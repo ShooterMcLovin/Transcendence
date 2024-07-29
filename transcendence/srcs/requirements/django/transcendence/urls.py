@@ -17,6 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.views import View
+from django.shortcuts import redirect
+from django.conf import settings
+from django.conf.urls.static import static
+# In views.py
+from django.http import HttpResponse
+from django.views import View
+
+
+def my_view(request):
+    return HttpResponse("Hello, World!")
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('hello/', my_view, name='hello'),
 ]

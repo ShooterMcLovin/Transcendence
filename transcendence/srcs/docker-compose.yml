@@ -1,0 +1,58 @@
+services:
+  postgresql:
+    container_name: postgresql
+    build:
+      context: requirements/postgresql
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  django:
+    container_name: django
+    build: requirements/django
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - frontend
+      - backend
+
+  nginx:
+    container_name: nginx
+    build:
+      context: requirements/nginx
+    ports:
+      - "443:443"
+    depends_on:
+      - django
+    volumes:
+      - /var/www/html   # Mount a directory with HTML files
+      - /etc/nginx/ssl   # Mount SSL certificates
+    restart: always
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  pgdata:
+    driver: local

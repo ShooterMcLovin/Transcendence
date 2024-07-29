@@ -49,3 +49,13 @@ Prepare for Submission: Package the project for submission, ensuring all documen
 - Step 11: Post-Deployment and Maintenance
 Feedback Gathering: Collect feedback from users and stakeholders to identify areas for improvement and future feature enhancements.
 Ongoing Maintenance: Plan for regular updates and maintenance to address any issues and keep the application secure and up-to-date.
+
+
+Secure Connection Failed
+
+An error occurred during a connection to localhost:8000. PR_END_OF_FILE_ERROR
+
+Error code: PR_END_OF_FILE_ERROR
+
+    The page you are trying to view cannot be shown because the authenticity of the received data could not be verified.
+    Please contact the website owners to inform them of this problem.
