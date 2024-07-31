@@ -1,0 +1,37 @@
+services:
+  web:
+    build: ./django
+    volumes:
+      - ./django:/code  
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"  
+    depends_on:
+      db:
+        condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+      interval: 10s
+      retries: 5
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - ./django:/code  
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+

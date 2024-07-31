@@ -1,0 +1,30 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.9-slim
+
+# Set environment variables to prevent Python from writing .pyc files and buffering stdout/stderr
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# Set the working directory inside the container
+WORKDIR /code
+RUN mkdir -p /code/static
+RUN mkdir -p /code/media
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt /code/
+COPY static /code/static
+COPY media /code/media
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+RUN chmod 755 /code/static/
+RUN chmod 755 /code/media/
+
+# Copy the rest of the application code into the container
+COPY . /code/
+
+# Expose port 8000 for the application
+EXPOSE 8000
+
+# Set the default command to run when the container starts
+ENTRYPOINT ["./docker-entrypoint.sh"]
