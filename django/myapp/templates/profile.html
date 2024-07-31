@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Profile</h2>
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {{ form.as_p|safe }}
+                <button type="submit" class="btn btn-warning btn-lg btn-block">Update Profile</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}

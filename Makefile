@@ -8,6 +8,9 @@ SHELL := /bin/bash
 
 build:  ## Build the Docker image
 	$(DOCKER_COMPOSE) build
+	
+compose:
+	$(DOCKER_COMPOSE) up
 
 up:  ## Build and start the containers in detached mode
 	$(DOCKER_COMPOSE) up -d --build

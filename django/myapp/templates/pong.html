@@ -1,42 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: radial-gradient(circle, #1c1c1c, #333333); /* Dark to light grey gradient */
-            position: relative; /* For positioning the top-left button */
-        }
-        .top-left-button {
-            position: absolute;
-            top: 20px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
-            background-color: #f7c600; /* Yellow color */
-            border: none;
-            color: black;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-        .top-left-button:hover {
-            background-color: #e0b800; /* Slightly darker yellow on hover */
-        }
-    </style>
-</head>
-<body>
-    <a href="{% url 'index' %}" class="top-left-button">Back to Index</a>
-</body>
-</html>
+<!-- home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Pong{% endblock %}
+
+{% block content %}
+  <h1 class="mt-5 custom-text-color">Welcome to Pong</h1>
+  <p class="lead custom-text-color">"Pong," released in 1972 by Atari, is one of the earliest arcade video games and is often credited with helping to launch the video game industry. Created by Nolan Bushnell and Allan Alcorn, Pong is a simple yet addictive two-dimensional sports game that simulates table tennis.
+
+    In Pong, two players control paddles on opposite sides of the screen, moving them up and down to hit a small square ball back and forth. The objective is to score points by getting the ball past the opponent's paddle. Each time this happens, the player earns a point, and the game continues until a set score is reached.
+    
+    The simplicity of Pong's design, with its basic graphics and straightforward gameplay, contributed to its widespread popularity. It was easy to understand and play, making it accessible to a broad audience. Pong's success helped establish Atari as a leading company in the emerging video game industry and paved the way for future video game development and innovation.
+    
+    Pong's legacy endures as a classic example of how engaging gameplay can captivate players, even with minimalistic design and technology.</p>
+{% endblock %}

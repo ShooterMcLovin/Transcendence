@@ -25,6 +25,8 @@ COPY . /code/
 
 # Expose port 8000 for the application
 EXPOSE 8000
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Set the default command to run when the container starts
 ENTRYPOINT ["./docker-entrypoint.sh"]

@@ -27,8 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'transcendence.42.fr']
 
+AUTH_USER_MODEL = 'myapp.CustomUser'
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
