@@ -2,6 +2,7 @@ from django.urls import path
 from .views import user_logout
 from django.views.generic import TemplateView
 from . import views
+from .views import user_list
 
 
 #path(<address extention>, <name of the view(views.py)>, <name>)
@@ -17,4 +18,5 @@ urlpatterns = [
     path('logout/', user_logout, name='logout'),
     path('logout/', views.user_logout, name='logout'),
     path('logout/done/', TemplateView.as_view(template_name='logout.html'), name='logout_done'),
+    path('users/', views.user_list, name='user_list'),
 ]

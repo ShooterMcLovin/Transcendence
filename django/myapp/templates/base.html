@@ -1,25 +1,32 @@
-<!-- base.html -->
 <!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content=
+    "width=device-width, initial-scale=1.0">
+<title>PONG GAME</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Generic Page{% endblock %}</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>{% block title %}Generic Page
+        {% endblock %}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex;
+            display: flex-start;
+            padding-top: 50px;
+            padding-left: 150px;
+            padding-right: 150px;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             background: radial-gradient(circle, #1c1c1c, #333333);
-            position: relative; /* For positioning the top-left button */
+            position: relative; /* For positioning the buttons */
         }
         .container {
             text-align: center;
-            color: #ffffff;
+            color: #1c1c1c;
         }
         .button {
             background-color: #f7c600; /* Yellow color */
@@ -38,10 +45,8 @@
         .button:hover {
             background-color: #e0b800; /* Slightly darker yellow on hover */
         }
-        .top-left-button {
+        .top-left-button, .top-right-button {
             position: absolute;
-            top: 20px; /* Adjust as needed */
-            left: 20px; /* Adjust as needed */
             background-color: #f7c600; /* Yellow color */
             border: none;
             color: black;
@@ -54,20 +59,34 @@
             border-radius: 4px;
             transition: background-color 0.3s ease;
         }
-        .top-left-button:hover {
+        .top-left-button:hover, .top-right-button:hover {
             background-color: #e0b800; /* Match hover color */
+        }
+        .top-left-button {
+            top: 20px; /* Adjust as needed */
+            left: 20px; /* Adjust as needed */
+        }
+        .top-right-button {
+            top: 20px; /* Adjust as needed */
+            right: 20px; /* Adjust as needed */
         }
         .custom-text-color {
             color: #FFA500; /* Orangy/yellow color */
         }
+        {% block extra_css %}{% endblock %}
     </style>
-    {% block extra_css %}{% endblock %}
 </head>
 <body>
     <a href="{% url 'home' %}" class="btn btn-warning top-left-button">Back to Index</a>
+    <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-warning top-right-button">
+        {% if user.is_authenticated %}
+            {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
+        {% else %}
+            Login
+        {% endif %}
+    </a>
     <div class="container">
         {% block content %}{% endblock %}
-        
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

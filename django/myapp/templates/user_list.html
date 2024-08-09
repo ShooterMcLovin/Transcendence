@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}User List{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Registered Users</h1>
+    <div class="user-list-container bg-dark p-4 rounded">
+        {% if users %}
+            <ul class="list-group">
+                {% for user in users %}
+                    <li class="list-group-item bg-secondary text-light">
+                        {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-center text-light">No users found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

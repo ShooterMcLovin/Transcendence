@@ -1,11 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
 from .models import CustomUser
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 
 class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email']  # Add other fields as necessary
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
@@ -16,3 +18,8 @@ class CustomAuthenticationForm(AuthenticationForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'password')
+
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}))
+    new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}))
+    new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}))

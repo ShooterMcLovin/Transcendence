@@ -1,15 +1,140 @@
 <!-- home.html -->
 {% extends 'base.html' %}
-
-{% block title %}Pong{% endblock %}
+{% load static %}
+{% block title %}Pong
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+{% endblock %}
 
 {% block content %}
-  <h1 class="mt-5 custom-text-color">Welcome to Pong</h1>
-  <p class="lead custom-text-color">"Pong," released in 1972 by Atari, is one of the earliest arcade video games and is often credited with helping to launch the video game industry. Created by Nolan Bushnell and Allan Alcorn, Pong is a simple yet addictive two-dimensional sports game that simulates table tennis.
 
-    In Pong, two players control paddles on opposite sides of the screen, moving them up and down to hit a small square ball back and forth. The objective is to score points by getting the ball past the opponent's paddle. Each time this happens, the player earns a point, and the game continues until a set score is reached.
+  <body>
+<div class="board">
+        <div class='ball'>
+            <div class="ball_effect"></div>
+        </div>
+        <div class="paddle_1 paddle"></div>
+        <div class="paddle_2  paddle"></div>
+        <h1 class="player_1_score">0</h1>
+        <h1 class="player_2_score">0</h1>
+        <h1 class="message">
+            Press Enter to Play Pong
+        </h1>
+    </div>
     
-    The simplicity of Pong's design, with its basic graphics and straightforward gameplay, contributed to its widespread popularity. It was easy to understand and play, making it accessible to a broad audience. Pong's success helped establish Atari as a leading company in the emerging video game industry and paved the way for future video game development and innovation.
-    
-    Pong's legacy endures as a classic example of how engaging gameplay can captivate players, even with minimalistic design and technology.</p>
+    <script src="{% static 'index.js' %}"></script>
+  </body>
+
+  
+  
+  
 {% endblock %}
+{% block extra_css %}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+background: radial-gradient(circle, #1c1c1c, #333333);
+    }
+    
+    .board {
+        height: 85vh;
+        width: 80vw;
+        background-image: linear-gradient(
+            to right, #222222, #222222);
+            border-radius: 14px;
+        }
+        
+        .ball {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            position: fixed;
+            top: calc(50% - 15px);
+            left: calc(50% - 15px);
+        }
+        
+        .ball_effect {
+            height: 100%;
+            width: 100%;
+            border-radius: 100px;
+            animation: spinBall 0.1s linear infinite;
+            box-shadow: inset 0 0 18px #fff,
+            inset 6px 0 18px violet,
+            inset -6px 0 18px #0ff,
+            inset 6px 0 30px violet,
+            inset -6px 0 30px #0ff,
+            0 0 18px #fff, -4px 0 18px
+            violet, 4px 0 18px #0ff;
+        }
+        
+        @keyframes spinBall {
+            100% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+            }
+        }
+        
+        .paddle {
+            height: 100px;
+            width: 18px;
+            border-radius: 50%;
+            position: fixed;
+        }
+        
+        .paddle_1 {
+            top: calc(7.5vh + 55px);
+            left: calc(10vw + 30px);
+            box-shadow: inset 0 0 18px #fff,
+            inset -6px 0 18px #f3bad6,
+            inset 6px 0 18px #0ff,
+            inset -6px 0 30px #f3bad6,
+            inset 6px 0 30px #0ff,
+            0 0 18px #fff, 4px 0 18px
+            #f3bad6, -4px 0 18px #0ff;
+        }
+        
+        .paddle_2 {
+            top: calc(85vh + 7.5vh - 100px - 55px);
+            right: calc(10vw + 30px);
+            box-shadow: inset 0 0 18px #fff,
+            inset 6px 0 18px #f3bad6,
+            inset -6px 0 18px #0ff,
+            inset 6px 0 30px #f3bad6,
+            inset -6px 0 30px #0ff,
+            0 0 18px #fff, -4px 0 18px
+            #f3bad6, 4px 0 18px #0ff;
+        }
+        
+        .player_1_score {
+            height: 50px;
+            width: 50px;
+            color: chartreuse;
+            position: fixed;
+            left: 30vw;
+            margin-top: 30px;
+        }
+        
+        .player_2_score {
+            height: 50px;
+            width: 50px;
+            color: chartreuse;
+            position: fixed;
+            left: 70vw;
+            margin-top: 30px;
+        }
+        
+        .message {
+            position: fixed;
+            /* color: #48426d; */
+            height: 10vh;
+            width: 30vw;
+            color: #c9cbff;
+            left: 38vw;
+            margin: 30px auto auto auto;
+        }
+        {% endblock %}

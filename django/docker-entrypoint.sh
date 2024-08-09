@@ -3,7 +3,7 @@ set -e
 
 # Apply Django database migrations
 echo "Applying Django database migrations..."
-python manage.py makemigrations myapp
+
 python manage.py migrate
 
 # Collect static files (if needed)

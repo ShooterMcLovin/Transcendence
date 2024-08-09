@@ -9,7 +9,14 @@
         {% csrf_token %}
         <div class="row justify-content-center">
             <div class="col-md-8">
-                {{ form.as_p|safe }}
+                <!-- User Profile Form -->
+                <h4 class="mb-4">Update Profile</h4>
+                {{ user_profile_form.as_p|safe }}
+                
+                <!-- Change Password Form -->
+                <h4 class="mt-4 mb-4">Change Password</h4>
+                {{ change_password_form.as_p|safe }}
+                
                 <button type="submit" class="btn btn-warning btn-lg btn-block">Update Profile</button>
             </div>
         </div>
