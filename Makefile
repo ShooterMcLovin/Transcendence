@@ -13,7 +13,10 @@ compose:
 	$(DOCKER_COMPOSE) up
 
 up:  ## Build and start the containers in detached mode
+	mkdir -p django/media
+	chmod +x django/docker-entrypoint.sh
 	$(DOCKER_COMPOSE) up -d --build
+
 
 down:  ## Stop and remove the containers
 	$(DOCKER_COMPOSE) down -v
