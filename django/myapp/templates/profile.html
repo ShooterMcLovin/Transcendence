@@ -9,20 +9,25 @@
         {% csrf_token %}
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <a href="{% url 'user_list' %}" class="btn btn-primary mb-4">Users</a>
+                <a href="{% url 'user_list' %}" class="btn btn-secondary mb-4">Users</a>
+                <p><strong>Nickname:</strong> {{ user.nickname }}</p>
+                <p><strong>UserName:</strong> {{ user.username }}</p>
                 
                 <!-- Stats Section -->
-                <h4 class="mb-4">STATS</h4>
-                <div class="333333; p-4 rounded mb-4">
+                <h4 class="mb-0 mt-4">STATS</h4>
+                <div class="333333; p-4 rounded mb-1">
                     <p><strong>Wins:</strong> {{ user.wins }}</p>
                     <p><strong>Losses:</strong> {{ user.losses }}</p>
-                    <p><strong>Tournament Wins:</strong> {{ user.tournement_wins }}</p>
-                    <p><strong>Tournament Losses:</strong> {{ user.tournement_losses }}</p>
                 </div>
-                <!-- User Profile Form -->
-                <h4 class="mb-4">Update Profile</h4>
-                <a href="{% url 'update_profile' %}" class="btn btn-primary mb-4">Update Profile</a>               
-            </div>
+                </div>
+                    <!-- Change Password Section -->
+                    <div class="col-md-6 mb-4">
+                        <h4>Change Password</h4>
+                        <br>
+                        {{ change_password_form.as_p|safe }}
+                        <button type="submit" name="change_password" class="btn btn-warning">Change Password</button>
+                    </div>
+                </div>
         </div>
     </form>
 </div>

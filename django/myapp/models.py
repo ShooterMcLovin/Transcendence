@@ -5,9 +5,8 @@ class CustomUser(AbstractUser):
     nickname = models.CharField(max_length=5, blank=True, null=True)
     wins = models.PositiveIntegerField(default=0)  # Counter for wins
     losses = models.PositiveIntegerField(default=0)  # Counter for losses
-
-    tournement_wins = models.PositiveIntegerField(default=0)  # Counter for wins
-    tournement_losses = models.PositiveIntegerField(default=0)  # Counter for losses
+    tournament_wins = models.PositiveIntegerField(default=0)  # Counter for wins
+    tournament_losses = models.PositiveIntegerField(default=0)  # Counter for losses
     
     groups = models.ManyToManyField(
         'auth.Group',

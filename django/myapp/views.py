@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -91,11 +90,20 @@ def profile(request):
         user_profile_form = UserProfileForm(request.POST, instance=request.user)
         change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
 
-        if user_profile_form.is_valid() and change_password_form.is_valid():
-            user_profile_form.save()
-            user = change_password_form.save()
-            update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
-            return redirect('profile')  # Redirect to a profile page or any other page after successful update
+        if 'update_profile' in request.POST:
+            if user_profile_form.is_valid():
+                # Only update if there is a change
+                new_username = user_profile_form.cleaned_data.get('nickname')
+                new_email = user_profile_form.cleaned_data.get('email')
+                if (new_username and new_username != request.user.nickname) or (new_email and new_email != request.user.email):
+                    user_profile_form.save()
+
+        if 'change_password' in request.POST:
+            if change_password_form.is_valid():
+                user = change_password_form.save()
+                update_session_auth_hash(request, user)  # Keep the user logged in after password change
+                return redirect('profile')  # Redirect after successful change
+
     else:
         user_profile_form = UserProfileForm(instance=request.user)
         change_password_form = ChangePasswordForm(user=request.user)
@@ -105,27 +113,6 @@ def profile(request):
         'change_password_form': change_password_form,
     })
     
-@login_required
-def update_profile(request):
-    if request.method == 'POST':
-        user_profile_form = UserProfileForm(request.POST, instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
-
-        if user_profile_form.is_valid() and change_password_form.is_valid():
-            user_profile_form.save()
-            user = change_password_form.save()
-            update_session_auth_hash(request, user)  # Important for keeping the user logged in after password change
-            return redirect('update_profile')  # Redirect to a profile page or any other page after successful update
-    else:
-        user_profile_form = UserProfileForm(instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user)
-
-    return render(request, 'update_profile.html', {
-        'user_profile_form': user_profile_form,
-        'change_password_form': change_password_form,
-    })
-
-
 @login_required
 def user_list(request):
     users = CustomUser.objects.all()  # Fetch all users (adjust query as needed)
