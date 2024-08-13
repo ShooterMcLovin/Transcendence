@@ -12,7 +12,12 @@ def get_usernames(request):
     # Liste des noms d'utilisateur
     usernames = list(CustomUser.objects.values_list('nickname', flat=True))
     return JsonResponse({'usernames': usernames})
+def get_username(request):
+    # Get the currently logged-in user
+    user = request.user
 
+    # Return the username of the logged-in user
+    return JsonResponse({'username': user.nickname})
 # # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -112,7 +117,36 @@ def profile(request):
         'user_profile_form': user_profile_form,
         'change_password_form': change_password_form,
     })
-    
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        user_profile_form = UserProfileForm(request.POST, instance=request.user)
+        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
+
+        if 'update_profile' in request.POST:
+            if user_profile_form.is_valid():
+                # Only update if there is a change
+                new_username = user_profile_form.cleaned_data.get('nickname')
+                new_email = user_profile_form.cleaned_data.get('email')
+                if (new_username and new_username != request.user.nickname) or (new_email and new_email != request.user.email):
+                    user_profile_form.save()
+
+        if 'change_password' in request.POST:
+            if change_password_form.is_valid():
+                user = change_password_form.save()
+                update_session_auth_hash(request, user)  # Keep the user logged in after password change
+                return redirect('profile')  # Redirect after successful change
+
+    else:
+        user_profile_form = UserProfileForm(instance=request.user)
+        change_password_form = ChangePasswordForm(user=request.user)
+
+    return render(request, 'profile.html', {
+        'user_profile_form': user_profile_form,
+        'change_password_form': change_password_form,
+    })
+
 @login_required
 def user_list(request):
     users = CustomUser.objects.all()  # Fetch all users (adjust query as needed)

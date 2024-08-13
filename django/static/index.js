@@ -1,3 +1,50 @@
+async function fetchUserList() { // fetch all users
+    try {
+        const response = await fetch('/api/get-usernames/');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        console.log('User List:', data);
+
+        // Access the usernames array from the response
+        const usernames = data.usernames;
+
+        // Check if the usernames array is not empty and return the first username
+        if (usernames && usernames.length > 0) {
+            return usernames[0]; // Return the first username
+        } else {
+            return 'Guest'; // Fallback value if no usernames are returned
+        }
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+        return 'Guest'; // Return fallback value in case of an error
+    }
+}
+
+async function fetchUser() { // fetch logged in user 
+    try {
+        const responsee = await fetch('/api/get-username/');
+        if (!responsee.ok) {
+            throw new Error(`Network response was not ok: ${responsee.statusText}`);
+        }
+        const _user = await responsee.json();
+        console.log('UserName:', _user);
+
+        // Access the usernames array from the response
+        const username = _user.username;
+
+        // Check if the usernames array is not empty and return the first username
+        if (username && username.length > 0) {
+            return username; // Return the first username
+        } else {
+            return 'Guest'; // Fallback value if no usernames are returned
+        }
+    } catch (error) {
+        console.error('There has been a problem with your fetch operation:', error);
+        return 'Guest'; // Return fallback value in case of an error
+    }
+}
 // Initialisation de la scène, de la caméra et du rendu
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
@@ -103,6 +150,8 @@ function moveAI() {
 }
 
 // Variables pour le score
+let player1 = 'AI'; // added variable for name
+let player2; // change to = 'whatever' 
 let score1 = 0;
 let score2 = 0;
 let gameOver = false;
@@ -131,10 +180,10 @@ function drawScores() {
     scoreContext.font = '30px Arial';
     scoreContext.fillStyle = 'blue';
     scoreContext.textAlign = 'left';
-    scoreContext.fillText(`Joueur 1: ${score1}`, scoreCanvas.width / 4, scoreCanvas.height / 4 * 2);
+    scoreContext.fillText(`Joueur 1 (${player1}): ${score1}`, scoreCanvas.width / 4, scoreCanvas.height / 4 * 2);
     scoreContext.fillStyle = 'red';
     scoreContext.textAlign = 'right';
-    scoreContext.fillText(`Joueur 2: ${score2}`, scoreCanvas.width / 4 * 3, scoreCanvas.height / 4 * 2);
+    scoreContext.fillText(`Joueur 2 (${player2}): ${score2}`, scoreCanvas.width / 4 * 3, scoreCanvas.height / 4 * 2);
 }
 
 // Fonction pour afficher le message de victoire
@@ -208,7 +257,6 @@ let modeSelected = false; // Nouvelle variable pour suivre si un mode a été s�
 // Fonction d'animation
 function animate() {
     requestAnimationFrame(animate);
-
     if (gameOver) return;
 
     if (!modeSelected ) {
@@ -263,7 +311,7 @@ function animate() {
         if (isTournament) {
             tournamentScores.player1 += 1;
             if (currentMatch >= maxMatches) {
-                endTournament('Joueur 1');
+                endTournament(player1);
                 return;
             }
         }
@@ -273,7 +321,7 @@ function animate() {
         if (isTournament) {
             tournamentScores.player2 += 1;
             if (currentMatch >= maxMatches) {
-                endTournament('Joueur 2');
+                endTournament(player2);
                 return;
             }
         }
@@ -300,13 +348,13 @@ function animate() {
     if (score1 >= 7) {     
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        showWinMessage('Joueur 1');
+        showWinMessage(player1);
         gameOver = true;
    
     } else if (score2 >= 7) {       
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        showWinMessage('Joueur 2');
+        showWinMessage(player2);
         gameOver = true;
 
     }
@@ -413,4 +461,15 @@ window.addEventListener('resize', () => {
 });
 
 // Lancer l'animation
-animate();
+async function initializeGame() {
+    const username = await fetchUser();
+    console.log('Fetched Username:', username);
+    player2 = username; // Assign the fetched username to player2
+    
+    animate();
+    // Initialize and start the game
+    startGame(mode); // or another mode if needed
+}
+
+
+initializeGame();
