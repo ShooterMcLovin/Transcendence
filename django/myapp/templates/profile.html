@@ -3,21 +3,25 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Profile</h2>
+<div class="container mt-5 custom-text-color" >
+    <h2 class="text-center mb-4">My Profile</h2>
     <form method="post" class="form-group">
         {% csrf_token %}
         <div class="row justify-content-center">
             <div class="col-md-8">
+                <a href="{% url 'user_list' %}" class="btn btn-primary mb-4">Users</a>
+                
+                <!-- Stats Section -->
+                <h4 class="mb-4">STATS</h4>
+                <div class="333333; p-4 rounded mb-4">
+                    <p><strong>Wins:</strong> {{ user.wins }}</p>
+                    <p><strong>Losses:</strong> {{ user.losses }}</p>
+                    <p><strong>Tournament Wins:</strong> {{ user.tournement_wins }}</p>
+                    <p><strong>Tournament Losses:</strong> {{ user.tournement_losses }}</p>
+                </div>
                 <!-- User Profile Form -->
                 <h4 class="mb-4">Update Profile</h4>
-                {{ user_profile_form.as_p|safe }}
-                
-                <!-- Change Password Form -->
-                <h4 class="mt-4 mb-4">Change Password</h4>
-                {{ change_password_form.as_p|safe }}
-                
-                <button type="submit" class="btn btn-warning btn-lg btn-block">Update Profile</button>
+                <a href="{% url 'update_profile' %}" class="btn btn-primary mb-4">Update Profile</a>               
             </div>
         </div>
     </form>

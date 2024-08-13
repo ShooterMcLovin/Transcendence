@@ -3,7 +3,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 custom-text-color" >
     <h2 class="text-center mb-4">Login</h2>
     <form method="post" class="form-group">
         {% csrf_token %}
@@ -11,6 +11,7 @@
             <div class="col-md-6 col-lg-4">
                 {{ form.as_p|safe }}
                 <button type="submit" class="btn btn-primary btn-lg btn-block mt-3">Login</button>
+                <a href="{% url 'register' %}" class="btn btn-secondary mt-3">Register</a>
             </div>
         </div>
     </form>

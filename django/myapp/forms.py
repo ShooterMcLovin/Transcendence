@@ -8,7 +8,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = ['username', 'email']  # Add other fields as necessary
+        fields = ['username','nickname', 'email']  # Add other fields as necessary
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser

@@ -12,13 +12,15 @@
     Transcendence can also be seen in various aspects of life, such as art, where it denotes the creation of something that inspires awe and surpasses conventional beauty, or in personal development, where it signifies overcoming personal limitations and reaching new heights of understanding and capability.
     
     Overall, transcendence is about breaking free from the constraints of the ordinary and accessing a higher plane of experience, understanding, or existence.</p>
-    {% comment %} {% if user.is_authenticated %} **UNCOMMENT TO BLOCK GAME IF NOT LOGGED IN** {% endcomment %}
-        <a href="{% url 'pong' %}" class="button">Click Here to play PONG!</a>
-    {% comment %} {% endif %} {% endcomment %}
+    {% if user.is_authenticated %} 
+        <a href="{% url 'pong' %}" class="button">Click Here to play PONG</a>
+    {% endif %}
   
   <div class="mt-4">
+    {% if not user.is_authenticated %}
     <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
     <a href="{% url 'register' %}" class="btn btn-secondary">Register</a>
+    {% endif %}
     {% if user.is_authenticated %}
       <a href="{% url 'profile' %}" class="btn btn-info">Profile</a>
       <a href="{% url 'logout' %}" class="btn btn-danger">Logout</a>

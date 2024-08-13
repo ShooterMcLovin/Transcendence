@@ -2,15 +2,23 @@
 
 {% block title %}User List{% endblock %}
 
+{% block extra_css %}
+.highlighted {
+    custom-text-color;
+    background-color: #d4edda; /* Example highlight color */
+    font-weight: bold;
+}
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
+<div class="container mt-5 custom-text-color">
     <h1 class="text-center mb-4">Registered Users</h1>
     <div class="user-list-container bg-dark p-4 rounded">
         {% if users %}
             <ul class="list-group">
                 {% for user in users %}
-                    <li class="list-group-item bg-secondary text-light">
-                        {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
+                    <li class="list-group-item bg-secondary text-light{% if user.username == logged_in_user.username %} highlighted{% endif %}">
+                        {{ user.username }}{% if user.profile.useruser.username %} ({{ user.profile.user.username }}){% endif %}
                     </li>
                 {% endfor %}
             </ul>
