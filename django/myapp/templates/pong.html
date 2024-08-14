@@ -27,18 +27,54 @@
             font-size: 18px;
             cursor: pointer;
         }
+        #nameForm {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            display: none; /* Masquer le formulaire au début */
+        }
+        #nameForm input {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 18px;
+        }
+        #nameForm button {
+            margin: 10px auto;
+        }
+
     </style>
 </head>
 <body>
-    <div id="userListContainer"></div>
     <div id="menu">
         <h1>Select Game Mode</h1>
         <button id="singlePlayer">Single Player (vs AI)</button>
         <button id="multiPlayer">Multiplayer (1 vs 1)</button>
         <button id="tournament">Tournament</button>
         <button onclick="window.location.href='{% url 'home' %}'">Back home</button>
-       
     </div>
+
+    <div id="nameForm">
+        <h2>Select Player Names</h2>
+        <label for="player1Select">Player 1 Name:</label>
+        <select id="player1Select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        <label for="player2Select">Player 2 Name:</label>
+        <select id="player2Select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        <button id="startMultiplayer">Start Game</button>
+    </div>
+
+    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="{% static 'index.js' %}"></script>
 </body>

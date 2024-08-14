@@ -1,26 +1,3 @@
-async function fetchUserList() { // fetch all users
-    try {
-        const response = await fetch('/api/get-usernames/');
-        if (!response.ok) {
-            throw new Error(`Network response was not ok: ${response.statusText}`);
-        }
-        const data = await response.json();
-        console.log('User List:', data);
-
-        // Access the usernames array from the response
-        const usernames = data.usernames;
-
-        // Check if the usernames array is not empty and return the first username
-        if (usernames && usernames.length > 0) {
-            return usernames[0]; // Return the first username
-        } else {
-            return 'Guest'; // Fallback value if no usernames are returned
-        }
-    } catch (error) {
-        console.error('There has been a problem with your fetch operation:', error);
-        return 'Guest'; // Return fallback value in case of an error
-    }
-}
 
 async function fetchUser() { // fetch logged in user 
     try {
@@ -394,7 +371,7 @@ function onDocumentKeyDown(event) {
         } else {
             setMenuVisibility(true); // Afficher le menu sinon
             isPaused = true; // Mettre le jeu en pause
-     
+    
         }
     }
     if (ia1Active) {
@@ -439,7 +416,82 @@ function setMenuVisibility(visible) {
     const menu = document.getElementById('menu');
     menu.style.display = visible ? 'block' : 'none';
 }
+let isEventListenerAdded = false;
+async function populateUserDropdowns() {
+    try {
+        const response = await fetch('/api/get-usernames/');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        const usernames = data.usernames;
 
+        if (usernames && usernames.length > 0) {
+            const player1Select = document.getElementById('player1Select');
+            const player2Select = document.getElementById('player2Select');
+
+            // Vider les anciennes options pour éviter les doublons
+            player1Select.innerHTML = '';
+            player2Select.innerHTML = '';
+
+            // Fonction pour ajouter des options à un menu déroulant
+            function populateSelect(selectElement, options) {
+                options.forEach(username => {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    selectElement.appendChild(option);
+                });
+            }
+
+            // Populate player1Select
+            populateSelect(player1Select, usernames);
+
+            // Populate player2Select with options excluding selected player1 options
+            player1Select.addEventListener('change', () => {
+                const selectedPlayer1 = player1Select.value;
+                const availableForPlayer2 = usernames.filter(username => username !== selectedPlayer1);
+                player2Select.innerHTML = ''; // Clear previous options
+                populateSelect(player2Select, availableForPlayer2);
+            });
+
+            // Trigger change event to initialize player2 options
+            player1Select.dispatchEvent(new Event('change'));
+        } else {
+            console.error('No usernames available.');
+        }
+    } catch (error) {
+        console.error('Error fetching usernames:', error);
+    }
+}
+
+
+function showNameForm() {
+    const nameForm = document.getElementById('nameForm');
+    nameForm.style.display = 'block';
+
+    // Assurez-vous que les événements ne sont ajoutés qu'une seule fois
+    const startMultiplayerButton = document.getElementById('startMultiplayer');
+    startMultiplayerButton.removeEventListener('click', startMultiplayerHandler); // Supprimer les anciens gestionnaires
+    startMultiplayerButton.addEventListener('click', startMultiplayerHandler);
+}
+
+function startMultiplayerHandler() {
+    const player1Select = document.getElementById('player1Select');
+    const player2Select = document.getElementById('player2Select');
+    player1 = player1Select.value || 'Joueur 1';
+    player2 = player2Select.value || 'Joueur 2';
+    const nameForm = document.getElementById('nameForm');
+    nameForm.style.display = 'none';
+    startGame('multiPlayer');
+}
+
+// Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
+document.getElementById('multiPlayer').addEventListener('click', () => {
+    populateUserDropdowns().then(() => {
+        showNameForm();
+    });
+});
 // Fonction pour démarrer le jeu
 function startGame(mode) {
     if (mode === 'singlePlayer') {
@@ -451,6 +503,7 @@ function startGame(mode) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
         isPaused = false; // Reprendre le jeu
+        player1 = "IA";
     } else if (mode === 'multiPlayer') {
         isSinglePlayer = false;
         isMultiplayer = true;
@@ -460,6 +513,7 @@ function startGame(mode) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
         isPaused = false; // Reprendre le jeu
+        // showNameForm();
     } else if (mode === 'tournament') {
         isSinglePlayer = false;
         isMultiplayer = false;
@@ -482,28 +536,29 @@ function startGame(mode) {
 }
 
 // Afficher le menu au début
+
 setMenuVisibility(true);
 document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
-document.getElementById('multiPlayer').addEventListener('click', () => startGame('multiPlayer'));
+document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
 
-// Ajuster la taille du rendu en cas de redimensionnement de la fenêtre
-window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    scoreCanvas.width = window.innerWidth;
-    scoreCanvas.height = 100;
-    drawScores();
-});
+// // Ajuster la taille du rendu en cas de redimensionnement de la fenêtre
+// window.addEventListener('resize', () => {
+//     camera.aspect = window.innerWidth / window.innerHeight;
+//     camera.updateProjectionMatrix();
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     scoreCanvas.width = window.innerWidth;
+//     scoreCanvas.height = 100;
+//     drawScores();
+// });
 
 // Lancer l'animation
 async function initializeGame() {
     const username = await fetchUser();
     console.log('Fetched Username:', username);
     player2 = username; // Assign the fetched username to player2
+    animate();
 
-animate();
     // Initialize and start the game
     startGame(mode); // or another mode if needed
 }
