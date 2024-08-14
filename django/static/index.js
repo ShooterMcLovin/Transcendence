@@ -134,9 +134,24 @@ const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
 scene.add(ball);
 
+// Ajoutez cette fonction pour contrôler le mouvement de la deuxième IA
+function moveAI2() {
+    const aiSpeed = 0.05 + (0.005 * score1); // Vitesse de déplacement de l'IA 2
+
+    if (ball.position.z > paddle2.position.z + aiSpeed) {
+        paddle2.position.z += aiSpeed;
+    } else if (ball.position.z < paddle2.position.z - aiSpeed) {
+        paddle2.position.z -= aiSpeed;
+    }
+
+    // Limiter la position de la palette 2 pour ne pas sortir des bordures
+    const paddleLimitY = 3.9;
+    paddle2.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle2.position.z));
+}
+
 // Ajoutez cette fonction pour contrôler le mouvement de l'IA
 function moveAI() {
-    const aiSpeed = 0.05; // Vitesse de déplacement de l'IA
+    const aiSpeed = 0.05 + (0.005 * score2); // Vitesse de déplacement de l'IA
 
     if (ball.position.z > paddle1.position.z + aiSpeed) {
         paddle1.position.z += aiSpeed;
@@ -198,6 +213,7 @@ function showWinMessage(player) {
     // Afficher le menu principal
     setMenuVisibility(true);
 }
+let isPaused = false; // Variable pour suivre l'état de pause
 
 
 // Fonction pour afficher le message de fin de tournoi
@@ -257,7 +273,9 @@ let modeSelected = false; // Nouvelle variable pour suivre si un mode a été s�
 // Fonction d'animation
 function animate() {
     requestAnimationFrame(animate);
-    if (gameOver) return;
+
+    
+    if (isPaused || gameOver) return;
 
     if (!modeSelected ) {
         if (initialCameraRotation) {
@@ -276,6 +294,8 @@ function animate() {
             renderer.render(scene, camera);
             // return;
         }
+        moveAI();
+        moveAI2();
     }
 
     // if (transitioningCamera) {
@@ -364,39 +384,41 @@ function animate() {
 
 // Fonction pour gérer les contrôles du clavier
 function onDocumentKeyDown(event) {
-    if (event.key === ' ') {
-        if (gameOver) {
-            if (isTournament) {
-                startGame('tournament');
-            } else {
-                score1 = 0;
-                score2 = 0;
-                gameOver = false;
-                resetBall();
-                setMenuVisibility(false); // Cacher le menu
-            }
-        } else if (!gameStarted) {
+    if (!gameStarted) {
             gameStarted = true;
         }
+    if (event.key === 'Escape') {
+        if (menu.style.display === 'block') {
+            setMenuVisibility(false); // Cacher le menu si déjà visible
+            isPaused = false; // Reprendre le jeu
+        } else {
+            setMenuVisibility(true); // Afficher le menu sinon
+            isPaused = true; // Mettre le jeu en pause
+     
+        }
     }
-    // if (event.key === 'Escape') {
-    //     if (gameOver) {
-    //         // Retourner au menu principal
-    //         setMenuVisibility(true);
-    //         score1 = 0;
-    //         score2 = 0;
-    //         gameOver = false;
-    //         setMenuVisibility(true); // Afficher le menu principal
-    //     }
-    // }
+    if (ia1Active) {
+        if (event.key === 'w' || event.key === 's') {
+            // Bloquer les touches 'w' et 's' si IA 1 est active
+            return;
+        }
+    }
+
+    if (ia2Active) {
+        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            // Bloquer les touches 'ArrowUp' et 'ArrowDown' si IA 2 est active
+            return;
+        }
+    }
+
     if (event.key === 'ArrowUp') {
-        paddle2Speed = -paddleSpeed;
+        paddle2Speed = !ia2Active ? -paddleSpeed : 0;
     } else if (event.key === 'ArrowDown') {
-        paddle2Speed = paddleSpeed;
+        paddle2Speed = !ia2Active ? paddleSpeed : 0;
     } else if (event.key === 'w') {
-        paddle1Speed = -paddleSpeed;
+        paddle1Speed = !ia1Active ? -paddleSpeed : 0;
     } else if (event.key === 's') {
-        paddle1Speed = paddleSpeed;
+        paddle1Speed = !ia1Active ? paddleSpeed : 0;
     }
 }
 
@@ -424,16 +446,31 @@ function startGame(mode) {
         isSinglePlayer = true;
         isMultiplayer = false;
         isTournament = false;
+        ia1Active = true;
+        ia2Active = false;
+        paddle1.position.set(-4.5, 0, 0);
+        paddle2.position.set(4.5, 0, 0);
+        isPaused = false; // Reprendre le jeu
     } else if (mode === 'multiPlayer') {
         isSinglePlayer = false;
         isMultiplayer = true;
         isTournament = false;
+        ia1Active = false;
+        ia2Active = false;
+        paddle1.position.set(-4.5, 0, 0);
+        paddle2.position.set(4.5, 0, 0);
+        isPaused = false; // Reprendre le jeu
     } else if (mode === 'tournament') {
         isSinglePlayer = false;
         isMultiplayer = false;
         isTournament = true;
+        ia1Active = false;
+        ia2Active = false;
+        paddle1.position.set(-4.5, 0, 0);
+        paddle2.position.set(4.5, 0, 0);
         currentMatch = 1;
         tournamentScores = { player1: 0, player2: 0 };
+        isPaused = false; // Reprendre le jeu
     }
 
     modeSelected = true; // Marquer le mode comme sélectionné
@@ -465,8 +502,8 @@ async function initializeGame() {
     const username = await fetchUser();
     console.log('Fetched Username:', username);
     player2 = username; // Assign the fetched username to player2
-    
-    animate();
+
+animate();
     // Initialize and start the game
     startGame(mode); // or another mode if needed
 }
