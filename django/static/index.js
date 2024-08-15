@@ -1,3 +1,53 @@
+function sendWinnerMessage(win, lose) {
+    console.log(`Winner: ${win}, Loser: ${lose}`);
+
+    fetch('/api/update-winner/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ winner: win, loser: lose }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                console.error('Server responded with error:', data);
+                throw new Error(data.message || 'An unknown error occurred');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Game result updated successfully.');
+        } else {
+            console.error(`Error: ${data.message}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+// Function to get the CSRF token from the cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 
 function updateTournamentPlayersDisplay() {
     // Sélectionner les éléments HTML pour afficher les noms des joueurs
@@ -279,15 +329,17 @@ function drawScores() {
 }
 
 // Fonction pour afficher le message de victoire
-function showWinMessage(player) {
+function showWinMessage(winner, loser) {
 
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
     scoreContext.textAlign = 'center';
-    scoreContext.fillText(`${player} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
     // Afficher le menu principal
+
+    sendWinnerMessage(winner, loser);
     setMenuVisibility(true);
 }
 
@@ -436,15 +488,15 @@ function updateBallPosition() {
 }
 
 function checkGameOver() {
-    if (score1 >= 7) {
+    if (score1 >= 1) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        showWinMessage(player1);
+        showWinMessage(player1, player2);
         gameOver = true;
-    } else if (score2 >= 7) {
+    } else if (score2 >= 1) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        showWinMessage(player2);
+        showWinMessage(player2, player1);
         gameOver = true;
     }
 }
@@ -618,7 +670,6 @@ document.getElementById('multiPlayer').addEventListener('click', () => {
         showNameForm();
     });
 });
-
 // Fonction pour démarrer le jeu
 function startGame(mode) {
     if (mode === 'singlePlayer') {
@@ -631,6 +682,7 @@ function startGame(mode) {
         paddle2.position.set(4.5, 0, 0);
         isPaused = false; // Reprendre le jeu
         player1 = "IA";
+        
     } else if (mode === 'multiPlayer') {
         isSinglePlayer = false;
         isMultiplayer = true;
@@ -668,16 +720,16 @@ setMenuVisibility(true);
 document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
 document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
-
+let mode;
 // Lancer l'animation
 async function initializeGame() {
     const username = await fetchUser();
     console.log('Fetched Username:', username);
     player2 = username; // Assign the fetched username to player2
     animate();
-
     // Initialize and start the game
-    startGame(mode); // or another mode if needed
+    if(mode)
+    startGame(mode); // or another mod  e if needed
 }
 
 

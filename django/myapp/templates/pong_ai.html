@@ -3,15 +3,117 @@
 {% load static %}
 {% block title %}PONG 3D{% endblock %}
 {% block content %}
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+body { margin: 0; overflow: hidden; }
+canvas { display: block; }
+#menu {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    display: none; /* Masquer le menu au début */
+}
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+#nameForm, #tournamentForm {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    display: none; /* Masquer les formulaires au début */
+}
+#nameForm input, #tournamentForm input {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 18px;
+    width: 80%;
+}
+#nameForm select {
+    display: block;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 18px;
+    width: 80%;
+}
+#nameForm button, #tournamentForm button {
+    margin: 10px auto;
+}
+
+{% block extra_css%}
+<style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+</style>
+{% endblock %}
 <body>
-    <div class ="container">
+    <div id="menu">
+        <h1>Select Game Mode</h1>
+        <button id="singlePlayer">Single Player (vs AI)</button>
+        <button id="multiPlayer">Multiplayer (1 vs 1)</button>
+        <button id="tournament">Tournament</button>
+        <button onclick="window.location.href='{% url 'home' %}'">Back home</button>
+    </div>
+
+    <div id="nameForm">
+        <h2>Select Player Names</h2>
+        <label for="player1Select">Player 1 Name:</label>
+        <select id="player1Select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        <label for="player2Select">Player 2 Name:</label>
+        <select id="player2Select">
+            <!-- Options will be populated dynamically -->
+        </select>
+        <button id="startMultiplayer">Start Game</button>
+        <button id="closeNameForm">Close</button> <!-- Nouveau bouton pour fermer -->
+    </div>
+
+    <!-- Formulaire pour la sélection des joueurs en tournoi -->
+<div id="tournamentForm" style="display: none;">
+    <h2>Choisir les joueurs pour le tournoi</h2>
+    <div>
+        <label for="player5Select">Joueur 1:</label>
+        <select id="player5Select"></select>
+    </div>
+    <div>
+        <label for="player6Select">Joueur 2:</label>
+        <select id="player6Select"></select>
+    </div>
+    <div>
+        <label for="player3Select">Joueur 3:</label>
+        <select id="player3Select"></select>
+    </div>
+    <div>
+        <label for="player4Select">Joueur 4:</label>
+        <select id="player4Select"></select>
+    </div>
+    <button id="startTournament">Démarrer le tournoi</button>
+    <button id="cancelTournament">Annuler</button>
+</div>
+<!-- <div id="tournamentPlayersDisplay">
+    <p id="player5Name">Player 1: </p>
+    <p id="player6Name">Player 2: </p>
+    <p id="player3Name">Player 3: </p>
+    <p id="player4Name">Player 4: </p>
+</div> -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="{% static 'index.js' %}"></script>
-    </div>
 </body>
 {% endblock %}
 </html>

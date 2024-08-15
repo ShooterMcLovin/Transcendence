@@ -32,15 +32,19 @@ def update_winner(request):
         data = json.loads(request.body)
         winner_username = data.get('winner')
         loser_username = data.get('loser')
-
+        
         if not winner_username or not loser_username:
             return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
 
         try:
-            winner = CustomUser.objects.get(username=winner_username)
-            loser = CustomUser.objects.get(username=loser_username)
+            winner = CustomUser.objects.get(nickname=winner_username)
         except CustomUser.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+            return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
+
+        try:
+            loser = CustomUser.objects.get(nickname=loser_username)
+        except CustomUser.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
 
         winner.wins += 1
         loser.losses += 1
@@ -51,6 +55,7 @@ def update_winner(request):
     
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+
 
 #define views, links them to html files
 def user_logout(request):
