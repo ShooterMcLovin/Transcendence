@@ -1,4 +1,25 @@
 
+// Fonction pour mettre à jour la taille du rendu et de la caméra
+function onWindowResize() {
+    // Mettre à jour la taille du rendu
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    // Mettre à jour le rapport d'aspect de la caméra
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix(); // Mettre à jour la matrice de projection de la caméra
+}
+// Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
+window.addEventListener('resize', onWindowResize);
+
+///fonction pour fermer le menu de multijoueur
+function closeNameForm() {
+    const nameForm = document.getElementById('nameForm');
+    nameForm.style.display = 'none'; // Masquer le formulaire
+}
+
+// Ajouter un écouteur d'événements pour le close du menu multijoueur
+document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
+
 async function fetchUser() { // fetch logged in user 
     try {
         const responsee = await fetch('/api/get-username/');
@@ -22,6 +43,7 @@ async function fetchUser() { // fetch logged in user
         return 'Guest'; // Return fallback value in case of an error
     }
 }
+
 // Initialisation de la scène, de la caméra et du rendu
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
@@ -141,19 +163,7 @@ function moveAI() {
     paddle1.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle1.position.z));
 }
 
-// Variables pour le score
-let player1 = 'AI'; // added variable for name
-let player2; // change to = 'whatever' 
-let score1 = 0;
-let score2 = 0;
-let gameOver = false;
-let gameStarted = false;
-let isSinglePlayer = false;
-let isMultiplayer = false;
-let isTournament = false;
-let currentMatch = 1;
-const maxMatches = 5;
-let tournamentScores = { player1: 0, player2: 0 };
+
 
 // Création d'un canvas secondaire pour les scores
 const scoreCanvas = document.createElement('canvas');
@@ -190,22 +200,7 @@ function showWinMessage(player) {
     // Afficher le menu principal
     setMenuVisibility(true);
 }
-let isPaused = false; // Variable pour suivre l'état de pause
 
-
-// Fonction pour afficher le message de fin de tournoi
-function endTournament(winner) {
-    setMenuVisibility(true);
-    const menu = document.getElementById('menu');
-    menu.innerHTML = `
-        <h1>${winner} a gagné le tournoi!</h1>
-        <p>Scores finaux :</p>
-        <p>Joueur 1 : ${tournamentScores.player1}</p>
-        <p>Joueur 2 : ${tournamentScores.player2}</p>
-        <button id="restart">Recommencer le Tournoi</button>
-    `;
-    document.getElementById('restart').addEventListener('click', () => startGame('tournament'));
-}
 
 // Fonction pour réinitialiser la balle
 function resetBall() {
@@ -227,6 +222,18 @@ function getRandomDirection() {
     return directions[index];
 }
 
+
+// Variables pour le score
+let player1 = 'AI'; // added variable for name
+let player2; // change to = 'whatever' 
+let score1 = 0;
+let score2 = 0;
+let gameOver = false;
+let gameStarted = false;
+let isSinglePlayer = false;
+let isMultiplayer = false;
+
+let isPaused = false; // Variable pour suivre l'état de pause
 // Variables pour le mouvement de la balle
 let ballSpeed = 0.05;
 let ballDirection = getRandomDirection();
@@ -247,56 +254,82 @@ camera.lookAt(0, 0, 0);
 const cameraStartPosition = new THREE.Vector3();
 let modeSelected = false; // Nouvelle variable pour suivre si un mode a été sélectionné
 
-// Fonction d'animation
-function animate() {
-    requestAnimationFrame(animate);
 
-    
-    if (isPaused || gameOver) return;
+function detectCollision() {
+    const paddle1Box = new THREE.Box3().setFromObject(paddle1);
+    const paddle2Box = new THREE.Box3().setFromObject(paddle2);
 
-    if (!modeSelected ) {
-        if (initialCameraRotation) {
-            rotationAngle += 0.01;
-            const radius = 9;
-            camera.position.x = Math.cos(rotationAngle) * radius;
-            camera.position.z = Math.sin(rotationAngle) * radius;
-            camera.position.y = 6;
-            camera.lookAt(0, 0, 0);
-            if (rotationAngle >= 2.5 * Math.PI ) {
-                rotationAngle = 0;
-                initialCameraRotation = false;
-                transitioningCamera = true;
-                cameraStartPosition.copy(camera.position);
-            }
-            renderer.render(scene, camera);
-            // return;
+    // Créer une boîte autour de la balle pour la détection de collision
+    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.25, 0.25, 0.25));
+
+    // Vérifier collision avec paddle1
+    if (paddle1Box.intersectsBox(ballBox)) {
+        // Raycast pour détecter les collisions avec les côtés des palettes
+        const ballRay = new THREE.Raycaster(ball.position, ballDirection.clone().normalize());
+        const intersections = ballRay.intersectObject(paddle1);
+
+        if (intersections.length > 0) {
+            ballDirection.x *= -1; // Rebondir horizontalement
+            ballSpeed += speedIncrease; // Augmenter la vitesse après la collision
         }
-        moveAI();
-        moveAI2();
     }
 
-    // if (transitioningCamera) {
-        camera.position.lerp(cameraTargetPosition, cameraTransitionSpeed);
-        if (camera.position.distanceTo(cameraTargetPosition) < 0.1) {
-            camera.position.copy(cameraTargetPosition);
-            cameraStartPosition.copy(camera.position);
-            transitioningCamera = false;
+    // Vérifier collision avec paddle2
+    if (paddle2Box.intersectsBox(ballBox)) {
+        // Raycast pour détecter les collisions avec les côtés des palettes
+        const ballRay = new THREE.Raycaster(ball.position, ballDirection.clone().normalize());
+        const intersections = ballRay.intersectObject(paddle2);
+
+        if (intersections.length > 0) {
+            ballDirection.x *= -1; // Rebondir horizontalement
+            ballSpeed += speedIncrease; // Augmenter la vitesse après la collision
         }
+    }
+}
+
+function handleInitialCameraRotation() {
+
+    if (initialCameraRotation) {
+        rotationAngle += 0.01;
+        const radius = 9;
+        camera.position.x = Math.cos(rotationAngle) * radius;
+        camera.position.z = Math.sin(rotationAngle) * radius;
+        camera.position.y = 6;
         camera.lookAt(0, 0, 0);
+        if (rotationAngle >= 1.5 * Math.PI) {
+            rotationAngle = 0;
+            initialCameraRotation = false;
+            transitioningCamera = true;
+            cameraStartPosition.copy(camera.position);
+        }
         renderer.render(scene, camera);
         // return;
-    // }
-    
-    if (isSinglePlayer) {
-        moveAI(); // Lancer l'IA si le mode solo est activé
     }
+
+
+}
+
+function handleCameraTransition() {
+    camera.position.lerp(cameraTargetPosition, cameraTransitionSpeed);
+    if (camera.position.distanceTo(cameraTargetPosition) < 0.1) {
+        camera.position.copy(cameraTargetPosition);
+        cameraStartPosition.copy(camera.position);
+        transitioningCamera = false;
+    }
+    camera.lookAt(0, 0, 0);
+    renderer.render(scene, camera);
+}
+
+function updatePaddlesPosition() {
     paddle1.position.z += paddle1Speed;
     paddle2.position.z += paddle2Speed;
 
     const paddleLimitY = 3.9;
     paddle1.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle1.position.z));
     paddle2.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle2.position.z));
+}
 
+function updateBallPosition() {
     ball.position.add(ballDirection.clone().multiplyScalar(ballSpeed));
 
     if (ball.position.z + 0.1 > 5 || ball.position.z - 0.1 < -5) {
@@ -305,97 +338,99 @@ function animate() {
 
     if (ball.position.x + 0.2 > 5) {
         score1 += 1;
-        if (isTournament) {
-            tournamentScores.player1 += 1;
-            if (currentMatch >= maxMatches) {
-                endTournament(player1);
-                return;
-            }
-        }
         resetBall();
     } else if (ball.position.x - 0.2 < -5) {
         score2 += 1;
-        if (isTournament) {
-            tournamentScores.player2 += 1;
-            if (currentMatch >= maxMatches) {
-                endTournament(player2);
-                return;
-            }
-        }
         resetBall();
     }
+}
 
-    if (ball.position.x + 0.1 > paddle2.position.x - 0.2 &&
-        ball.position.x - 0.1 < paddle2.position.x + 0.2 &&
-        ball.position.z + 0.1 > paddle2.position.z - 1 &&
-        ball.position.z - 0.1 < paddle2.position.z + 1) {
-        ballDirection.x *= -1;
-        ballSpeed += speedIncrease;
-    }
-    if (ball.position.x + 0.1 > paddle1.position.x - 0.2 &&
-        ball.position.x - 0.1 < paddle1.position.x + 0.2 &&
-        ball.position.z + 0.1 > paddle1.position.z - 1 &&
-        ball.position.z - 0.1 < paddle1.position.z + 1) {
-        ballDirection.x *= -1;
-        ballSpeed += speedIncrease;
-    }
-
-    drawScores();
-
-    if (score1 >= 7) {     
+function checkGameOver() {
+    if (score1 >= 7) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
         showWinMessage(player1);
         gameOver = true;
-   
-    } else if (score2 >= 7) {       
+    } else if (score2 >= 7) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
         showWinMessage(player2);
         gameOver = true;
-
     }
+}
+
+// Fonction d'animation
+function animate() {
+    requestAnimationFrame(animate);
+
+    if (isPaused || gameOver) return;
+
+    if (!modeSelected) {
+        handleInitialCameraRotation();
+        moveAI();
+        moveAI2();
+    }
+
+    handleCameraTransition();
+
+    if (isSinglePlayer) {
+        moveAI(); // Lancer l'IA si le mode solo est activé
+    }
+
+    updatePaddlesPosition();
+    updateBallPosition();
+    detectCollision();
+    drawScores();
+    checkGameOver();
 
     renderer.render(scene, camera);
 }
 
 // Fonction pour gérer les contrôles du clavier
 function onDocumentKeyDown(event) {
+
     if (!gameStarted) {
-            gameStarted = true;
-        }
-    if (event.key === 'Escape') {
-        if (menu.style.display === 'block') {
-            setMenuVisibility(false); // Cacher le menu si déjà visible
-            isPaused = false; // Reprendre le jeu
-        } else {
-            setMenuVisibility(true); // Afficher le menu sinon
-            isPaused = true; // Mettre le jeu en pause
-    
-        }
-    }
-    if (ia1Active) {
-        if (event.key === 'w' || event.key === 's') {
-            // Bloquer les touches 'w' et 's' si IA 1 est active
-            return;
-        }
+        gameStarted = true;
     }
 
-    if (ia2Active) {
-        if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-            // Bloquer les touches 'ArrowUp' et 'ArrowDown' si IA 2 est active
-            return;
-        }
-    }
+    switch (event.key) {
+        case 'Escape':
+            if (menu.style.display === 'block') {
+                setMenuVisibility(false); // Cacher le menu si déjà visible
+                isPaused = false; // Reprendre le jeu
+            } else {
+                setMenuVisibility(true); // Afficher le menu sinon
+                isPaused = true; // Mettre le jeu en pause
+            }
+            return; // Sortir après avoir géré l'échappement
 
-    if (event.key === 'ArrowUp') {
-        paddle2Speed = !ia2Active ? -paddleSpeed : 0;
-    } else if (event.key === 'ArrowDown') {
-        paddle2Speed = !ia2Active ? paddleSpeed : 0;
-    } else if (event.key === 'w') {
-        paddle1Speed = !ia1Active ? -paddleSpeed : 0;
-    } else if (event.key === 's') {
-        paddle1Speed = !ia1Active ? paddleSpeed : 0;
+        case 'ArrowUp':
+            if (!ia2Active) {
+                paddle2Speed = -paddleSpeed;
+            }
+            break;
+
+        case 'ArrowDown':
+            if (!ia2Active) {
+                paddle2Speed = paddleSpeed;
+            }
+            break;
+
+        case 'w':
+            if (!ia1Active) {
+                paddle1Speed = -paddleSpeed;
+            }
+            break;
+
+        case 's':
+            if (!ia1Active) {
+                paddle1Speed = paddleSpeed;
+            }
+            break;
+
+        default:
+            // Aucun traitement pour les autres touches
+            break;
     }
 }
 
@@ -417,6 +452,7 @@ function setMenuVisibility(visible) {
     menu.style.display = visible ? 'block' : 'none';
 }
 let isEventListenerAdded = false;
+
 async function populateUserDropdowns() {
     try {
         const response = await fetch('/api/get-usernames/');
@@ -492,6 +528,7 @@ document.getElementById('multiPlayer').addEventListener('click', () => {
         showNameForm();
     });
 });
+
 // Fonction pour démarrer le jeu
 function startGame(mode) {
     if (mode === 'singlePlayer') {
@@ -541,16 +578,6 @@ setMenuVisibility(true);
 document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
 document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
-
-// // Ajuster la taille du rendu en cas de redimensionnement de la fenêtre
-// window.addEventListener('resize', () => {
-//     camera.aspect = window.innerWidth / window.innerHeight;
-//     camera.updateProjectionMatrix();
-//     renderer.setSize(window.innerWidth, window.innerHeight);
-//     scoreCanvas.width = window.innerWidth;
-//     scoreCanvas.height = 100;
-//     drawScores();
-// });
 
 // Lancer l'animation
 async function initializeGame() {
