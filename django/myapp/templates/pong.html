@@ -81,6 +81,35 @@
         <button id="closeNameForm">Close</button> <!-- Nouveau bouton pour fermer -->
     </div>
 
+    <!-- Formulaire pour la sélection des joueurs en tournoi -->
+<div id="tournamentForm" style="display: none;">
+    <h2>Choisir les joueurs pour le tournoi</h2>
+    <div>
+        <label for="player5Select">Joueur 1:</label>
+        <select id="player5Select"></select>
+    </div>
+    <div>
+        <label for="player6Select">Joueur 2:</label>
+        <select id="player6Select"></select>
+    </div>
+    <div>
+        <label for="player3Select">Joueur 3:</label>
+        <select id="player3Select"></select>
+    </div>
+    <div>
+        <label for="player4Select">Joueur 4:</label>
+        <select id="player4Select"></select>
+    </div>
+    <button id="startTournament">Démarrer le tournoi</button>
+    <button id="cancelTournament">Annuler</button>
+</div>
+<!-- <div id="tournamentPlayersDisplay">
+    <p id="player5Name">Player 1: </p>
+    <p id="player6Name">Player 2: </p>
+    <p id="player3Name">Player 3: </p>
+    <p id="player4Name">Player 4: </p>
+</div> -->
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="{% static 'index.js' %}"></script>
 </body>

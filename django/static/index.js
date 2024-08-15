@@ -1,4 +1,94 @@
 
+function updateTournamentPlayersDisplay() {
+    // Sélectionner les éléments HTML pour afficher les noms des joueurs
+    const player1NameElement = document.getElementById('player5Name');
+    const player2NameElement = document.getElementById('player6Name');
+    const player3NameElement = document.getElementById('player3Name');
+    const player4NameElement = document.getElementById('player4Name');
+
+    // Mettre à jour le texte des éléments avec les noms des joueurs sélectionnés
+    player1NameElement.textContent = `Player 1: ${tournamentPlayers[0] || 'Not selected'}`;
+    player2NameElement.textContent = `Player 2: ${tournamentPlayers[1] || 'Not selected'}`;
+    player3NameElement.textContent = `Player 3: ${tournamentPlayers[2] || 'Not selected'}`;
+    player4NameElement.textContent = `Player 4: ${tournamentPlayers[3] || 'Not selected'}`;
+}
+
+// Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
+function startTournamentHandler() {
+    const player1 = document.getElementById('player5Select').value || 'Joueur 1';
+    const player2 = document.getElementById('player6Select').value || 'Joueur 2';
+    const player3 = document.getElementById('player3Select').value || 'Joueur 3';
+    const player4 = document.getElementById('player4Select').value || 'Joueur 4';
+
+    // Vérifier la sélection unique des joueurs
+    const selectedPlayers = [player1, player2, player3, player4];
+    if (new Set(selectedPlayers).size !== selectedPlayers.length) {
+        alert('Chaque joueur doit avoir un nom unique.');
+        return;
+    }
+
+    // Save the selected players
+    tournamentPlayers = selectedPlayers;
+    
+    // Close the form and start the tournament
+    document.getElementById('tournamentForm').style.display = 'none';
+    startGame('tournament');
+
+    // Update the display with the selected player names
+    updateTournamentPlayersDisplay();
+}
+
+let tournamentPlayers = [];
+let currentMatch = 1;
+let tournamentScores = { player1: 0, player2: 0, player3: 0, player4: 0 };
+
+async function populateTournamentDropdowns() {
+    try {
+        const response = await fetch('/api/get-usernames/');
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.statusText}`);
+        }
+        const data = await response.json();
+        const usernames = data.usernames;
+
+        if (usernames && usernames.length > 0) {
+            const selects = ['player5Select', 'player6Select', 'player3Select', 'player4Select'];
+
+            selects.forEach(selectId => {
+                const selectElement = document.getElementById(selectId);
+                selectElement.innerHTML = ''; // Clear previous options
+                usernames.forEach(username => {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    selectElement.appendChild(option);
+                });
+            });
+
+            // Set up event listeners for player selection
+            document.getElementById('startTournament').addEventListener('click', startTournamentHandler);
+            document.getElementById('cancelTournament').addEventListener('click', () => {
+                document.getElementById('tournamentForm').style.display = 'none';
+                setMenuVisibility(true); // Show the main menu
+            });
+            
+        } else {
+            console.error('No usernames available.');
+        }
+    } catch (error) {
+        console.error('Error fetching usernames:', error);
+    }
+}
+
+function showTournamentForm() {
+    document.getElementById('tournamentForm').style.display = 'block';
+    populateTournamentDropdowns();
+}
+
+// Call `showTournamentForm` when the tournament button is clicked
+document.getElementById('tournament').addEventListener('click', showTournamentForm);
+
+
 // Fonction pour mettre à jour la taille du rendu et de la caméra
 function onWindowResize() {
     // Mettre à jour la taille du rendu
