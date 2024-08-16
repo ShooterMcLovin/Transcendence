@@ -6,7 +6,10 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import CustomUser
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm, ChangePasswordForm
+from django.templatetags.static import static
+from .forms import AvatarForm
 ##
+
 
 def get_usernames(request):
     # Liste des noms d'utilisateur
@@ -26,37 +29,37 @@ from .models import CustomUser
 import json
 
 # @csrf_exempt  # Remove this decorator in production and handle CSRF properly
-@require_POST
 def update_winner(request):
     try:
         data = json.loads(request.body)
         winner_username = data.get('winner')
         loser_username = data.get('loser')
-        
-        if not winner_username or not loser_username:
+
+        if not winner_username and not loser_username:
             return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
 
-        try:
-            winner = CustomUser.objects.get(nickname=winner_username)
-        except CustomUser.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
+        # Try to update the winner if not 'AI' or 'IA'
+        if winner_username not in ['AI', 'IA']:
+            try:
+                winner = CustomUser.objects.get(nickname=winner_username)
+                winner.wins += 1
+                winner.save()
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
 
-        try:
-            loser = CustomUser.objects.get(nickname=loser_username)
-        except CustomUser.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
-
-        winner.wins += 1
-        loser.losses += 1
-        winner.save()
-        loser.save()
+        # Try to update the loser if not 'AI' or 'IA'
+        if loser_username not in ['AI', 'IA']:
+            try:
+                loser = CustomUser.objects.get(nickname=loser_username)
+                loser.losses += 1
+                loser.save()
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
 
         return JsonResponse({'status': 'success'})
-    
+
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-
-
 #define views, links them to html files
 def user_logout(request):
     logout(request)
@@ -99,10 +102,10 @@ def profile(request):
     if request.method == 'POST':
         user_profile_form = UserProfileForm(request.POST, instance=request.user)
         change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
+        avatar_form = AvatarForm(request.POST, instance=request.user)  # Add this form
 
         if 'update_profile' in request.POST:
             if user_profile_form.is_valid():
-                # Only update if there is a change
                 new_username = user_profile_form.cleaned_data.get('nickname')
                 new_email = user_profile_form.cleaned_data.get('email')
                 if (new_username and new_username != request.user.nickname) or (new_email and new_email != request.user.email):
@@ -111,16 +114,25 @@ def profile(request):
         if 'change_password' in request.POST:
             if change_password_form.is_valid():
                 user = change_password_form.save()
-                update_session_auth_hash(request, user)  # Keep the user logged in after password change
-                return redirect('profile')  # Redirect after successful change
+                update_session_auth_hash(request, user)
+                return redirect('profile')
+
+        if 'update_avatar' in request.POST:
+            if avatar_form.is_valid():
+                avatar_url = avatar_form.cleaned_data.get('avatar_url')
+                request.user.avatar_url = avatar_url
+                request.user.save()
+                return redirect('profile')
 
     else:
         user_profile_form = UserProfileForm(instance=request.user)
         change_password_form = ChangePasswordForm(user=request.user)
+        avatar_form = AvatarForm(instance=request.user)  # Add this form
 
     return render(request, 'profile.html', {
         'user_profile_form': user_profile_form,
         'change_password_form': change_password_form,
+        'avatar_form': avatar_form,  # Pass the avatar form to the template
     })
 
 @login_required
@@ -160,3 +172,18 @@ def user_list(request):
         'users': users,
         'logged_in_user': logged_in_user
     })
+
+@login_required
+def update_avatar(request):
+    if request.method == 'POST':
+        avatar_url = request.POST.get('avatar_url')
+        if avatar_url:
+            user = request.user
+            user.avatar_url = avatar_url
+            user.save()
+            messages.success(request, 'Avatar updated successfully!')
+        else:
+            messages.error(request, 'Invalid URL. Please try again.')
+        return redirect('profile')  # Adjust to your URL pattern name
+    
+    return render(request, 'update_avatar.html')

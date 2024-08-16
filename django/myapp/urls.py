@@ -23,4 +23,5 @@ urlpatterns = [
     path('api/get-username/', views.get_username, name='get_username'),
     path('pong/api/get-username/', views.get_username, name='get_username'),
     path('api/update-winner/', views.update_winner, name='update_winner'),
+    path('update-avatar/', views.update_avatar, name='update_avatar'),
 ]

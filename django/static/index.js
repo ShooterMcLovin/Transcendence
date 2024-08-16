@@ -1,3 +1,5 @@
+
+
 function sendWinnerMessage(win, lose) {
     console.log(`Winner: ${win}, Loser: ${lose}`);
 
@@ -138,6 +140,12 @@ function showTournamentForm() {
 // Call `showTournamentForm` when the tournament button is clicked
 document.getElementById('tournament').addEventListener('click', showTournamentForm);
 
+// Fonction pour ajuster la taille de la police en fonction de la hauteur du canvas
+function getFontSize() {
+    // Vous pouvez ajuster ce facteur en fonction de vos besoins
+    const fontSizeFactor = 0.33; 
+    return scoreCanvas.height * fontSizeFactor;
+}
 
 // Fonction pour mettre à jour la taille du rendu et de la caméra
 function onWindowResize() {
@@ -147,7 +155,15 @@ function onWindowResize() {
     // Mettre à jour le rapport d'aspect de la caméra
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix(); // Mettre à jour la matrice de projection de la caméra
+
+    // Mettre à jour la taille du canvas de score
+    scoreCanvas.width = window.innerWidth;
+    scoreCanvas.height = 100;
+
+    // Redessiner les scores après le redimensionnement
+    drawScores();
 }
+
 // Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
 window.addEventListener('resize', onWindowResize);
 
@@ -290,11 +306,15 @@ function moveAI2() {
 
 // Ajoutez cette fonction pour contrôler le mouvement de l'IA
 function moveAI() {
-    const aiSpeed = 0.05 + (0.005 * score2); // Vitesse de déplacement de l'IA
+    const aiSpeed = 0.05 + (0.005 * score1); // Vitesse de déplacement de l'IA
+    const randomFactor = Math.random() * 0.1; // Facteur de variation aléatoire
 
-    if (ball.position.z > paddle1.position.z + aiSpeed) {
+    // Prendre en compte la position future de la balle
+    const futureBallPosition = ball.position.clone().add(ballDirection.clone().multiplyScalar(ballSpeed * 2));
+
+    if (futureBallPosition.z > paddle1.position.z + aiSpeed + randomFactor) {
         paddle1.position.z += aiSpeed;
-    } else if (ball.position.z < paddle1.position.z - aiSpeed) {
+    } else if (futureBallPosition.z < paddle1.position.z - aiSpeed - randomFactor) {
         paddle1.position.z -= aiSpeed;
     }
 
@@ -302,6 +322,7 @@ function moveAI() {
     const paddleLimitY = 3.9;
     paddle1.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle1.position.z));
 }
+
 
 
 
@@ -319,13 +340,21 @@ document.body.appendChild(scoreCanvas);
 // Fonction pour dessiner les scores
 function drawScores() {
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    scoreContext.font = '30px Arial';
+    const fontSize = getFontSize(); // Ajuster la taille de la police
+    scoreContext.font = `${fontSize}px Arial`;
+    
+    // Calculer les positions pour centrer les scores
+    const leftScoreX = scoreCanvas.width / 4;
+    const rightScoreX = scoreCanvas.width / 4 * 3;
+    const textY = scoreCanvas.height / 2;
+
     scoreContext.fillStyle = 'blue';
-    scoreContext.textAlign = 'left';
-    scoreContext.fillText(`Joueur 1 (${player1}): ${score1}`, scoreCanvas.width / 4, scoreCanvas.height / 4 * 2);
+    scoreContext.textAlign = 'center';
+    scoreContext.fillText(`Joueur 1 (${player1}): ${score1}`, leftScoreX, textY);
+
     scoreContext.fillStyle = 'red';
-    scoreContext.textAlign = 'right';
-    scoreContext.fillText(`Joueur 2 (${player2}): ${score2}`, scoreCanvas.width / 4 * 3, scoreCanvas.height / 4 * 2);
+    scoreContext.textAlign = 'center';
+    scoreContext.fillText(`Joueur 2 (${player2}): ${score2}`, rightScoreX, textY);
 }
 
 // Fonction pour afficher le message de victoire
@@ -624,17 +653,8 @@ async function populateUserDropdowns() {
 
             // Populate player1Select
             populateSelect(player1Select, usernames);
+            populateSelect(player2Select, usernames);
 
-            // Populate player2Select with options excluding selected player1 options
-            player1Select.addEventListener('change', () => {
-                const selectedPlayer1 = player1Select.value;
-                const availableForPlayer2 = usernames.filter(username => username !== selectedPlayer1);
-                player2Select.innerHTML = ''; // Clear previous options
-                populateSelect(player2Select, availableForPlayer2);
-            });
-
-            // Trigger change event to initialize player2 options
-            player1Select.dispatchEvent(new Event('change'));
         } else {
             console.error('No usernames available.');
         }
@@ -661,6 +681,13 @@ function startMultiplayerHandler() {
     player2 = player2Select.value || 'Joueur 2';
     const nameForm = document.getElementById('nameForm');
     nameForm.style.display = 'none';
+    const selectedPlayers = [player1, player2];
+    if (new Set(selectedPlayers).size !== selectedPlayers.length) {
+        alert('Chaque joueur doit avoir un nom unique.');
+        showNameForm();
+        return;
+    }
+
     startGame('multiPlayer');
 }
 

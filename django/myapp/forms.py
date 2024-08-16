@@ -23,3 +23,12 @@ class ChangePasswordForm(PasswordChangeForm):
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}))
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={'autocomplete': 'new-password'}))
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['avatar_url']  # Ensure this field exists in your User model
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['avatar_url'].widget.attrs.update({'class': 'form-control'})

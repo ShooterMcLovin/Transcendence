@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.templatetags.static import static
 
+
 class CustomUser(AbstractUser):
     nickname = models.CharField(max_length=5, blank=True, null=True)
     wins = models.PositiveIntegerField(default=0)  # Counter for wins
@@ -9,12 +10,7 @@ class CustomUser(AbstractUser):
     tournament_wins = models.PositiveIntegerField(default=0)  # Counter for wins
     tournament_losses = models.PositiveIntegerField(default=0)  # Counter for losses
     
-    avatar_url = models.URLField(
-        max_length=200,
-        blank=True,
-        null=True,
-        default=static('images/42-logo.png')  # Default image URL
-    )
+    avatar_url = models.URLField(blank=True, null=True)
 
     groups = models.ManyToManyField(
         'auth.Group',
@@ -30,6 +26,12 @@ class CustomUser(AbstractUser):
         help_text='Specific permissions for this user.',
         verbose_name='user permissions',
     )
+    def get_avatar_url(self):
+        if self.avatar_url:
+            return self.avatar_url
+        return static('images/42-logo.png')
+
+
 
 class Match(models.Model): 
     winner = models.ForeignKey(CustomUser, related_name='won_matches', on_delete=models.CASCADE)
@@ -44,7 +46,7 @@ class Friendship(models.Model):
     user = models.ForeignKey(CustomUser, related_name='friends', on_delete=models.CASCADE)
     friend = models.ForeignKey(CustomUser, related_name='friend_of', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)  # Status of the friendship
+    is_friend = models.BooleanField(default=True)  # Status of the friendship
 
     class Meta:
         unique_together = ('user', 'friend')

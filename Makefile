@@ -33,4 +33,4 @@ re: down clean up
 
 handle_error:
 	@make down
-	@exit 1
+	@exit 42
