@@ -1,4 +1,81 @@
 
+let isPaused = false;
+//variable globale tournois
+let isFirstMatchComplete = false;
+let isTournament = false;
+let match2Players;
+let tournamentPlayers = [];
+let currentMatch = 1;
+let tournamentScores = { player1: 0, player2: 0, player3: 0, player4: 0 };
+
+// Fonction pour afficher/masquer le menu de pause
+function setPauseMenuVisibility(visible) {
+    const pauseMenu = document.getElementById('pauseMenu');
+    pauseMenu.style.display = visible ? 'block' : 'none';
+}
+
+// Fonction pour gérer le clic sur le bouton Start
+document.getElementById('resumeButton').addEventListener('click', () => {
+    setPauseMenuVisibility(false); // Cacher le menu de pause
+    isPaused = false; // Reprendre le jeu
+});
+
+function handleSpaceKey(event) {
+    currentMatch = 2;
+    startMatch(match2Players[0], match2Players[1], 'Match 2');
+    isFirstMatchComplete = false;
+}
+
+function startTournamentMatches() {
+    // Assurez-vous que les joueurs sont bien sélectionnés
+    if (tournamentPlayers.length !== 4) {
+        console.error('Quatre joueurs doivent être sélectionnés pour commencer le tournoi.');
+        return;
+    }
+    isPaused = false;
+
+    // Mélanger les joueurs pour obtenir un tirage aléatoire
+    const shuffledPlayers = [...tournamentPlayers].sort(() => 0.5 - Math.random());
+
+    // Définir les matchs
+    const match1Players = [shuffledPlayers[0], shuffledPlayers[1]];
+    match2Players = [shuffledPlayers[2], shuffledPlayers[3]];
+
+    console.log(`Match 1: ${match1Players[0]} vs ${match1Players[1]}`);
+    console.log(`Match 2: ${match2Players[0]} vs ${match2Players[1]}`);
+    // Commencer les matchs
+    currentMatch = 1;
+    startMatch(match1Players[0], match1Players[1], 'Match 1');
+}
+
+// Fonction pour démarrer un match
+function startMatch(playerA, playerB, matchName) {
+    console.log(`Démarrage du ${matchName}: ${playerA} vs ${playerB}`);
+
+    // Réinitialiser les scores pour ce match
+    tournamentScores[playerA] = 0;
+    tournamentScores[playerB] = 0;
+
+    // Configurer les joueurs pour ce match
+    player1 = playerA;
+    player2 = playerB;
+
+    // Réinitialiser les scores
+    score1 = 0;
+    score2 = 0;
+
+    // Mettre à jour le mode du jeu
+    isSinglePlayer = false;
+    isMultiplayer = false;
+    isTournament = true;
+
+    // Démarrer le jeu pour le match en cours
+    startGame('tournament');
+    drawScores();
+    setPauseMenuVisibility(true); // Afficher le menu de pause
+    isPaused = true;
+
+}
 
 function sendWinnerMessage(win, lose) {
     console.log(`Winner: ${win}, Loser: ${lose}`);
@@ -11,28 +88,26 @@ function sendWinnerMessage(win, lose) {
         },
         body: JSON.stringify({ winner: win, loser: lose }),
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(data => {
-                console.error('Server responded with error:', data);
-                throw new Error(data.message || 'An unknown error occurred');
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            console.log('Game result updated successfully.');
-        } else {
-            console.error(`Error: ${data.message}`);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    console.error('Server responded with error:', data);
+                    throw new Error(data.message || 'An unknown error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Game result updated successfully.');
+            } else {
+                console.error(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
-
-
 
 // Function to get the CSRF token from the cookie
 function getCookie(name) {
@@ -51,22 +126,9 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function updateTournamentPlayersDisplay() {
-    // Sélectionner les éléments HTML pour afficher les noms des joueurs
-    const player1NameElement = document.getElementById('player5Name');
-    const player2NameElement = document.getElementById('player6Name');
-    const player3NameElement = document.getElementById('player3Name');
-    const player4NameElement = document.getElementById('player4Name');
-
-    // Mettre à jour le texte des éléments avec les noms des joueurs sélectionnés
-    player1NameElement.textContent = `Player 1: ${tournamentPlayers[0] || 'Not selected'}`;
-    player2NameElement.textContent = `Player 2: ${tournamentPlayers[1] || 'Not selected'}`;
-    player3NameElement.textContent = `Player 3: ${tournamentPlayers[2] || 'Not selected'}`;
-    player4NameElement.textContent = `Player 4: ${tournamentPlayers[3] || 'Not selected'}`;
-}
-
 // Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
 function startTournamentHandler() {
+
     const player1 = document.getElementById('player5Select').value || 'Joueur 1';
     const player2 = document.getElementById('player6Select').value || 'Joueur 2';
     const player3 = document.getElementById('player3Select').value || 'Joueur 3';
@@ -81,18 +143,12 @@ function startTournamentHandler() {
 
     // Save the selected players
     tournamentPlayers = selectedPlayers;
-    
+
     // Close the form and start the tournament
     document.getElementById('tournamentForm').style.display = 'none';
-    startGame('tournament');
+    startTournamentMatches();
 
-    // Update the display with the selected player names
-    updateTournamentPlayersDisplay();
 }
-
-let tournamentPlayers = [];
-let currentMatch = 1;
-let tournamentScores = { player1: 0, player2: 0, player3: 0, player4: 0 };
 
 async function populateTournamentDropdowns() {
     try {
@@ -123,7 +179,7 @@ async function populateTournamentDropdowns() {
                 document.getElementById('tournamentForm').style.display = 'none';
                 setMenuVisibility(true); // Show the main menu
             });
-            
+
         } else {
             console.error('No usernames available.');
         }
@@ -133,17 +189,16 @@ async function populateTournamentDropdowns() {
 }
 
 function showTournamentForm() {
+    isPaused = true;
     document.getElementById('tournamentForm').style.display = 'block';
     populateTournamentDropdowns();
-}
 
-// Call `showTournamentForm` when the tournament button is clicked
-document.getElementById('tournament').addEventListener('click', showTournamentForm);
+}
 
 // Fonction pour ajuster la taille de la police en fonction de la hauteur du canvas
 function getFontSize() {
     // Vous pouvez ajuster ce facteur en fonction de vos besoins
-    const fontSizeFactor = 0.33; 
+    const fontSizeFactor = 0.33;
     return scoreCanvas.height * fontSizeFactor;
 }
 
@@ -151,7 +206,7 @@ function getFontSize() {
 function onWindowResize() {
     // Mettre à jour la taille du rendu
     renderer.setSize(window.innerWidth, window.innerHeight);
-    
+
     // Mettre à jour le rapport d'aspect de la caméra
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix(); // Mettre à jour la matrice de projection de la caméra
@@ -164,8 +219,7 @@ function onWindowResize() {
     drawScores();
 }
 
-// Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
-window.addEventListener('resize', onWindowResize);
+
 
 ///fonction pour fermer le menu de multijoueur
 function closeNameForm() {
@@ -173,6 +227,10 @@ function closeNameForm() {
     nameForm.style.display = 'none'; // Masquer le formulaire
 }
 
+// Call `showTournamentForm` when the tournament button is clicked
+document.getElementById('tournament').addEventListener('click', showTournamentForm);
+// Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
+window.addEventListener('resize', onWindowResize);
 // Ajouter un écouteur d'événements pour le close du menu multijoueur
 document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
 
@@ -210,7 +268,7 @@ document.body.appendChild(renderer.domElement);
 // Ajout des étoiles en arrière-plan
 const starGeometry = new THREE.BufferGeometry();
 const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
-const starCount = 1000;
+const starCount = 500;
 const starVertices = [];
 for (let i = 0; i < starCount; i++) {
     const x = THREE.MathUtils.randFloatSpread(200);
@@ -342,7 +400,7 @@ function drawScores() {
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     const fontSize = getFontSize(); // Ajuster la taille de la police
     scoreContext.font = `${fontSize}px Arial`;
-    
+
     // Calculer les positions pour centrer les scores
     const leftScoreX = scoreCanvas.width / 4;
     const rightScoreX = scoreCanvas.width / 4 * 3;
@@ -356,6 +414,8 @@ function drawScores() {
     scoreContext.textAlign = 'center';
     scoreContext.fillText(`Joueur 2 (${player2}): ${score2}`, rightScoreX, textY);
 }
+let winners1;
+let winners2;
 
 // Fonction pour afficher le message de victoire
 function showWinMessage(winner, loser) {
@@ -364,14 +424,44 @@ function showWinMessage(winner, loser) {
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
     scoreContext.textAlign = 'center';
-    scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    if (!isTournament && (currentMatch === 1 || currentMatch === 2))
+        scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    else
+        scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
     // Afficher le menu principal
 
-    sendWinnerMessage(winner, loser);
-    setMenuVisibility(true);
-}
 
+
+    if (isTournament) {
+        if (currentMatch === 1) {
+            isFirstMatchComplete = true
+            handleSpaceKey();
+            winners1 = winner;
+        }
+        else if (currentMatch === 2) {
+            // Proceed to final match
+            winners2 = winner;
+            currentMatch = 3;
+            startMatch(winners1, winners2, 'Finale');
+        }
+        else {
+            // Tournament is complete
+            console.log(`${winner} remporte le tournoi !`);
+            tournamentPlayers = []; // Clear players
+            isTournament = false;
+        }
+
+
+
+        sendWinnerMessage(winner, loser);
+
+
+    }
+
+    if (!isTournament)
+        setMenuVisibility(true);
+}
 
 // Fonction pour réinitialiser la balle
 function resetBall() {
@@ -393,7 +483,6 @@ function getRandomDirection() {
     return directions[index];
 }
 
-
 // Variables pour le score
 let player1 = 'AI'; // added variable for name
 let player2; // change to = 'whatever' 
@@ -404,7 +493,6 @@ let gameStarted = false;
 let isSinglePlayer = false;
 let isMultiplayer = false;
 
-let isPaused = false; // Variable pour suivre l'état de pause
 // Variables pour le mouvement de la balle
 let ballSpeed = 0.05;
 let ballDirection = getRandomDirection();
@@ -423,7 +511,9 @@ const cameraTransitionSpeed = 0.05;
 const cameraTargetPosition = new THREE.Vector3(0, 10, 0);
 camera.lookAt(0, 0, 0);
 const cameraStartPosition = new THREE.Vector3();
-let modeSelected = false; // Nouvelle variable pour suivre si un mode a été sélectionné
+
+///variables mode
+let modeSelected = false; 
 
 
 function detectCollision() {
@@ -474,7 +564,7 @@ function handleInitialCameraRotation() {
             cameraStartPosition.copy(camera.position);
         }
         renderer.render(scene, camera);
-        // return;
+
     }
 
 
@@ -517,16 +607,17 @@ function updateBallPosition() {
 }
 
 function checkGameOver() {
-    if (score1 >= 1) {
+    if (score1 >= 7 || score2 >= 7) {
+        const winner = score1 >= 7 ? player1 : player2;
+        const loser = score1 >= 7 ? player2 : player1;
+
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        showWinMessage(player1, player2);
-        gameOver = true;
-    } else if (score2 >= 1) {
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
-        showWinMessage(player2, player1);
-        gameOver = true;
+        showWinMessage(winner, loser);
+
+
+        if (!isTournament)
+            gameOver = true;
     }
 }
 
@@ -697,6 +788,7 @@ document.getElementById('multiPlayer').addEventListener('click', () => {
         showNameForm();
     });
 });
+
 // Fonction pour démarrer le jeu
 function startGame(mode) {
     if (mode === 'singlePlayer') {
@@ -709,7 +801,8 @@ function startGame(mode) {
         paddle2.position.set(4.5, 0, 0);
         isPaused = false; // Reprendre le jeu
         player1 = "IA";
-        
+        player2 = username; // Assign the fetched username to player2
+
     } else if (mode === 'multiPlayer') {
         isSinglePlayer = false;
         isMultiplayer = true;
@@ -719,18 +812,17 @@ function startGame(mode) {
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
         isPaused = false; // Reprendre le jeu
-        // showNameForm();
     } else if (mode === 'tournament') {
         isSinglePlayer = false;
         isMultiplayer = false;
-        isTournament = true;
         ia1Active = false;
         ia2Active = false;
         paddle1.position.set(-4.5, 0, 0);
         paddle2.position.set(4.5, 0, 0);
-        currentMatch = 1;
         tournamentScores = { player1: 0, player2: 0 };
-        isPaused = false; // Reprendre le jeu
+        if (!isTournament)
+            startTournamentMatches();
+        isTournament = true;
     }
 
     modeSelected = true; // Marquer le mode comme sélectionné
@@ -749,14 +841,15 @@ document.getElementById('multiPlayer').addEventListener('click', showNameForm); 
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
 let mode;
 // Lancer l'animation
+let username;
 async function initializeGame() {
-    const username = await fetchUser();
+    username = await fetchUser();
     console.log('Fetched Username:', username);
-    player2 = username; // Assign the fetched username to player2
+    player2 = "IA2"; // Assign the fetched username to player2
     animate();
     // Initialize and start the game
-    if(mode)
-    startGame(mode); // or another mod  e if needed
+    if (mode)
+        startGame(mode); // or another mod  e if needed
 }
 
 
