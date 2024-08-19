@@ -1,4 +1,54 @@
 
+//DO NOT REMOVE!!
+function sendWinnerMessage(win, lose) {
+    console.log(`Winner: ${win}, Loser: ${lose}`);
+
+    fetch('/api/update-winner/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ winner: win, loser: lose }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                console.error('Server responded with error:', data);
+                throw new Error(data.message || 'An unknown error occurred');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Game result updated successfully.');
+        } else {
+            console.error(`Error: ${data.message}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+//DO NOT REMOVE!!
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 let isPaused = false;
 
 //variable globale tournois
@@ -455,7 +505,6 @@ let winners2;
 
 // Fonction pour afficher le message de victoire
 function showWinMessage(winner, loser) {
-
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
@@ -463,8 +512,9 @@ function showWinMessage(winner, loser) {
     if (!isTournament && (currentMatch === 1 || currentMatch === 2))
         scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     else
-        scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
-    scoreContext.font = '20px Arial';
+    scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+scoreContext.font = '20px Arial';
+sendWinnerMessage(winner,loser); //// DO NOT REMOVE!
  
 
 
@@ -640,7 +690,7 @@ function updateBallPosition() {
 }
    // Afficher le menu principal
 function checkGameOver() {
-    if (score1 >= 7 || score2 >= 7) {
+    if (score1 >= 1 || score2 >= 1) {
         const winner = score1 >= 7 ? player1 : player2;
         const loser = score1 >= 7 ? player2 : player1;
 
