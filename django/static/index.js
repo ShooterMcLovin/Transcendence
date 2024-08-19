@@ -1,5 +1,6 @@
 
 let isPaused = false;
+
 //variable globale tournois
 let isFirstMatchComplete = false;
 let isTournament = false;
@@ -19,12 +20,6 @@ document.getElementById('resumeButton').addEventListener('click', () => {
     setPauseMenuVisibility(false); // Cacher le menu de pause
     isPaused = false; // Reprendre le jeu
 });
-
-function handleSpaceKey(event) {
-    currentMatch = 2;
-    startMatch(match2Players[0], match2Players[1], 'Match 2');
-    isFirstMatchComplete = false;
-}
 
 function startTournamentMatches() {
     // Assurez-vous que les joueurs sont bien sélectionnés
@@ -109,47 +104,6 @@ function sendWinnerMessage(win, lose) {
         });
 }
 
-// Function to get the CSRF token from the cookie
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-// Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
-function startTournamentHandler() {
-
-    const player1 = document.getElementById('player5Select').value || 'Joueur 1';
-    const player2 = document.getElementById('player6Select').value || 'Joueur 2';
-    const player3 = document.getElementById('player3Select').value || 'Joueur 3';
-    const player4 = document.getElementById('player4Select').value || 'Joueur 4';
-
-    // Vérifier la sélection unique des joueurs
-    const selectedPlayers = [player1, player2, player3, player4];
-    if (new Set(selectedPlayers).size !== selectedPlayers.length) {
-        alert('Chaque joueur doit avoir un nom unique.');
-        return;
-    }
-
-    // Save the selected players
-    tournamentPlayers = selectedPlayers;
-
-    // Close the form and start the tournament
-    document.getElementById('tournamentForm').style.display = 'none';
-    startTournamentMatches();
-
-}
-
 async function populateTournamentDropdowns() {
     try {
         const response = await fetch('/api/get-usernames/');
@@ -194,6 +148,48 @@ function showTournamentForm() {
     populateTournamentDropdowns();
 
 }
+
+// Function to get the CSRF token from the cookie
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
+function startTournamentHandler() {
+
+    const player1 = document.getElementById('player5Select').value || 'Joueur 1';
+    const player2 = document.getElementById('player6Select').value || 'Joueur 2';
+    const player3 = document.getElementById('player3Select').value || 'Joueur 3';
+    const player4 = document.getElementById('player4Select').value || 'Joueur 4';
+
+    // Vérifier la sélection unique des joueurs
+    const selectedPlayers = [player1, player2, player3, player4];
+    if (new Set(selectedPlayers).size !== selectedPlayers.length) {
+        alert('Chaque joueur doit avoir un nom unique.');
+        return;
+    }
+
+    // Save the selected players
+    tournamentPlayers = selectedPlayers;
+
+    // Close the form and start the tournament
+    document.getElementById('tournamentForm').style.display = 'none';
+    startTournamentMatches();
+
+}
+
 
 // Fonction pour ajuster la taille de la police en fonction de la hauteur du canvas
 function getFontSize() {
@@ -284,17 +280,34 @@ scene.add(stars);
 scene.background = new THREE.Color(0x000000); // Arrière-plan noir
 
 // Lumière
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(0, 10, 10).normalize();
+const light = new THREE.DirectionalLight(0xffffff, 0.5);
+light.position.set(0, 5, 2).normalize();
 scene.add(light);
+
+// Lumière
+const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+light2.position.set(2, 5, 0).normalize();
+scene.add(light2);
 
 // Inclinaison commune (45 degrés)
 const commonRotation = -Math.PI / 2;
 
 // Contour de la carte
 const borderGeometry = new THREE.BoxGeometry(10.2, 0.2, 1);
-const borderMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 }); // Couleur rouge pour le contour
+// Créez un chargeur de textures
+const textureLoader = new THREE.TextureLoader();
 
+// Chargez la texture de bois
+const woodTexture = textureLoader.load('/static/wood.jpg');
+
+// const borderMaterial = new THREE.MeshBasicMaterial({ map: woodTexture }); // Couleur rouge pour le contour
+const borderMaterial = new THREE.MeshPhysicalMaterial({
+    map: woodTexture,
+    roughness: 0.5,
+    metalness: 0.1,
+    clearCoat: 1.0,
+    clearCoatRoughness: 0.1
+  });
 // Bord supérieur
 const topBorder = new THREE.Mesh(borderGeometry, borderMaterial);
 topBorder.position.set(0, 0, 5);
@@ -322,15 +335,30 @@ scene.add(rightBorder);
 
 // Création du plancher
 const floorGeometry = new THREE.PlaneGeometry(10, 10);
-const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x008000 }); // Couleur verte pour le plancher
+// const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x008000 }); // Couleur verte pour le plancher
+const floorMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0x008000 ,
+    roughness: 0.5,
+    metalness: 0.1,
+    clearCoat: 1.0,
+    clearCoatRoughness: 0.1
+  });
+  
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.y = -0.1; // Positionnement légèrement en dessous des bordures pour éviter tout conflit visuel
 floor.rotation.x = commonRotation; // Incliner pour être à plat
 scene.add(floor);
 
 // Création des palettes
-const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1);
-const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1); 
+const paddleMaterial = new THREE.MeshPhysicalMaterial({
+    map: woodTexture,
+    roughness: 0.5,
+    metalness: 0.1,
+    clearCoat: 1.0,
+    clearCoatRoughness: 0.1
+  });  
+// const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
 const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 paddle1.rotation.x = commonRotation;
@@ -342,7 +370,15 @@ scene.add(paddle2);
 
 // Création de la balle
 const ballGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+// const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+
+const ballMaterial = new THREE.MeshPhysicalMaterial({
+    color: 0xffffff,
+    roughness: 0.5,
+    metalness: 0.1,
+    clearCoat: 1.0,
+    clearCoatRoughness: 0.1
+  });
 const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
 scene.add(ball);
@@ -429,14 +465,16 @@ function showWinMessage(winner, loser) {
     else
         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
-    // Afficher le menu principal
+ 
 
 
 
     if (isTournament) {
         if (currentMatch === 1) {
             isFirstMatchComplete = true
-            handleSpaceKey();
+            currentMatch = 2;
+            startMatch(match2Players[0], match2Players[1], 'Match 2');
+            isFirstMatchComplete = false;
             winners1 = winner;
         }
         else if (currentMatch === 2) {
@@ -451,12 +489,7 @@ function showWinMessage(winner, loser) {
             tournamentPlayers = []; // Clear players
             isTournament = false;
         }
-
-
-
         sendWinnerMessage(winner, loser);
-
-
     }
 
     if (!isTournament)
@@ -521,7 +554,7 @@ function detectCollision() {
     const paddle2Box = new THREE.Box3().setFromObject(paddle2);
 
     // Créer une boîte autour de la balle pour la détection de collision
-    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.25, 0.25, 0.25));
+    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.1, 0.25, 0.25));
 
     // Vérifier collision avec paddle1
     if (paddle1Box.intersectsBox(ballBox)) {
@@ -557,7 +590,7 @@ function handleInitialCameraRotation() {
         camera.position.z = Math.sin(rotationAngle) * radius;
         camera.position.y = 6;
         camera.lookAt(0, 0, 0);
-        if (rotationAngle >= 1.5 * Math.PI) {
+        if (rotationAngle >= 0.5 * Math.PI) {
             rotationAngle = 0;
             initialCameraRotation = false;
             transitioningCamera = true;
@@ -605,7 +638,7 @@ function updateBallPosition() {
         resetBall();
     }
 }
-
+   // Afficher le menu principal
 function checkGameOver() {
     if (score1 >= 7 || score2 >= 7) {
         const winner = score1 >= 7 ? player1 : player2;
@@ -834,14 +867,15 @@ function startGame(mode) {
 }
 
 // Afficher le menu au début
-
 setMenuVisibility(true);
 document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
 document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
+
 let mode;
-// Lancer l'animation
 let username;
+
+// Lancer l'animation
 async function initializeGame() {
     username = await fetchUser();
     console.log('Fetched Username:', username);
