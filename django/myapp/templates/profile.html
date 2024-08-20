@@ -2,13 +2,17 @@
 {% load static %}
 {% block title %}Profile{% endblock %}
 
-{% block  extra_css %}
-
+{% block extra_css %}
+<!-- Additional CSS if needed -->
 {% endblock %}
 {% block content %}
-    <h2 class="text-center mb-4">My Profile</h2>
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center mb-4">My Profile</h2>
+    </div>  
     {% csrf_token %}
-    <div class="row">
+    
+    <!-- Avatar and Info Section -->
         <!-- Display Avatar -->
         <div class="col-md-4">
             <div class="text-center mb-4">
@@ -16,17 +20,28 @@
             </div>
         </div>
         
+        <!-- Vertical Separator -->
+        <div class="col-md-1 d-none d-md-block">
+            <div class="vertical-separator"></div>
+        </div>
+
         <!-- Display Username/Nickname -->
-        <div class="col-md-4">
-            <div class="pt-5">
+        <div class="col-md-3">
+            <div class="pr-5 pt-5">
                 <p><strong>Username:</strong> {{ user.username }}</p>
                 <p><strong>Nickname:</strong> {{ user.nickname }}</p>
             </div>
         </div>
         
+        <!-- Vertical Separator -->
+        <div class="col-md-1 d-none d-md-block">
+            <div class="vertical-separator"></div>
+        </div>
+
         <!-- Display Friends -->
-        <div class="col-md-4">
-            <h4 class="text-center mb-2">Friends</h4>
+        <div class="col-md-3">
+            <h4 class="text-center mb-1">Friends</h4>
+            <br>
             <div class="text-center mb-3">
                 <a href="{% url 'user_list' %}" class="btn btn-primary">Find Friends</a>
                 <br><br>
@@ -34,19 +49,27 @@
             </div>
         </div>
     </div>
+
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
     
     <!-- Stats Section -->
-    <div class=container"custom-text-color">
-        <h4 class="text-center mb-2">STATS</h4>
-            <div class="p-4 rounded mb-1">
-                <p><strong>Wins:</strong> {{ user.wins }}</p>
-                <p><strong>Losses:</strong> {{ user.losses }}</p>
-                <p><strong>Tournament Wins:</strong> {{ user.tournament_wins }}</p>
-                <p><strong>Tournament Losses:</strong> {{ user.tournament_losses }}</p>
-            </div>  
-        </div>
-        <a href="{% url 'update_password' %}" class="btn btn-info">Change Password</a>
-        <a href="{% url 'update_profile' %}" class="btn btn-info">Update Profile</a>      
-        </div>
-{% endblock %}
+    <h4 class="text-center mb-3">STATS</h4>
 
+        <div class="p-1 rounded">
+            <p><strong>Wins:</strong> {{ user.wins }}</p>
+            <p><strong>Losses:</strong> {{ user.losses }}</p>
+            <p><strong>Tournament Wins:</strong> {{ user.tournament_wins }}</p>
+            <p><strong>Tournament Losses:</strong> {{ user.tournament_losses }}</p>
+        </div>  
+
+
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
+
+    <!-- Actions Section -->
+    <div class="text-center">
+        <a href="{% url 'update_password' %}" class="btn btn-info mb-2">Change Password</a>
+        <a href="{% url 'update_profile' %}" class="btn btn-info mb-2">Update Profile</a>      
+    </div>
+{% endblock %}
