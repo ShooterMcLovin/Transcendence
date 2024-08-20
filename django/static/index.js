@@ -331,12 +331,12 @@ scene.background = new THREE.Color(0x000000); // Arrière-plan noir
 
 // Lumière
 const light = new THREE.DirectionalLight(0xffffff, 0.5);
-light.position.set(0, 5, 2).normalize();
+light.position.set(0,-12, 4).normalize();
 scene.add(light);
 
 // Lumière
 const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-light2.position.set(2, 5, 0).normalize();
+light2.position.set(0, 12, 4).normalize();
 scene.add(light2);
 
 // Inclinaison commune (45 degrés)
@@ -353,10 +353,10 @@ const woodTexture = textureLoader.load('/static/wood.jpg');
 // const borderMaterial = new THREE.MeshBasicMaterial({ map: woodTexture }); // Couleur rouge pour le contour
 const borderMaterial = new THREE.MeshPhysicalMaterial({
     map: woodTexture,
-    roughness: 0.5,
-    metalness: 0.1,
-    clearCoat: 1.0,
-    clearCoatRoughness: 0.1
+    roughness: 0.6,
+    metalness: 0.3,
+    clearCoat: 3.0,
+    clearCoatRoughness: 0.3
   });
 // Bord supérieur
 const topBorder = new THREE.Mesh(borderGeometry, borderMaterial);
@@ -389,8 +389,8 @@ const floorGeometry = new THREE.PlaneGeometry(10, 10);
 const floorMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x008000 ,
     roughness: 0.5,
-    metalness: 0.1,
-    clearCoat: 1.0,
+    metalness: 0.2,
+    clearCoat: 3.0,
     clearCoatRoughness: 0.1
   });
   
@@ -425,9 +425,9 @@ const ballGeometry = new THREE.SphereGeometry(0.1, 32, 32);
 const ballMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffffff,
     roughness: 0.5,
-    metalness: 0.1,
-    clearCoat: 1.0,
-    clearCoatRoughness: 0.1
+    metalness: 0.3,
+    clearCoat: 3.0,
+    clearCoatRoughness: 0.3
   });
 const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
@@ -505,6 +505,7 @@ let winners2;
 
 // Fonction pour afficher le message de victoire
 function showWinMessage(winner, loser) {
+
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
@@ -512,14 +513,14 @@ function showWinMessage(winner, loser) {
     if (!isTournament && (currentMatch === 1 || currentMatch === 2))
         scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     else
-    scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
-scoreContext.font = '20px Arial';
+        scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    scoreContext.font = '20px Arial';
 sendWinnerMessage(winner,loser); //// DO NOT REMOVE!
  
 
 
 
-    if (isTournament) {
+    if (isTournament) {  
         if (currentMatch === 1) {
             isFirstMatchComplete = true
             currentMatch = 2;
@@ -539,11 +540,10 @@ sendWinnerMessage(winner,loser); //// DO NOT REMOVE!
             tournamentPlayers = []; // Clear players
             isTournament = false;
         }
-        sendWinnerMessage(winner, loser);
     }
 
     if (!isTournament)
-        setMenuVisibility(true);
+         setMenuVisibility(true);
 }
 
 // Fonction pour réinitialiser la balle
@@ -604,7 +604,7 @@ function detectCollision() {
     const paddle2Box = new THREE.Box3().setFromObject(paddle2);
 
     // Créer une boîte autour de la balle pour la détection de collision
-    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.1, 0.25, 0.25));
+    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.1, 0.3, 0.3));
 
     // Vérifier collision avec paddle1
     if (paddle1Box.intersectsBox(ballBox)) {
@@ -690,7 +690,7 @@ function updateBallPosition() {
 }
    // Afficher le menu principal
 function checkGameOver() {
-    if (score1 >= 1 || score2 >= 1) {
+    if (score1 >= 7 || score2 >= 7) {
         const winner = score1 >= 7 ? player1 : player2;
         const loser = score1 >= 7 ? player2 : player1;
 
