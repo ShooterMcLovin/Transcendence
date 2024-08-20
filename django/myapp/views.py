@@ -3,7 +3,6 @@ from django.contrib.auth import login, authenticate, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from django.contrib.auth.models import User
 from .models import CustomUser
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm, ChangePasswordForm
 from django.templatetags.static import static
@@ -74,7 +73,9 @@ def index(request):
     return render(request, 'index.html')
 def view_404(request):
     return render(request, '404.html')
-    # return HttpResponse("Hello, world. You're at the myapp index.")
+def profile(request):
+    return render(request, 'profile.html')
+
 def LoginView(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
@@ -97,71 +98,31 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        user_profile_form = UserProfileForm(request.POST, instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
-        avatar_form = AvatarForm(request.POST, instance=request.user)  # Add this form
-
-        if 'update_profile' in request.POST:
-            if user_profile_form.is_valid():
-                new_username = user_profile_form.cleaned_data.get('nickname')
-                new_email = user_profile_form.cleaned_data.get('email')
-                if (new_username and new_username != request.user.nickname) or (new_email and new_email != request.user.email):
-                    user_profile_form.save()
-
-        if 'change_password' in request.POST:
-            if change_password_form.is_valid():
-                user = change_password_form.save()
-                update_session_auth_hash(request, user)
-                return redirect('profile')
-
-        if 'update_avatar' in request.POST:
-            if avatar_form.is_valid():
-                avatar_url = avatar_form.cleaned_data.get('avatar_url')
-                request.user.avatar_url = avatar_url
-                request.user.save()
-                return redirect('profile')
-
-    else:
-        user_profile_form = UserProfileForm(instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user)
-        avatar_form = AvatarForm(instance=request.user)  # Add this form
-
-    return render(request, 'profile.html', {
-        'user_profile_form': user_profile_form,
-        'change_password_form': change_password_form,
-        'avatar_form': avatar_form,  # Pass the avatar form to the template
-    })
 
 @login_required
 def update_profile(request):
     if request.method == 'POST':
         user_profile_form = UserProfileForm(request.POST, instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user, data=request.POST)
+        avatar_form = AvatarForm(request.POST, instance=request.user)
 
-        if 'update_profile' in request.POST:
+        if 'save_changes' in request.POST:  # Check for the button name
             if user_profile_form.is_valid():
-                # Only update if there is a change
-                new_username = user_profile_form.cleaned_data.get('nickname')
-                new_email = user_profile_form.cleaned_data.get('email')
-                if (new_username and new_username != request.user.nickname) or (new_email and new_email != request.user.email):
-                    user_profile_form.save()
+                user_profile_form.save()  # Save profile updates directly from the form
+                return redirect('profile')  # Redirect to avoid form resubmission
 
-        if 'change_password' in request.POST:
-            if change_password_form.is_valid():
-                user = change_password_form.save()
-                update_session_auth_hash(request, user)  # Keep the user logged in after password change
-                return redirect('profile')  # Redirect after successful change
+        elif 'update_avatar' in request.POST:  # Handle avatar update
+            if avatar_form.is_valid():
+                request.user.avatar_url = avatar_form.cleaned_data.get('avatar_url')
+                request.user.save()  # Save the avatar URL
+                return redirect('profile')  # Redirect to avoid form resubmission
 
     else:
         user_profile_form = UserProfileForm(instance=request.user)
-        change_password_form = ChangePasswordForm(user=request.user)
+        avatar_form = AvatarForm(instance=request.user)
 
-    return render(request, 'profile.html', {
+    return render(request, 'update_profile.html', {
         'user_profile_form': user_profile_form,
-        'change_password_form': change_password_form,
+        'avatar_form': avatar_form,
     })
 
 @login_required
@@ -187,3 +148,21 @@ def update_avatar(request):
         return redirect('profile')  # Adjust to your URL pattern name
     
     return render(request, 'update_avatar.html')
+
+@login_required
+def update_password(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            return redirect('profile')
+        else:
+            # Log form errors to debug
+            print(form.errors)
+    else:
+        form = ChangePasswordForm(user=request.user)
+    
+    return render(request, 'updatePassword.html', {
+        'change_password_form': form,
+    })

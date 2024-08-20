@@ -2,48 +2,71 @@
 {% load static %}
 {% block title %}Profile{% endblock %}
 
+{% block  extra_css %}
+
+{% endblock %}
 {% block content %}
 <div class="container mt-5 custom-text-color">
     <h2 class="text-center mb-4">My Profile</h2>
-    <form method="post" class="form-group">
         {% csrf_token %}
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                
-                
-                <!-- Display Avatar -->
-                 
+        <div class="row">
+            <div class="col-md-4">
                 <div class="text-center mb-4">
+                    <!-- Display Avatar -->
                     <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
-                </div>
-                <!-- Avatar Update Form -->
-                <form method="post" action="{% url 'profile' %}">
-                    {% csrf_token %}
-                    {{ avatar_form.as_p }}
-                    <button type="submit" name="update_avatar" class="btn btn-primary">Update Avatar</button>
-                </form>
-
-                <p><strong>Nickname:</strong> {{ user.nickname }}</p>
-                <p><strong>UserName:</strong> {{ user.username }}</p>
-                
-                <!-- Stats Section -->
-                <h4 class="mb-0 mt-4">STATS</h4>
-                <div class="p-4 rounded mb-1">
-                    <p><strong>Wins:</strong> {{ user.wins }}</p>
-                    <p><strong>Losses:</strong> {{ user.losses }}</p>
-                    <p><strong>Tournament Wins:</strong> {{ user.tournament_wins }}</p>
-                    <p><strong>Tournament Losses:</strong> {{ user.tournament_losses }}</p>
                 </div>
             </div>
 
-            {% comment %} <!-- Change Password Section -->
-            <div class="col-md-6 mb-4">
-                <h4>Change Password</h4>
-                <br>
-                {{ change_password_form.as_p|safe }}
-                <button type="submit" name="change_password" class="btn btn-warning">Change Password</button>
-            </div> {% endcomment %}
+           <div class="col-md-8 d-flex justify-content-end">
+                <div class="pt-5 mb-2">
+                <p><strong>Username:</strong> {{ user.username }}</p>
+                <p><strong>Nickname:</strong> {{ user.nickname }}</p>
+                </div>
+            </div>
         </div>
-    </form>
+        <div class=container"custom-text-color">
+        <!-- Stats Section -->
+        <h4 class="mb-0 mt-4 custom-text-color">STATS</h4>
+        <div class="p-4 rounded mb-1">
+            <p><strong>Wins:</strong> {{ user.wins }}</p>
+            <p><strong>Losses:</strong> {{ user.losses }}</p>
+            <p><strong>Tournament Wins:</strong> {{ user.tournament_wins }}</p>
+            <p><strong>Tournament Losses:</strong> {{ user.tournament_losses }}</p>
+        </div>
+        </div>
+
+                <a href="{% url 'update_password' %}" class="btn btn-info">Update Password</a>
+                <a href="{% url 'update_profile' %}" class="btn btn-info">Update Profile</a>
+                
+            </div>
+        </div>
+
 </div>
 {% endblock %}
+                {% comment %} <!-- Password Change Section -->
+                <h4 class="mt-5">Change Password</h4>
+                <button type="button" id="toggle-password-form" class="btn btn-warning mb-3">Change Password</button>
+
+                <!-- Password change form, initially hidden -->
+                <div id="password-form-container" style="display: none; margin-top: 20px;">
+                    <form method="post" action="{% url 'profile' %}">
+                        {% csrf_token %}
+                        {{ change_password_form.as_p }}
+                        <button type="submit" name="change_password" class="btn btn-primary">Submit</button>
+                    </form>
+                </div> {% endcomment %}
+
+
+<!-- JavaScript for toggling the password form -->
+{% comment %} <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('toggle-password-form').addEventListener('click', function() {
+            var formContainer = document.getElementById('password-form-container');
+            formContainer.classList.toggle('show');
+            console.log('Form class list:', formContainer.classList);
+        });
+    });
+     console.log('Form display:', formContainer.style.display); 
+</script> 
+{% endcomment %}
+

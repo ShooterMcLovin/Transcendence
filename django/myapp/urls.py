@@ -10,7 +10,6 @@ urlpatterns = [
     path('pong/', views.pong, name='pong'), 
     path('pongAI/', views.pongA, name='pongA'), 
     path('profile/', views.profile, name='profile'), 
-    path('update_profile/', views.update_profile, name='update_profile'), 
     path('register/', views.register, name='register'), 
     path('login/', views.LoginView, name='login'),
     path('404/', views.view_404, name='view_404'),
@@ -24,4 +23,6 @@ urlpatterns = [
     path('pong/api/get-username/', views.get_username, name='get_username'),
     path('api/update-winner/', views.update_winner, name='update_winner'),
     path('update-avatar/', views.update_avatar, name='update_avatar'),
+    path('update_password/', views.update_password, name='update_password'), 
+    path('update_profile/', views.update_profile, name='update_profile'), 
 ]

@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<meta charset="UTF-8">
-<meta name="viewport" content=
-    "width=device-width, initial-scale=1.0">
-<title>PONG GAME</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Generic Page
-        {% endblock %}</title>
+    <title>{% block title %}Generic Page{% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            display: flex-start;
             padding-top: 50px;
             padding-left: 150px;
             padding-right: 150px;
@@ -67,7 +61,6 @@
             left: 20px; /* Adjust as needed */
         }
         .top-mid-button {
-            {% comment %} position: relative; /* or absolute depending on the context */ {% endcomment %}
             top: 20px; /* Adjust as needed */
             left: 50%;
             transform: translateX(-50%);
@@ -78,16 +71,19 @@
         }
         .custom-text-color {
             color: #FFA500; /* Orangy/yellow color */
-        }    
+        }
+        
         {% block extra_css %}{% endblock %}
     </style>
 </head>
 <body>
     <a href="{% url 'home' %}" class="btn btn-warning top-left-button">Back to Index</a>
-    <a href="{% if user.is_authenticated %}{% url 'user_list' %}" class="btn btn-secondary top-mid-button">Users</a>{% endif %}
+    {% if user.is_authenticated %}
+        <a href="{% url 'user_list' %}" class="btn btn-secondary top-mid-button">Users</a>
+    {% endif %}
     <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-warning top-right-button">
         {% if user.is_authenticated %}
-        {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
+            {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
         {% else %}
             Login
         {% endif %}
