@@ -199,22 +199,22 @@ function showTournamentForm() {
 
 }
 
-// Function to get the CSRF token from the cookie
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
+// // Function to get the CSRF token from the cookie
+// function getCookie(name) {
+//     let cookieValue = null;
+//     if (document.cookie && document.cookie !== '') {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             // Does this cookie string begin with the name we want?
+//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
+//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+//                 break;
+//             }
+//         }
+//     }
+//     return cookieValue;
+// }
 
 // Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
 function startTournamentHandler() {
@@ -387,12 +387,13 @@ scene.add(rightBorder);
 const floorGeometry = new THREE.PlaneGeometry(10, 10);
 // const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x008000 }); // Couleur verte pour le plancher
 const floorMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x008000 ,
-    roughness: 0.5,
-    metalness: 0.2,
-    clearCoat: 3.0,
-    clearCoatRoughness: 0.1
-  });
+    color: 0x008000, // Couleur de base du matériau
+    roughness: 0.5, // Rugosité
+    metalness: 0.2, // Métal
+    clearCoat: 0.3, // Couche de finition
+    clearCoatRoughness: 0.1, // Rugosité de la couche de finition
+
+});
   
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.y = -0.1; // Positionnement légèrement en dessous des bordures pour éviter tout conflit visuel
@@ -402,13 +403,14 @@ scene.add(floor);
 // Création des palettes
 const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1); 
 const paddleMaterial = new THREE.MeshPhysicalMaterial({
-    map: woodTexture,
-    roughness: 0.5,
-    metalness: 0.1,
-    clearCoat: 1.0,
-    clearCoatRoughness: 0.1
-  });  
-// const paddleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    map: woodTexture, // Texture du bois
+    roughness: 0.5, // Rugosité
+    metalness: 0.1, // Métal
+    clearCoat: 1, // Couche de finition très brillante
+    clearCoatRoughness: 1, // Rugosité élevée de la couche de finition
+    opacity: 1.0, // Opacité complète
+    transparent: false // Le matériau ne sera pas transparent
+});
 const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 paddle1.rotation.x = commonRotation;
@@ -420,22 +422,27 @@ scene.add(paddle2);
 
 // Création de la balle
 const ballGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-// const ballMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+// Créer une lumière ponctuelle
+const pointLight = new THREE.PointLight(0x00ff00, 1, 2); // Couleur verte, intensité 2, distance 50 unités
+// Ajouter la lumière à la scène
+scene.add(pointLight);
 
 const ballMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
-    roughness: 0.5,
-    metalness: 0.3,
-    clearCoat: 3.0,
-    clearCoatRoughness: 0.3
-  });
+    color: 0xffffff, // Couleur de base blanche
+    roughness: 0.1, // Réduit la rugosité pour un meilleur reflet
+    metalness: 0.1, // Comportement métallique
+    clearCoat: 0.1, // Couche de finition normale
+    clearCoatRoughness: 0.1, // Rugosité faible de la couche de finition
+    emissive: 0x00ff00, // Couleur émissive verte
+    emissiveIntensity: 5.0 // Intensité de l'émission ajustée
+});
 const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
 scene.add(ball);
 
 // Ajoutez cette fonction pour contrôler le mouvement de la deuxième IA
 function moveAI2() {
-    const aiSpeed = 0.05 + (0.005 * score1); // Vitesse de déplacement de l'IA 2
+    const aiSpeed = 0.07 + (0.005 * score1); // Vitesse de déplacement de l'IA 2
 
     if (ball.position.z > paddle2.position.z + aiSpeed) {
         paddle2.position.z += aiSpeed;
@@ -450,7 +457,7 @@ function moveAI2() {
 
 // Ajoutez cette fonction pour contrôler le mouvement de l'IA
 function moveAI() {
-    const aiSpeed = 0.05 + (0.005 * score1); // Vitesse de déplacement de l'IA
+    const aiSpeed = 0.07 + (0.005 * score1); // Vitesse de déplacement de l'IA
     const randomFactor = Math.random() * 0.1; // Facteur de variation aléatoire
 
     // Prendre en compte la position future de la balle
@@ -548,7 +555,7 @@ sendWinnerMessage(winner,loser); //// DO NOT REMOVE!
 
 // Fonction pour réinitialiser la balle
 function resetBall() {
-    ball.position.set(0, 0, 0);
+    ball.position.set(0, 0.1, 0);
     ballDirection = getRandomDirection();
     ballSpeed = 0.05;
     gameStarted = false;
@@ -604,7 +611,7 @@ function detectCollision() {
     const paddle2Box = new THREE.Box3().setFromObject(paddle2);
 
     // Créer une boîte autour de la balle pour la détection de collision
-    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.1, 0.3, 0.3));
+    const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.355, 0.355, 0.355));
 
     // Vérifier collision avec paddle1
     if (paddle1Box.intersectsBox(ballBox)) {
@@ -675,11 +682,11 @@ function updatePaddlesPosition() {
 
 function updateBallPosition() {
     ball.position.add(ballDirection.clone().multiplyScalar(ballSpeed));
-
+    pointLight.position.set(ball.position.x,0.2,ball.position.z);
     if (ball.position.z + 0.1 > 5 || ball.position.z - 0.1 < -5) {
         ballDirection.z *= -1;
     }
-
+    
     if (ball.position.x + 0.2 > 5) {
         score1 += 1;
         resetBall();

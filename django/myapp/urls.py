@@ -25,4 +25,7 @@ urlpatterns = [
     path('update-avatar/', views.update_avatar, name='update_avatar'),
     path('update_password/', views.update_password, name='update_password'), 
     path('update_profile/', views.update_profile, name='update_profile'), 
+    path('add_friend/<int:user_id>/', views.add_friend, name='add_friend'),
+    path('remove_friend/<int:user_id>/', views.remove_friend, name='remove_friend'),
+    path('my_friends/', views.my_friends, name='my_friends'),
 ]

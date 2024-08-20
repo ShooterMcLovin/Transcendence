@@ -9,6 +9,7 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['nickname', 'email']  # Add other fields as necessary
+        
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser

@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .models import CustomUser
+from .models import CustomUser, Friendship
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm, ChangePasswordForm
 from django.templatetags.static import static
 from .forms import AvatarForm
+from django.db import IntegrityError
+
 ##
 
 
@@ -24,7 +26,7 @@ def get_username(request):
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
-from .models import CustomUser
+from .models import CustomUser, Friendship
 import json
 
 # @csrf_exempt  # Remove this decorator in production and handle CSRF properly
@@ -127,12 +129,69 @@ def update_profile(request):
 
 @login_required
 def user_list(request):
-    users = CustomUser.objects.all()  # Fetch all users (adjust query as needed)
-    logged_in_user = request.user  # Get the logged-in user
-    return render(request, 'user_list.html', {
-        'users': users,
-        'logged_in_user': logged_in_user
-    })
+    """View to list all users."""
+    users = CustomUser.objects.all()
+    friendships = {user.id: Friendship.objects.filter(user=request.user, friend=user, is_friend=True).exists() for user in users}
+    logged_in_user = request.user
+    return render(request, 'user_list.html', {'users': users,'friendships': friendships, 'logged_in_user': logged_in_user})
+
+@login_required
+def add_friend(request, user_id):
+    """View to add a friend."""
+    friend = get_object_or_404(CustomUser, id=user_id)
+    user = request.user
+
+    # Check if the user is trying to add themselves
+    if user == friend:
+        messages.error(request, "You cannot add yourself as a friend.")
+        return redirect('profile')
+
+    try:
+        # Attempt to create or update the friendship
+        friendship, created = Friendship.objects.get_or_create(
+            user=user,
+            friend=friend,
+            defaults={'is_friend': True}
+        )
+        if not created:
+            if friendship.is_friend:
+                messages.info(request, f"You are already friends with {friend.nickname}.")
+            else:
+                # Reactivate the friendship if it was previously removed
+                friendship.is_friend = True
+                friendship.save()
+                messages.success(request, f"{friend.nickname} has been added back to your friends.")
+        else:
+            messages.success(request, f"You are now friends with {friend.nickname}.")
+    
+    except IntegrityError:
+        messages.error(request, f"An error occurred while trying to add {friend.nickname} as a friend. Please try again.")
+    
+    return redirect('profile')
+
+@login_required
+def remove_friend(request, user_id):
+    """View to remove a friend."""
+    friend = get_object_or_404(CustomUser, id=user_id)
+    user = request.user
+    try:
+        friendship = Friendship.objects.get(user=user, friend=friend, is_friend=True)
+        friendship.is_friend = False
+        friendship.save()
+        messages.success(request, f"{friend.nickname} has been removed from your friends.")
+    except Friendship.DoesNotExist:
+        messages.error(request, f"{friend.nickname} is not in your friend list.")
+    update_session_auth_hash(request, request.user)
+    return redirect('profile')
+
+@login_required
+def my_friends(request):
+    """View to display a list of user's friends."""
+    user = request.user
+    friends = user.friendships.filter(is_friend=True).select_related('friend')
+    
+    context = {'friends': [f.friend for f in friends]}
+    return render(request, 'my_friends.html', context)
 
 @login_required
 def update_avatar(request):

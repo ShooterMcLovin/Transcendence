@@ -1,29 +1,30 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Find Friends{% endblock %}
-
+{% block title %}My Friends{% endblock %}
 {% block content %}
 <div class="container mt-5 custom-text-color">
-    <h2 class="text-center mb-4">Users</h2>
+    <h2 class="text-center mb-4">Friends</h2>
     <div class="user-list-container bg-dark p-4 rounded">
         <ul class="list-group">
-        {% for user in users %}
+        {%if friends%}
+        {% for friend in friends %}
             <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                    <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
+                    <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                        {{ user.nickname }} 
+                        {{ friend.nickname }} 
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                    {%if user.username != logged_in_user.username %}
-                        <a href="{% url 'add_friend' user.id %}" class="btn btn-success">Add Friend</a>
-                    {%else%}
-                        <a href="{% url 'profile'%}" class="btn btn-success">View Profile</a>
-                    {%endif%}
+                    
+                    <a href="{% url 'remove_friend' friend.id %}" class="btn btn-danger">Remove Friend</a>
+        
                 </div>
             </li>
         {% endfor %}
+        {% else %}
+            You have no friends
+        {% endif %}
         </ul>
     </div>
 </div>
