@@ -12,16 +12,16 @@ services:
         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
 
   db:
-    image: postgres:13
+    build: ./postgresql
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
-
+  
   nginx:
     build: ./nginx
     volumes:
@@ -47,5 +47,11 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./postgresql/data
+
   grafana_data:
 

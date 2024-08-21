@@ -15,6 +15,7 @@ compose:
 up:  ## Build and start the containers in detached mode
 	mkdir -p django/media
 	chmod +x django/docker-entrypoint.sh
+	mkdir -p postgresql/data
 	$(DOCKER_COMPOSE) up -d --build
 
 
@@ -28,6 +29,9 @@ clean: ## Remove all stopped containers, networks, and volumes
 	docker volume prune -f
 	docker image prune -a -f
 	docker container prune -f
+
+fclean: down clean
+	rm -rf postgresql/data
 
 re: down clean up
 
