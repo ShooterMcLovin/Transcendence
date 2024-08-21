@@ -8,21 +8,21 @@
     <div class="user-list-container bg-dark p-4 rounded">
         <ul class="list-group">
         {% for user in users %}
+            {% if user.username != 'master' and user.username != 'Guest' %}
             <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-center col-md-4">
                     <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                        {{ user.nickname }} 
+                    <a href="{% url 'user_profile' user.id %}" class="btn btn-success">{{ user.nickname }}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                    {%if user.username != logged_in_user.username %}
-                        <a href="{% url 'add_friend' user.id %}" class="btn btn-success">Add Friend</a>
-                    {%else%}
-                        <a href="{% url 'profile'%}" class="btn btn-success">View Profile</a>
-                    {%endif%}
+                    {% if user.username != logged_in_user.username %}
+                        <a href="{% url 'add_friend' user.id %}" class="btn btn-primary">Add Friend</a>
+                    {% endif %}
                 </div>
             </li>
+            {% endif %}
         {% endfor %}
         </ul>
     </div>

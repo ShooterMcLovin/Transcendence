@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
@@ -8,10 +8,11 @@ from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfile
 from django.templatetags.static import static
 from .forms import AvatarForm
 from django.db import IntegrityError
+from django.http import JsonResponse
 
-##
+import json
 
-
+# links to game
 def get_usernames(request):
     # Liste des noms d'utilisateur
     usernames = list(CustomUser.objects.values_list('nickname', flat=True))
@@ -22,14 +23,6 @@ def get_username(request):
 
     # Return the username of the logged-in user
     return JsonResponse({'username': user.nickname})
-# # Create your views here.
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from django.http import JsonResponse
-from .models import CustomUser, Friendship
-import json
-
-# @csrf_exempt  # Remove this decorator in production and handle CSRF properly
 def update_winner(request):
     try:
         data = json.loads(request.body)
@@ -61,7 +54,8 @@ def update_winner(request):
 
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-#define views, links them to html files
+
+# Basic webpages
 def user_logout(request):
     logout(request)
     return redirect(reverse('logout_done'))
@@ -77,7 +71,12 @@ def view_404(request):
     return render(request, '404.html')
 def profile(request):
     return render(request, 'profile.html')
+def user_profile(request, user_id):
+    userProfile = get_object_or_404(CustomUser, id=user_id)
+    friends = userProfile.get_friends()  # Call the method here
+    return render(request, 'user_profile.html', {'user_profile': userProfile, 'friends': friends})
 
+# credentials
 def LoginView(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
@@ -88,7 +87,6 @@ def LoginView(request):
     else:
         form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
-
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -100,41 +98,7 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
-@login_required
-def update_profile(request):
-    if request.method == 'POST':
-        user_profile_form = UserProfileForm(request.POST, instance=request.user)
-        avatar_form = AvatarForm(request.POST, instance=request.user)
-
-        if 'save_changes' in request.POST:  # Check for the button name
-            if user_profile_form.is_valid():
-                user_profile_form.save()  # Save profile updates directly from the form
-                return redirect('profile')  # Redirect to avoid form resubmission
-
-        elif 'update_avatar' in request.POST:  # Handle avatar update
-            if avatar_form.is_valid():
-                request.user.avatar_url = avatar_form.cleaned_data.get('avatar_url')
-                request.user.save()  # Save the avatar URL
-                return redirect('profile')  # Redirect to avoid form resubmission
-
-    else:
-        user_profile_form = UserProfileForm(instance=request.user)
-        avatar_form = AvatarForm(instance=request.user)
-
-    return render(request, 'update_profile.html', {
-        'user_profile_form': user_profile_form,
-        'avatar_form': avatar_form,
-    })
-
-@login_required
-def user_list(request):
-    """View to list all users."""
-    users = CustomUser.objects.all()
-    friendships = {user.id: Friendship.objects.filter(user=request.user, friend=user, is_friend=True).exists() for user in users}
-    logged_in_user = request.user
-    return render(request, 'user_list.html', {'users': users,'friendships': friendships, 'logged_in_user': logged_in_user})
-
+# friends management
 @login_required
 def add_friend(request, user_id):
     """View to add a friend."""
@@ -168,7 +132,6 @@ def add_friend(request, user_id):
         messages.error(request, f"An error occurred while trying to add {friend.nickname} as a friend. Please try again.")
     
     return redirect('profile')
-
 @login_required
 def remove_friend(request, user_id):
     """View to remove a friend."""
@@ -183,7 +146,6 @@ def remove_friend(request, user_id):
         messages.error(request, f"{friend.nickname} is not in your friend list.")
     update_session_auth_hash(request, request.user)
     return redirect('profile')
-
 @login_required
 def my_friends(request):
     """View to display a list of user's friends."""
@@ -193,6 +155,32 @@ def my_friends(request):
     context = {'friends': [f.friend for f in friends]}
     return render(request, 'my_friends.html', context)
 
+# Updates
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        user_profile_form = UserProfileForm(request.POST, instance=request.user)
+        avatar_form = AvatarForm(request.POST, instance=request.user)
+
+        if 'save_changes' in request.POST:  # Check for the button name
+            if user_profile_form.is_valid():
+                user_profile_form.save()  # Save profile updates directly from the form
+                return redirect('profile')  # Redirect to avoid form resubmission
+
+        elif 'update_avatar' in request.POST:  # Handle avatar update
+            if avatar_form.is_valid():
+                request.user.avatar_url = avatar_form.cleaned_data.get('avatar_url')
+                request.user.save()  # Save the avatar URL
+                return redirect('profile')  # Redirect to avoid form resubmission
+
+    else:
+        user_profile_form = UserProfileForm(instance=request.user)
+        avatar_form = AvatarForm(instance=request.user)
+
+    return render(request, 'update_profile.html', {
+        'user_profile_form': user_profile_form,
+        'avatar_form': avatar_form,
+    })
 @login_required
 def update_avatar(request):
     if request.method == 'POST':
@@ -207,7 +195,6 @@ def update_avatar(request):
         return redirect('profile')  # Adjust to your URL pattern name
     
     return render(request, 'update_avatar.html')
-
 @login_required
 def update_password(request):
     if request.method == 'POST':
@@ -225,3 +212,16 @@ def update_password(request):
     return render(request, 'updatePassword.html', {
         'change_password_form': form,
     })
+
+# User List
+@login_required
+def user_list(request):
+    """View to list all users."""
+    users = CustomUser.objects.all()
+    friendships = {user.id: Friendship.objects.filter(user=request.user, friend=user, is_friend=True).exists() for user in users}
+    logged_in_user = request.user
+    return render(request, 'user_list.html', {'users': users,'friendships': friendships, 'logged_in_user': logged_in_user})
+
+# 404
+def view_404(request, exception=None):
+    return render(request, '404.html', status=404)

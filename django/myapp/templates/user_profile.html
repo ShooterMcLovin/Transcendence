@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Profile{% endblock %}
+
+{% block extra_css %}
+<!-- Additional CSS if needed -->
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="text-center mb-4">{{ user_profile.nickname }}'s Profile</h2>
+    </div>  
+    
+    <!-- Avatar and Info Section -->
+    <!-- Display Avatar -->
+    <div class="col-md-4">
+        <div class="text-center mb-4">
+            <img src="{% if user_profile.avatar_url %}{{ user_profile.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+        </div>
+    </div>
+    
+    <!-- Vertical Separator -->
+    <div class="col-md-1 d-none d-md-block">
+        <div class="vertical-separator"></div>
+    </div>
+
+    <!-- Display Username/Nickname -->
+    <div class="col-md-3">
+        <div class="pr-5 pt-5">
+            <p><strong>Username:</strong> {{ user_profile.username }}</p>
+            <p><strong>Nickname:</strong> {{ user_profile.nickname }}</p>
+        </div>
+    </div>
+    
+    <!-- Vertical Separator -->
+    <div class="col-md-1 d-none d-md-block">
+        <div class="vertical-separator"></div>
+    </div>
+    
+    <div class="col-md-3">
+        <h4 class="text-center mb-4">{{ user_profile.nickname }}'s Friends</h4>
+    <div class="user-list-container bg-dark p-4 rounded">
+        <ul class="list-group">
+            {%if friends%}
+                {% for friend in friends %}
+                    <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle me-2" style="width: 35px; height: 35px;">
+                        </div>
+                        <div class="d-flex align-items-center">
+                            {{ friend.nickname }}
+                        </div>
+                    </li>
+                {% endfor %}
+            {% else %}
+                {{user_profile.nickname}} has no friends
+            {% endif %}
+        </ul>
+    </div>
+    </div>
+    
+</div>
+
+<!-- Horizontal Separator -->
+<hr class="my-4 bg-light">
+
+<!-- Stats Section -->
+<h4 class="text-center mb-3">STATS</h4>
+
+<div class="p-1 rounded">
+    <p><strong>Wins:</strong> {{ user_profile.wins }}</p>
+    <p><strong>Losses:</strong> {{ user_profile.losses }}</p>
+    <p><strong>Tournament Wins:</strong> {{ user_profile.tournament_wins }}</p>
+    <p><strong>Tournament Losses:</strong> {{ user_profile.tournament_losses }}</p>
+</div>  
+
+<!-- Horizontal Separator -->
+<hr class="my-4 bg-light">
+
+{% endblock %}
