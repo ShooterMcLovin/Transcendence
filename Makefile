@@ -33,6 +33,9 @@ clean: ## Remove all stopped containers, networks, and volumes
 fclean: down clean
 	rm -rf postgresql/data
 
+reset: down clean
+	rm -rf postgresql/data
+
 re: down clean up
 
 handle_error:

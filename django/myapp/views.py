@@ -63,6 +63,8 @@ def home(request):
     return render(request, 'home.html')
 def pong(request):
     return render(request, 'pong.html')
+def ttt(request):
+    return render(request, 'ttt.html')
 def pongA(request):
     return render(request, 'pong_ai.html')
 def index(request):

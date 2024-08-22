@@ -8,11 +8,12 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'), 
     path('pong/', views.pong, name='pong'), 
+    path('ttt/', views.ttt, name='ttt'), 
     path('profile/', views.profile, name='profile'), 
     path('user_profile/<int:user_id>/', views.user_profile, name='user_profile'),
     path('register/', views.register, name='register'), 
     path('login/', views.LoginView, name='login'),
-     path('404/', views.view_404, name='view_404'),
+    path('404/', views.view_404, name='view_404'),
     path('logout/', views.user_logout, name='logout'),
     path('logout/done/', TemplateView.as_view(template_name='logout.html'), name='logout_done'),
     path('users/', views.user_list, name='user_list'),
