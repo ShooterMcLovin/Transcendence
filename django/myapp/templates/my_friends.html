@@ -13,7 +13,7 @@
                     <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
-                    <a href="{% url 'user_profile' user.id %}" class="btn btn-info">{{ friend.nickname }}</a>
+                    <a href="{% url 'user_profile' friend.id %}" class="btn btn-info">{{ friend.nickname }}</a>
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-4">
                     

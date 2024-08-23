@@ -3,13 +3,12 @@ FROM postgres:15
 
 # Install gosu
 RUN apt-get update && apt-get install -y \
-    gosu \
-    && rm -rf /var/lib/apt/lists/*
+    gosu 
 
-# Ensure directories exist and have proper permissions
 RUN mkdir -p /var/lib/postgresql/data && \
-    chown -R postgres:postgres /var/lib/postgresql && \
-    chmod 0700 /var/lib/postgresql/data
+chmod 0750 /var/lib/postgresql/data  && \
+chown -R postgres:postgres /var/lib/postgresql
+
 
 # Copy setup script and make it executable
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

@@ -39,7 +39,8 @@
         <div class="pr-5 pt-5">
             <p><strong>Username:</strong> {{ user_profile.username }}</p>
             <p><strong>Nickname:</strong> {{ user_profile.nickname }}</p>
-            {% if user_profile.id == request.user.id %}
+            {% comment %} {% if user_profile.id == request.user.id %} {% endcomment %}
+            {% if user_profile.is_online %}
                 <p class="status-online"><strong>Online</strong></p>
             {% else %}
                 <p class="status-offline"><strong>Offline</strong></p>

@@ -67,11 +67,13 @@ def update_winner(request):
 
 # Basic webpages
 def user_logout(request):
-    if request.user.is_authenticated:
-        logout(request)
+    user = request.user
+    user.is_online = False
+    user.save()
+    logout(request)
     return redirect(reverse('logout_done'))
+
 def home(request):
-    # Explicitly pass context if needed
     context = {
         'user': request.user,
     }
@@ -80,8 +82,6 @@ def pong(request):
     return render(request, 'pong.html')
 def ttt(request):
     return render(request, 'ttt.html')
-def index(request):
-    return render(request, 'index.html')
 def view_404(request):
     return render(request, '404.html')
 def profile(request):
@@ -98,6 +98,8 @@ def LoginView(request):
         form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            user.is_online = True
+            user.save()
             login(request, user) 
             return redirect('home')
     else:
@@ -109,6 +111,8 @@ def register(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            user.is_online = True
+            user.save()
             login(request, user)
             return redirect('home')
     else:

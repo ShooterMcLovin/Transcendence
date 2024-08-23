@@ -15,7 +15,8 @@ compose:
 up:  ## Build and start the containers in detached mode
 	mkdir -p django/media
 	chmod +x django/docker-entrypoint.sh
-	mkdir -p postgresql/data
+	mkdir -p ./postgresql/data
+	chmod 700 ./postgresql/data
 	$(DOCKER_COMPOSE) up -d --build
 
 

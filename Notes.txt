@@ -1,0 +1,13 @@
+Known Bugs:
+    - 1 vs Guest history
+    -
+
+To verify:
+    - Online Status
+    - match history tournaments
+    - docker scan(requirements.txt)
+    - media (needed?)
+    - Friend 2 ways 
+
+To do:
+    - password security
