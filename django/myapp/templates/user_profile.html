@@ -3,7 +3,16 @@
 {% block title %}Profile{% endblock %}
 
 {% block extra_css %}
-<!-- Additional CSS if needed -->
+<style>
+    .status-online {
+        color: green;
+        font-weight: bold;
+    }
+    .status-offline {
+        color: red;
+        font-weight: bold;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +21,6 @@
     <div class="col-md-12">
         <h2 class="text-center mb-4">{{ user_profile.nickname }}'s Profile</h2>
     </div>  
-    
     <!-- Avatar and Info Section -->
     <!-- Display Avatar -->
     <div class="col-md-4">
@@ -31,6 +39,11 @@
         <div class="pr-5 pt-5">
             <p><strong>Username:</strong> {{ user_profile.username }}</p>
             <p><strong>Nickname:</strong> {{ user_profile.nickname }}</p>
+            {% if user_profile.id == request.user.id %}
+                <p class="status-online"><strong>Online</strong></p>
+            {% else %}
+                <p class="status-offline"><strong>Offline</strong></p>
+            {% endif %}
         </div>
     </div>
     
@@ -75,7 +88,9 @@
     <p><strong>Tournament Wins:</strong> {{ user_profile.tournament_wins }}</p>
     <p><strong>Tournament Losses:</strong> {{ user_profile.tournament_losses }}</p>
 </div>  
-
+<div class="text-center p-3">
+    <a href="{% url 'user_history' user_profile.id %}" class="btn btn-info">Match History</a>
+</div>  
 <!-- Horizontal Separator -->
 <hr class="my-4 bg-light">
 

@@ -3,12 +3,13 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .models import CustomUser, Friendship
+from .models import CustomUser, Friendship, Match, Tournament
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm, ChangePasswordForm
 from django.templatetags.static import static
 from .forms import AvatarForm
 from django.db import IntegrityError
 from django.http import JsonResponse
+from django.utils import timezone
 
 import json
 
@@ -23,13 +24,14 @@ def get_username(request):
 
     # Return the username of the logged-in user
     return JsonResponse({'username': user.nickname})
+
 def update_winner(request):
     try:
         data = json.loads(request.body)
         winner_username = data.get('winner')
         loser_username = data.get('loser')
 
-        if not winner_username and not loser_username:
+        if not winner_username or not loser_username:
             return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
 
         # Try to update the winner if not 'AI' or 'IA'
@@ -50,33 +52,45 @@ def update_winner(request):
             except CustomUser.DoesNotExist:
                 return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
 
+        # Create a match record
+        Match.objects.create(
+            winner=winner,
+            loser=loser,
+            match_date=timezone.now()
+        )
+
         return JsonResponse({'status': 'success'})
 
     except json.JSONDecodeError:
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
+
 # Basic webpages
 def user_logout(request):
-    logout(request)
+    if request.user.is_authenticated:
+        logout(request)
     return redirect(reverse('logout_done'))
 def home(request):
-    return render(request, 'home.html')
+    # Explicitly pass context if needed
+    context = {
+        'user': request.user,
+    }
+    return render(request, 'home.html', context)
 def pong(request):
     return render(request, 'pong.html')
 def ttt(request):
     return render(request, 'ttt.html')
-def pongA(request):
-    return render(request, 'pong_ai.html')
 def index(request):
     return render(request, 'index.html')
 def view_404(request):
     return render(request, '404.html')
 def profile(request):
-    return render(request, 'profile.html')
+    user = request.user
+    return render(request, 'profile.html',{'user_profile': user})
 def user_profile(request, user_id):
-    userProfile = get_object_or_404(CustomUser, id=user_id)
-    friends = userProfile.get_friends()  # Call the method here
-    return render(request, 'user_profile.html', {'user_profile': userProfile, 'friends': friends})
+    user = get_object_or_404(CustomUser, id=user_id)
+    friends = user.get_friends()  # Call the method here
+    return render(request, 'user_profile.html', {'user_profile': user, 'friends': friends})
 
 # credentials
 def LoginView(request):
@@ -84,11 +98,12 @@ def LoginView(request):
         form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            login(request, user)
+            login(request, user) 
             return redirect('home')
     else:
         form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -221,9 +236,55 @@ def user_list(request):
     """View to list all users."""
     users = CustomUser.objects.all()
     friendships = {user.id: Friendship.objects.filter(user=request.user, friend=user, is_friend=True).exists() for user in users}
-    logged_in_user = request.user
-    return render(request, 'user_list.html', {'users': users,'friendships': friendships, 'logged_in_user': logged_in_user})
+    friendships_dict = {user.id: user.id in friendships for user in users}
+    context = {
+        'users': users,
+        'friendships': friendships_dict,
+        'logged_in_user': request.user,
+    }
+    return render(request, 'user_list.html', context)
 
 # 404
 def view_404(request, exception=None):
     return render(request, '404.html', status=404)
+
+@login_required
+def match_history(request):
+    """View to display the match history of the logged-in user."""
+    user = request.user
+    matches_won = Match.objects.filter(winner=user).order_by('-match_date')
+    matches_lost = Match.objects.filter(loser=user).order_by('-match_date')
+    
+    # Get all matches and associated tournaments
+    matches = Match.objects.all().order_by('-match_date')
+    
+    # Get all tournaments (optional: filter by current or past tournaments)
+    tournaments = Tournament.objects.all().order_by('-start_date')
+
+    context = {
+        'matches_won': matches_won,
+        'matches_lost': matches_lost,
+        'matches': matches,
+        'tournaments': tournaments,  # Add tournaments to context
+    }
+    return render(request, 'matchHistory.html', context)
+@login_required
+def user_history(request, user_id):
+    """View to display the match history of the logged-in user."""
+    gooduser = get_object_or_404(CustomUser, id=user_id)
+    matches_won = Match.objects.filter(winner=gooduser).order_by('-match_date')
+    matches_lost = Match.objects.filter(loser=gooduser).order_by('-match_date')
+    
+    # Get all matches and associated tournaments
+    matches = Match.objects.all().order_by('-match_date')
+    
+    # Get all tournaments (optional: filter by current or past tournaments)
+    tournaments = Tournament.objects.all().order_by('-start_date')
+
+    context = {
+        'matches_won': matches_won,
+        'matches_lost': matches_lost,
+        'matches': matches,
+        'tournaments': tournaments,  # Add tournaments to context
+    }
+    return render(request, 'userHistory.html', context)

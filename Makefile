@@ -22,18 +22,16 @@ up:  ## Build and start the containers in detached mode
 down:  ## Stop and remove the containers
 	$(DOCKER_COMPOSE) down -v
 
-clean: ## Remove all stopped containers, networks, and volumes
-	$(DOCKER_COMPOSE) down -v
+clean: down
+
+fclean: clean
 	docker system prune -f --volumes
 	docker network prune -f
 	docker volume prune -f
 	docker image prune -a -f
 	docker container prune -f
 
-fclean: down clean
-	rm -rf postgresql/data
-
-reset: down clean
+reset_db: fclean
 	rm -rf postgresql/data
 
 re: down clean up

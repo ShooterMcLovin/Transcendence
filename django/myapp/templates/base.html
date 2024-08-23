@@ -89,7 +89,7 @@
     <a href="{% url 'home' %}" class="btn btn-warning top-left-button">Back to Index</a>
     <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="btn btn-warning top-right-button">
         {% if user.is_authenticated %}
-            {{ user.username }}{% if user.profile.nickname %} ({{ user.profile.nickname }}){% endif %}
+            {{ user.username }}{% if user.nickname %} ({{ user.nickname }}){% endif %}
         {% else %}
             Login
         {% endif %}

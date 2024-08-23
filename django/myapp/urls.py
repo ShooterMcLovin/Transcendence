@@ -26,6 +26,8 @@ urlpatterns = [
     path('add_friend/<int:user_id>/', views.add_friend, name='add_friend'),
     path('remove_friend/<int:user_id>/', views.remove_friend, name='remove_friend'),
     path('my_friends/', views.my_friends, name='my_friends'),
+    path('match-history/', views.match_history, name='match_history'),
+    path('user-history/<int:user_id>/', views.user_history, name='user_history'),
 ]
 
 handler404 = 'myapp.views.view_404'
