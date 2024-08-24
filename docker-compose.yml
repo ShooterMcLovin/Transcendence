@@ -44,6 +44,21 @@ services:
       - db
     links:
       - db
+    networks:
+      - monitor-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - /Users/mkramer/Transcendence//prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - monitor-net
+
+networks:
+  monitor-net:
 
 volumes:
   postgres_data:
@@ -51,7 +66,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./postgresql/data
-
+      device: /Users/mkramer/Transcendence/postgresql/data
+      
   grafana_data:
 
