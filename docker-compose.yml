@@ -10,6 +10,8 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+    networks:
+      - transcendence
 
   db:
     build: ./postgresql
@@ -21,6 +23,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
+    networks:
+      - transcendence
   
   nginx:
     build: ./nginx
@@ -31,6 +35,8 @@ services:
       - "443:443"
     depends_on:
       - web
+    networks:
+      - transcendence
 
   grafana:
     image: grafana/grafana:latest
@@ -39,13 +45,15 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - grafana_data:/var/lib/grafana
+      # - grafana_data:/var/lib/grafana
+      - '/Users/mkramer/Transcendence/grafana:/var/lib/grafana'
+      - '/Users/mkramer/Transcendence/grafana/provisioning:/etc/grafana/provisioning'
     depends_on:
       - db
     links:
       - db
     networks:
-      - monitor-net
+      - transcendence
 
   prometheus:
     image: prom/prometheus
@@ -53,12 +61,13 @@ services:
     ports:
       - 9090:9090
     volumes:
-      - /Users/mkramer/Transcendence//prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - /Users/mkramer/Transcendence/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     networks:
-      - monitor-net
+      - transcendence
 
 networks:
-  monitor-net:
+  transcendence:
+    driver: bridge
 
 volumes:
   postgres_data:
