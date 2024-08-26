@@ -17,10 +17,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='IA').exists():
     User.objects.create_superuser(
-        nickname='IA',
-        username='IA',
-        email='email@email.com',
-        password='password'
+        nickname='$DJANGO_SUPERUSER_NICKNAME',
+        username='$DJANGO_SUPERUSER_USERNAME',
+        email='$DJANGO_SUPERUSER_EMAIL',
+        password='$DJANGO_SUPERUSER_PASSWORD'
     )
 EOF
 
@@ -31,10 +31,10 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='Guest').exists():
     User.objects.create_user(
-        username='Guest',
-        nickname='guest',
-        email='guest@example.com',
-        password='password'
+        nickname='$DJANGO_GUEST_NICKNAME',
+        username='$DJANGO_GUEST_USERNAME',
+        email='$DJANGO_GUEST_EMAIL',
+        password='$DJANGO_GUEST_PASSWORD'
     )
 EOF
 
