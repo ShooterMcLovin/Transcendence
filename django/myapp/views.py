@@ -30,6 +30,7 @@ def update_winner(request):
         data = json.loads(request.body)
         winner_username = data.get('winner')
         loser_username = data.get('loser')
+        pgame = data.get('game')
 
         if not winner_username or not loser_username:
             return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
@@ -56,6 +57,7 @@ def update_winner(request):
         Match.objects.create(
             winner=winner,
             loser=loser,
+            game=pgame,
             match_date=timezone.now()
         )
 
@@ -78,15 +80,18 @@ def home(request):
         'user': request.user,
     }
     return render(request, 'home.html', context)
+@login_required
 def pong(request):
     return render(request, 'pong.html')
 def ttt(request):
     return render(request, 'ttt.html')
 def view_404(request):
     return render(request, '404.html')
+@login_required
 def profile(request):
     user = request.user
     return render(request, 'profile.html',{'user_profile': user})
+@login_required
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
     friends = user.get_friends()  # Call the method here
@@ -277,6 +282,7 @@ def match_history(request):
         'tournaments': tournaments,  # Add tournaments to context
     }
     return render(request, 'matchHistory.html', context)
+
 @login_required
 def user_history(request, user_id):
     """View to display the match history of the logged-in user."""

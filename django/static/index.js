@@ -1,7 +1,7 @@
 
 //DO NOT REMOVE!!
-function sendWinnerMessage(win, lose) {
-    console.log(`Winner: ${win}, Loser: ${lose}`);
+function sendWinnerMessage(win, lose, pgame) {
+    console.log(`Winner: ${win}, Loser: ${lose}, Game: ${pgame}`);
 
     fetch('/api/update-winner/', {
         method: 'POST',
@@ -9,7 +9,7 @@ function sendWinnerMessage(win, lose) {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCookie('csrftoken')
         },
-        body: JSON.stringify({ winner: win, loser: lose }),
+        body: JSON.stringify({ winner: win, loser: lose, game: pgame }),
     })
     .then(response => {
         if (!response.ok) {
@@ -122,37 +122,37 @@ function startMatch(playerA, playerB, matchName) {
 
 }
 
-function sendWinnerMessage(win, lose) {
-    console.log(`Winner: ${win}, Loser: ${lose}`);
+// function sendWinnerMessage(win, lose) {
+//     console.log(`Winner: ${win}, Loser: ${lose}`);
 
-    fetch('/api/update-winner/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        },
-        body: JSON.stringify({ winner: win, loser: lose }),
-    })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(data => {
-                    console.error('Server responded with error:', data);
-                    throw new Error(data.message || 'An unknown error occurred');
-                });
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Game result updated successfully.');
-            } else {
-                console.error(`Error: ${data.message}`);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-}
+//     fetch('/api/update-winner/', {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'X-CSRFToken': getCookie('csrftoken')
+//         },
+//         body: JSON.stringify({ winner: win, loser: lose }),
+//     })
+//         .then(response => {
+//             if (!response.ok) {
+//                 return response.json().then(data => {
+//                     console.error('Server responded with error:', data);
+//                     throw new Error(data.message || 'An unknown error occurred');
+//                 });
+//             }
+//             return response.json();
+//         })
+//         .then(data => {
+//             if (data.status === 'success') {
+//                 console.log('Game result updated successfully.');
+//             } else {
+//                 console.error(`Error: ${data.message}`);
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//         });
+// }
 
 async function populateTournamentDropdowns() {
     try {
@@ -522,7 +522,7 @@ function showWinMessage(winner, loser) {
     else
         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
-sendWinnerMessage(winner,loser); //// DO NOT REMOVE!
+    sendWinnerMessage(winner,loser, 'pong'); //// DO NOT REMOVE!
  
 
 

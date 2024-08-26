@@ -51,10 +51,11 @@ class Match(models.Model):
     winner = models.ForeignKey(CustomUser, related_name='won_matches', on_delete=models.CASCADE)
     loser = models.ForeignKey(CustomUser, related_name='lost_matches', on_delete=models.CASCADE)
     match_date = models.DateTimeField(auto_now_add=True)
+    game = models.TextField(blank=True, null=True)
     details = models.TextField(blank=True, null=True)  # Additional details about the match
 
     def __str__(self):
-        return f"{self.winner.nickname} vs {self.loser.nickname} on {self.match_date}"
+        return f"{self.winner.nickname} vs {self.loser.nickname} on {self.match_date} at {self.game}"
 
 class Friendship(models.Model):
     user = models.ForeignKey(CustomUser, related_name='friendships', on_delete=models.CASCADE)

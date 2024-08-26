@@ -1,3 +1,92 @@
+async function getusers() {
+		try {
+			const response = await fetch('/api/get-usernames/');
+			if (!response.ok) {
+				throw new Error(`Network response was not ok: ${response.statusText}`);
+			}
+			const data = await response.json();
+			const usernames = data.usernames;
+	
+			if (usernames && usernames.length > 0) {
+				const selects = ['player5Select', 'player6Select', 'player3Select', 'player4Select'];
+	
+				selects.forEach(selectId => {
+					const selectElement = document.getElementById(selectId);
+					selectElement.innerHTML = ''; // Clear previous options
+					usernames.forEach(username => {
+						const option = document.createElement('option');
+						option.value = username;
+						option.textContent = username;
+						selectElement.appendChild(option);
+					});
+				});
+	
+				// Set up event listeners for player selection
+				document.getElementById('startTournament').addEventListener('click', startTournamentHandler);
+				document.getElementById('cancelTournament').addEventListener('click', () => {
+					document.getElementById('tournamentForm').style.display = 'none';
+					setMenuVisibility(true); // Show the main menu
+				});
+	
+			} else {
+				console.error('No usernames available.');
+			}
+		} catch (error) {
+			console.error('Error fetching usernames:', error);
+		}
+	}
+
+//DO NOT REMOVE!!
+function sendWinnerMessage(win, lose, pgame) {
+    console.log(`Winner: ${win}, Loser: ${lose}, Game: ${pgame}`);
+
+    fetch('/api/update-winner/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: JSON.stringify({ winner: win, loser: lose, game: pgame }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.json().then(data => {
+                console.error('Server responded with error:', data);
+                throw new Error(data.message || 'An unknown error occurred');
+            });
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Game result updated successfully.');
+        } else {
+            console.error(`Error: ${data.message}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+//DO NOT REMOVE!!
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+
 // Function called whenever user tab on any box 
 function myfunc() { 
 

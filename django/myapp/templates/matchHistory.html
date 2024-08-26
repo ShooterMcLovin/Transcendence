@@ -20,7 +20,7 @@
 <ul class="list-group mb-4 ">
     {% for match in matches_won %}
         <li class="list-group-item">
-            <strong>{{ match.winner.nickname }}</strong> has defeated <strong>{{ match.loser.nickname }}</strong>
+            <strong>{{ match.winner.nickname }}</strong> has defeated <strong>{{ match.loser.nickname }}</strong> at {{match.game}}
             on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>
@@ -36,7 +36,7 @@
 <ul class="list-group mb-4">
     {% for match in matches_lost %}
         <li class="list-group-item">
-            <strong>{{ match.loser.nickname }}</strong> lost to <strong>{{ match.winner.nickname }}</strong>
+            <strong>{{ match.loser.nickname }}</strong> lost to <strong>{{ match.winner.nickname }}</strong> at {{match.game}}
              on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>
