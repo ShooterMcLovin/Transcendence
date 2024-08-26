@@ -14,20 +14,13 @@ python manage.py collectstatic --noinput
 echo "Creating superuser..."
 python manage.py shell <<EOF
 from django.contrib.auth import get_user_model
-from django.core.management.utils import get_random_secret_key
-import os
-
 User = get_user_model()
-
-username = os.getenv('DJANGO_SUPERUSER_USERNAME')
-email = os.getenv('DJANGO_SUPERUSER_EMAIL')
-password = os.getenv('DJANGO_SUPERUSER_PASSWORD')
-
-if not User.objects.filter(username=username).exists():
+if not User.objects.filter(username='IA').exists():
     User.objects.create_superuser(
-        username=username,
-        email=email,
-        password=password
+        nickname='IA',
+        username='IA',
+        email='email@email.com',
+        password='password'
     )
 EOF
 

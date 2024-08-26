@@ -2,13 +2,8 @@
 {% block title %}Match History{% endblock %}
 {% block extra_css %}
 <style>
-    .won {
-        color: green;
-        font-weight: bold;
-    }
-    .lost {
-        color: red;
-        font-weight: bold;
+    der {
+
     }
     .list-group-item {
         background-color: #343a40; /* Dark grey background */
@@ -25,7 +20,7 @@
 <ul class="list-group mb-4 ">
     {% for match in matches_won %}
         <li class="list-group-item">
-            <strong>{{ match.winner.nickname }}</strong><span class="won"> has defeated</span> <strong>{{ match.loser.nickname }}</strong>
+            <strong>{{ match.winner.nickname }}</strong> has defeated <strong>{{ match.loser.nickname }}</strong>
             on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>
@@ -41,7 +36,7 @@
 <ul class="list-group mb-4">
     {% for match in matches_lost %}
         <li class="list-group-item">
-            <strong>{{ match.loser.nickname }}</strong><span class="lost"> lost</span> to <strong>{{ match.winner.nickname }}</strong>
+            <strong>{{ match.loser.nickname }}</strong> lost to <strong>{{ match.winner.nickname }}</strong>
              on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>

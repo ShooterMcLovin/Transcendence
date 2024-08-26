@@ -51,7 +51,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /Users/alpicard/desktop/Transcendence/postgresql/data
+      device: ./postgresql/data
 
   grafana_data:
 

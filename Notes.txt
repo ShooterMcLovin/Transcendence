@@ -1,13 +1,55 @@
 Known Bugs:
-    - 1 vs Guest history
+    - 1 vs AI history 🟨
     -
 
 To verify:
-    - Online Status
-    - match history tournaments
-    - docker scan(requirements.txt)
-    - media (needed?)
-    - Friend 2 ways 
+    - Online Status ✅
+    - match history tournaments (needs testing) 🟨
+    - docker scan(requirements.txt) 🟨
+    - media (needed?) 🟨
+    - Friend 2 ways ✅
 
 To do:
-    - password security
+    - security 🟥
+    III.4 Security concerns
+    In order to create a basic functional website, here are a few security concerns that you
+    have to tackle:
+    •Any password stored in your database, if applicable, must be hashed.
+    •Your website must be protected against SQL injections/XSS.
+    •If you have a backend or any other features, it is mandatory to enable an HTTPS
+    connection for all aspects (Utilize wss instead of ws...).
+    •You must implement some form of validation for forms and any user input, either
+    within the base page if no backend is used or on the server side if a backend is
+    employed.
+    Please make sure you use a strong password hashing algorithm
+    For obvious security reasons, any credentials, API keys, env
+    variables etc... must be saved locally in a .env file and ignored by
+    git. Publicly stored credentials will lead you directly to a failure
+    of the project.
+
+
+
+If your container solution is Docker:
+When your computers in clusters run under Linux, you will use Docker
+in rootless mode for security reasons. This comes with 2 sideways:
+•Your Docker runtime files must be located in /goinfre or
+/sgoinfre.
+•You can’t use so called “bind-mount volumes” between the host
+and the container if non-root UIDs are used in the container.
+Depending on the project, your situation and the context, several
+fallbacks exist: Docker in a VM, rebuild you container after your
+changes, craft your own docker image with root as unique UID.
+
+
+For obvious security reasons, any credentials, API keys, env
+variables etc... must be saved locally in a .env file and ignored by
+git. Publicly stored credentials will lead you directly to a failure
+of the project.
+
+Any password stored in your database, if applicable, must be hashed.
+Your website must be protected against SQL injections/XSS.
+• If you have a backend or any other features, it is mandatory to enable an HTTPS
+connection for all aspects (Utilize wss instead of ws...).
+• You must implement some form of validation for forms and any user input, either
+within the base page if no backend is used or on the server side if a backend is
+employed.

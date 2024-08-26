@@ -35,7 +35,7 @@ def update_winner(request):
             return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
 
         # Try to update the winner if not 'AI' or 'IA'
-        if winner_username not in ['AI', 'IA']:
+        if winner_username not in ['AaI', 'IaA']:
             try:
                 winner = CustomUser.objects.get(nickname=winner_username)
                 winner.wins += 1
@@ -44,7 +44,7 @@ def update_winner(request):
                 return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
 
         # Try to update the loser if not 'AI' or 'IA'
-        if loser_username not in ['AI', 'IA']:
+        if loser_username not in ['AaI', 'IaA']:
             try:
                 loser = CustomUser.objects.get(nickname=loser_username)
                 loser.losses += 1
@@ -136,6 +136,11 @@ def add_friend(request, user_id):
         friendship, created = Friendship.objects.get_or_create(
             user=user,
             friend=friend,
+            defaults={'is_friend': True}
+        )
+        friendship, created = Friendship.objects.get_or_create(
+            user=friend,
+            friend=user,
             defaults={'is_friend': True}
         )
         if not created:
