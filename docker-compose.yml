@@ -1,3 +1,19 @@
+networks:
+  monitoring:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./postgresql/data
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+
 services:
   web:
     build: ./django
@@ -10,8 +26,6 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
-    networks:
-      - transcendence
 
   db:
     build: ./postgresql
@@ -23,8 +37,6 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
-    networks:
-      - transcendence
   
   nginx:
     build: ./nginx
@@ -35,47 +47,47 @@ services:
       - "443:443"
     depends_on:
       - web
-    networks:
-      - transcendence
-
-  grafana:
-    image: grafana/grafana:latest
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
-    ports:
-      - "3000:3000"
-    volumes:
-      # - grafana_data:/var/lib/grafana
-      - '/Users/mkramer/Transcendence/grafana:/var/lib/grafana'
-      - '/Users/mkramer/Transcendence/grafana/provisioning:/etc/grafana/provisioning'
-    depends_on:
-      - db
-    links:
-      - db
-    networks:
-      - transcendence
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.37.9
     container_name: prometheus
     ports:
       - 9090:9090
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
     volumes:
-      - /Users/mkramer/Transcendence/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - transcendence
-
-networks:
-  transcendence:
-    driver: bridge
-
-volumes:
-  postgres_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /Users/mkramer/Transcendence/postgresql/data
-      
-  grafana_data:
-
+      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+      - ./data:/prometheus
+    restart: unless-stopped
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    #password: root123
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    container_name: node_exporter
+    command: '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rbind
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cadvisor
+    command:
+      - '-port=8098'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
+    restart: unless-stopped

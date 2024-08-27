@@ -2,6 +2,10 @@
 postgres_data
 postgres
 logs
+.backup
+**/.DS_Store
+.DS_Store
+/backup/
 
 # Ignore share folders that are created from dockers volumes
 django/*/share
@@ -142,7 +146,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+; .env
 .venv
 env/
 venv/
