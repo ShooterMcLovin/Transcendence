@@ -7,7 +7,7 @@ from django.templatetags.static import static
 
 
 class CustomUser(AbstractUser):
-    nickname = models.CharField(max_length=5, blank=True, null=True)
+    nickname = models.CharField(max_length=5, blank=True, null=True,unique=True)
     wins = models.PositiveIntegerField(default=0)  # Counter for wins
     losses = models.PositiveIntegerField(default=0)  # Counter for losses
     tournament_wins = models.PositiveIntegerField(default=0)  # Counter for tournament wins

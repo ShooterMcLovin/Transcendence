@@ -4,23 +4,37 @@
 {% block content %}
 <div class="container mt-5 custom-text-color">
     <h2 class="text-center mb-4">Friends</h2>
-    <div class="user-list-container bg-dark p-4 rounded">
+    <div class="user-list-container bg-dark p-2 rounded">
         <ul class="list-group">
         {%if friends%}
         {% for friend in friends %}
+            {%if friend.is_active%}
             <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
-                <div class="d-flex align-items-center justify-content-center col-md-4">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
                     <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
                 </div>
-                <div class="d-flex align-items-center justify-content-center col-md-4">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
                     <a href="{% url 'user_profile' friend.id %}" class="btn btn-info">{{ friend.nickname }}</a>
                 </div>
-                <div class="d-flex align-items-center justify-content-center col-md-4">
+                <div class="d-flex align-items-center justify-content-center col-md-3">
                     
                     <a href="{% url 'remove_friend' friend.id %}" class="btn btn-danger">Remove Friend</a>
         
                 </div>
+                <div class="d-flex align-items-center justify-content-center col-md-3">
+                    {% comment %} {%if friend.is_online %} {% endcomment %}
+                    <a href="{% url 'ttt' friend.id %}" class="btn btn-primary">Challenge</a>
+                    {% comment %} {% endif %} {% endcomment %}
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-2">
+                    {%if friend.is_online %}
+                    Online
+                    {% else %}
+                    Offline
+                    {% endif %}
+                </div>
             </li>
+            {% endif %}
         {% endfor %}
         {% else %}
             You have no friends

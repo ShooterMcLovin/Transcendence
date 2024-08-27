@@ -8,7 +8,7 @@
     <div class="user-list-container bg-dark p-4 rounded">
         <ul class="list-group">
         {% for user in users %}
-            {% if user.username != 'master' and user.username != 'Guest' and user.username != 'IA'%}
+            {% if user.username != 'master' and user.username != 'Guest' and user.username != 'IA' and user.is_active%}
             <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-center col-md-3">
                     <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">

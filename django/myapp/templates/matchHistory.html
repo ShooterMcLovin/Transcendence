@@ -5,6 +5,12 @@
     der {
 
     }
+    .won{
+        color: green
+    }
+    .lost{
+        color: red
+    }
     .list-group-item {
         background-color: #343a40; /* Dark grey background */
         color: #ffffff; /* White text for contrast */
@@ -20,7 +26,7 @@
 <ul class="list-group mb-4 ">
     {% for match in matches_won %}
         <li class="list-group-item">
-            <strong>{{ match.winner.nickname }}</strong> has defeated <strong>{{ match.loser.nickname }}</strong> at {{match.game}}
+            You have <span class="won">won</span> against <strong>{{ match.loser.nickname }}</strong> at {{match.game}}
             on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>
@@ -36,7 +42,7 @@
 <ul class="list-group mb-4">
     {% for match in matches_lost %}
         <li class="list-group-item">
-            <strong>{{ match.loser.nickname }}</strong> lost to <strong>{{ match.winner.nickname }}</strong> at {{match.game}}
+            You <span class="lost">lost</span> to <strong>{{ match.winner.nickname }}</strong> at {{match.game}}
              on {{ match.match_date }}
             {% if match.details %}
                 <p><small>Details: {{ match.details }}</small></p>
@@ -50,11 +56,11 @@
 <h3>Tournaments</h3>
 <ul class="list-group">
     {% for tournament in tournaments %}
-        <li class="list-group-item">
+        <li class="list-group-item mb-4">
             <strong>{{ tournament.name }}</strong> ({{ tournament.start_date|date:"F j, Y" }} - {{ tournament.end_date|date:"F j, Y" }})
         </li>
     {% empty %}
-        <li class="list-group-item">No tournaments available.</li>
+        <li class="list-group-item mb-4">No tournaments available.</li>
     {% endfor %}
 </ul>
 {% endblock %}

@@ -2,6 +2,10 @@
 {% block title %}Match History{% endblock %}
 {% block extra_css %}
 <style>
+    .wonton {
+        color: green;
+        font-weight: bold;
+    }
     .won {
         color: green;
         font-weight: bold;
@@ -52,7 +56,7 @@
 </ul>
 <!-- Tournaments -->
 <h3>Tournaments</h3>
-<ul class="list-group">
+<ul class="list-group p-4">
     {% for tournament in tournaments %}
         <li class="list-group-item">
             <strong>{{ tournament.name }}</strong> ({{ tournament.start_date|date:"F j, Y" }} - {{ tournament.end_date|date:"F j, Y" }})
