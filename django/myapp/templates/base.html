@@ -98,12 +98,14 @@
     <div class="container mt-5 custom-text-color">
         {% block content %}{% endblock %}
     </div>
-    {% if messages %}
-    <div class="alert alert-info text-align: center;">
-        {% for message in messages %}
-            {{ message }}
-        {% endfor %}
-      {%endif%}  
+    <div class="container ">
+        {% if messages %}
+            <div class="alert alert-info text-center;">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </div>
+        {%endif%}  
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

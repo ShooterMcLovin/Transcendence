@@ -49,7 +49,7 @@ function getCookie(name) {
 // Initialize turn flag
 let flag = 1; // 1 for X, 0 for O
 const player1Select = document.getElementById('Challenger'); 
-const player2Select = document.getElementById('Challenged'); 
+const player2Select = document.getElementById('Challenged');
 const player1 = player1Select ? player1Select.value : '';
 const player2 = player2Select ? player2Select.value : '';
 if (player1 != player2)

@@ -21,7 +21,18 @@ class CustomUser(AbstractUser):
                 user=self
             ).values_list('friend', flat=True)
         )
+    
+    def get_challenges(self):
+        return CustomUser.objects.filter(
+            id__in=Challenge.objects.filter(
+                challenged=self
+            ).values_list('challenge', flat=True)
+        )
 
+    def is_challenged_by(self, user):
+        """Check if this user is friends with another user."""
+        return Challenge.objects.filter(challenged=self, challenger=user, is_accepted=False).exists()
+    
     def is_friend_with(self, user):
         """Check if this user is friends with another user."""
         return Friendship.objects.filter(user=self, friend=user, is_friend=True).exists()
@@ -95,3 +106,19 @@ class Tournament(models.Model):
         """Determine the loser of the tournament based on match results."""
         # This is a placeholder implementation; adjust according to your criteria
         return min(self.participants, key=lambda user: user.losses)
+    
+class Challenge(models.Model):
+    challenger = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        related_name='challenges_sent', 
+        on_delete=models.CASCADE
+    )
+    challenged = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        related_name='challenges_received', 
+        on_delete=models.CASCADE
+    )
+    is_accepted = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.challenger} challenged {self.challenged}'

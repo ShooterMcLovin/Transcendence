@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
-from .models import CustomUser, Friendship, Match, Tournament
+from .models import CustomUser, Friendship, Match, Tournament, Challenge
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, UserProfileForm, ChangePasswordForm
 from django.templatetags.static import static
 from .forms import AvatarForm
@@ -110,8 +110,9 @@ def profile(request):
 @login_required
 def user_profile(request, user_id):
     user = get_object_or_404(CustomUser, id=user_id)
-    friends = user.get_friends()  # Call the method here
-    return render(request, 'user_profile.html', {'user_profile': user, 'friends': friends})
+    friends = user.get_friends()
+    
+    return render(request, 'user_profile.html' , {'user_profile': user, 'friends': friends})
 
 # credentials
 def LoginView(request):
@@ -198,8 +199,11 @@ def my_friends(request):
     """View to display a list of user's friends."""
     user = request.user
     friends = user.friendships.filter(is_friend=True).select_related('friend')
-    
-    context = {'friends': [f.friend for f in friends]}
+    challenges = Challenge.objects.filter(challenged=user, is_accepted=False)
+    context = {
+        'friends': [f.friend for f in friends],
+        'challenges': challenges,
+        }
     return render(request, 'my_friends.html', context)
 
 # Updates
@@ -320,7 +324,42 @@ def user_history(request, user_id):
     }
     return render(request, 'userHistory.html', context)
 
+@login_required
 def ttt_challenge(request, user_id):
+    """View to create a challenge from the current user to another user."""
     challenger = request.user
     challenged = get_object_or_404(CustomUser, id=user_id)
-    return render(request, 'ttt.html', {'Challenger': challenger, 'Challenged': challenged})
+    
+    # Prevent challenging oneself
+    if challenger == challenged:
+        return render(request, 'ttt.html' , {'Challenger': challenger, 'Challenged': challenger})
+
+    # Check if the challenge already exists
+    existing_challenge = Challenge.objects.filter(
+        challenger=challenger,
+        challenged=challenged
+    ).first()
+    
+    if existing_challenge and not existing_challenge.is_accepted:
+        messages.info(request, f"You already challeneged {challenged.nickname}.")
+        return redirect('home')  # or provide a message to the user
+    else:
+        # Create a new challenge
+        existing_challenge.delete()
+        Challenge.objects.create(
+            challenger=challenger,
+            challenged=challenged,
+            is_accepted=False
+        )
+    messages.success(request, f"You successfuly challeneged {challenged.nickname}.")
+    
+    return redirect('home')
+
+def accept_challenge(request, user_id):
+    challenged = request.user
+    challenger = get_object_or_404(CustomUser, id=user_id)
+    challenge = Challenge.objects.get(challenged=challenged, challenger=challenger, is_accepted=False)
+    challenge.is_accepted = True
+    challenge.save()
+
+    return render(request, 'ttt.html' , {'Challenger': challenger, 'Challenged': challenged})

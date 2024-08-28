@@ -10,6 +10,7 @@ urlpatterns = [
     path('pong/', views.pong, name='pong'), 
     # path('ttt/', views.ttt, name='ttt'), 
     path('ttt/<int:user_id>/', views.ttt_challenge, name='ttt'), 
+    path('accept_challenge/<int:user_id>/', views.accept_challenge, name='accept_challenge'), 
     path('profile/', views.profile, name='profile'), 
     path('user_profile/<int:user_id>/', views.user_profile, name='user_profile'),
     path('register/', views.register, name='register'), 

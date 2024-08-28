@@ -41,5 +41,28 @@
         {% endif %}
         </ul>
     </div>
+    <h2 class="text-center mb-4">Challenges</h2>
+    <div class="user-list-container bg-dark p-2 rounded">
+        {%if challenges%}
+        {% for challenge in challenges %}
+            {%if not challenge.is_accpted%}
+            <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
+                    <img src="{% if challenge.challenger.avatar_url %}{{ challenge.challenger.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-2">
+                    <a href="{% url 'user_profile' challenge.challenger.id %}" class="btn btn-info">{{ challenge.challenger.nickname }}</a>
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-3">
+                    {%if not challenege.is_accepted%}
+                        <a href="{% url 'accept_challenge' challenge.challenger.id %}" class="btn btn-danger">Accept Challenge</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% else %}
+            You have no Challenges
+        {% endif %}
 </div>
 {% endblock %}
