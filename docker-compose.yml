@@ -1,5 +1,6 @@
 networks:
   monitoring:
+    name: monitoring
     driver: bridge
 
 volumes:
@@ -26,6 +27,8 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+    networks:
+      - monitoring
 
   db:
     build: ./postgresql
@@ -37,7 +40,9 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
-  
+    networks:
+      - monitoring
+        
   nginx:
     build: ./nginx
     volumes:
@@ -47,6 +52,8 @@ services:
       - "443:443"
     depends_on:
       - web
+    networks:
+      - monitoring
 
   prometheus:
     image: prom/prometheus:v2.37.9
@@ -59,6 +66,9 @@ services:
       - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
       - ./data:/prometheus
     restart: unless-stopped
+    networks:
+      - monitoring
+
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
@@ -68,6 +78,9 @@ services:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
     #password: root123
+    networks:
+      - monitoring
+
   node_exporter:
     image: quay.io/prometheus/node-exporter:v1.5.0
     container_name: node_exporter
@@ -76,6 +89,9 @@ services:
     restart: unless-stopped
     volumes:
       - /:/host:ro,rbind
+    networks:
+      - monitoring
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.0
     container_name: cadvisor
@@ -91,3 +107,5 @@ services:
       - /dev/kmsg
     privileged: true
     restart: unless-stopped
+    networks:
+      - monitoring    
