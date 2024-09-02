@@ -8,7 +8,6 @@ from . import views
 urlpatterns = [
     path('', views.home, name='home'), 
     path('pong/', views.pong, name='pong'), 
-    # path('ttt/', views.ttt, name='ttt'), 
     path('ttt/<int:user_id>/', views.ttt_challenge, name='ttt'), 
     path('accept_challenge/<int:user_id>/', views.accept_challenge, name='accept_challenge'), 
     path('profile/', views.profile, name='profile'), 

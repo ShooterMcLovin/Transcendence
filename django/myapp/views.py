@@ -13,81 +13,6 @@ from django.utils import timezone
 
 import json
 
-# links to game
-def get_usernames(request):
-    # Liste des noms d'utilisateur
-    usernames = list(CustomUser.objects.values_list('nickname', flat=True))
-    return JsonResponse({'usernames': usernames})
-def get_username(request):
-    # Get the currently logged-in user
-    user = request.user
-
-    # Return the username of the logged-in user
-    return JsonResponse({'username': user.nickname})
-
-def update_winner(request):
-    try:
-        data = json.loads(request.body)
-        winner_username = data.get('winner')
-        loser_username = data.get('loser')
-        pgame = data.get('game')
-
-        if winner_username == loser_username:
-            return JsonResponse({'status': 'success'})
-        if not winner_username or not loser_username:
-            return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
-
-        # Try to update the winner if not 'AI' or 'IA'
-        if winner_username not in ['AaI', 'IaA']:
-            try:
-                winner = CustomUser.objects.get(nickname=winner_username)
-                winner.wins += 1
-                winner.save()
-            except CustomUser.DoesNotExist:
-                return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
-
-        # Try to update the loser if not 'AI' or 'IA'
-        if loser_username not in ['AaI', 'IaA']:
-            try:
-                loser = CustomUser.objects.get(nickname=loser_username)
-                loser.losses += 1
-                loser.save()
-            except CustomUser.DoesNotExist:
-                return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
-
-        # Create a match record
-        Match.objects.create(
-            winner=winner,
-            loser=loser,
-            game=pgame,
-            match_date=timezone.now()
-        )
-
-        return JsonResponse({'status': 'success'})
-
-    except json.JSONDecodeError:
-        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
-
-
-@login_required
-def del_user(request):
-    user = request.user
-    logout(request)
-    Friendship.objects.filter(user=user).delete()
-    Friendship.objects.filter(friend=user).delete()
-    user.is_active = False
-    user.save()
-    return redirect(reverse('logout_done'))
-
-def user_logout(request):
-    user = request.user
-    user.is_online = False
-    user.save()
-    logout(request)
-    return redirect(reverse('logout_done'))
-
-
-
 def home(request):
     context = {
         'user': request.user,
@@ -98,11 +23,9 @@ def home(request):
 def pong(request):
     return render(request, 'pong.html')
 
-
-def view_404(request):
-    return render(request, '404.html')
-
-
+############
+# Profiles #
+############
 
 @login_required
 def profile(request):
@@ -116,7 +39,10 @@ def user_profile(request, user_id):
     
     return render(request, 'user_profile.html' , {'user_profile': user, 'friends': friends})
 
-# credentials
+###############
+# credentials #
+###############
+
 def LoginView(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
@@ -143,18 +69,37 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-# friends management
+@login_required
+def del_user(request):
+    user = request.user
+    logout(request)
+    Friendship.objects.filter(user=user).delete()
+    Friendship.objects.filter(friend=user).delete()
+    user.is_active = False
+    user.save()
+    return redirect(reverse('logout_done'))
+
+@login_required
+def user_logout(request):
+    user = request.user
+    user.is_online = False
+    user.save()
+    logout(request)
+    return redirect(reverse('logout_done'))
+
+######################
+# friends management #
+######################
+
 @login_required
 def add_friend(request, user_id):
     """View to add a friend."""
     friend = get_object_or_404(CustomUser, id=user_id)
     user = request.user
-
     # Check if the user is trying to add themselves
     if user == friend:
         messages.error(request, "You cannot add yourself as a friend.")
         return redirect('profile')
-
     try:
         # Attempt to create or update the friendship
         friendship, created = Friendship.objects.get_or_create(
@@ -182,8 +127,8 @@ def add_friend(request, user_id):
     
     except IntegrityError:
         messages.error(request, f"An error occurred while trying to add {friend.nickname} as a friend. Please try again.")
-    
     return redirect('profile')
+
 @login_required
 def remove_friend(request, user_id):
     """View to remove a friend."""
@@ -203,6 +148,7 @@ def remove_friend(request, user_id):
         messages.error(request, f"{friend.nickname} is not in your friend list.")
     update_session_auth_hash(request, request.user)
     return redirect('profile')
+
 @login_required
 def my_friends(request):
     """View to display a list of user's friends."""
@@ -217,7 +163,10 @@ def my_friends(request):
         }
     return render(request, 'my_friends.html', context)
 
-# Updates
+###########
+# Updates #
+###########
+
 @login_required
 def update_profile(request):
     if request.method == 'POST':
@@ -243,6 +192,7 @@ def update_profile(request):
         'user_profile_form': user_profile_form,
         'avatar_form': avatar_form,
     })
+
 @login_required
 def update_avatar(request):
     if request.method == 'POST':
@@ -257,6 +207,7 @@ def update_avatar(request):
         return redirect('profile')  # Adjust to your URL pattern name
     
     return render(request, 'update_avatar.html')
+
 @login_required
 def update_password(request):
     if request.method == 'POST':
@@ -275,7 +226,10 @@ def update_password(request):
         'change_password_form': form,
     })
 
-# User List
+#############
+# User List #
+#############
+
 @login_required
 def user_list(request):
     """View to list all users."""
@@ -290,8 +244,13 @@ def user_list(request):
     return render(request, 'user_list.html', context)
 
 # 404
-def view_404(request, exception=None):
-    return render(request, '404.html', status=404)
+
+def view_404(request):
+    return render(request, '404.html')
+
+###########
+# History #
+###########
 
 @login_required
 def match_history(request):
@@ -335,6 +294,9 @@ def user_history(request, user_id):
     }
     return render(request, 'userHistory.html', context)
 
+############
+#Challenges#
+############
 @login_required
 def ttt_challenge(request, user_id):
     """View to create a challenge from the current user to another user."""
@@ -368,6 +330,7 @@ def ttt_challenge(request, user_id):
     
     return redirect('profile')
 
+@login_required
 def accept_challenge(request, user_id):
     challenged = request.user
     challenger = get_object_or_404(CustomUser, id=user_id)
@@ -378,8 +341,9 @@ def accept_challenge(request, user_id):
 
     return render(request, 'ttt.html' , {'Challenger': challenger, 'Challenged': challenged})
 
-
-
+###############
+# Admin stuff #
+###############
 
 def manage(request):
     clients = CustomUser.objects.all()
@@ -445,3 +409,59 @@ def Remstaff(request, user_id):
     return redirect('profile')
     # return render(request, 'manage.html', {'clients': clients})
     
+#################
+# links to game #
+#################
+
+def get_usernames(request):
+    # Liste des noms d'utilisateur
+    usernames = list(CustomUser.objects.values_list('nickname', flat=True))
+    return JsonResponse({'usernames': usernames})
+def get_username(request):
+    # Get the currently logged-in user
+    user = request.user
+
+    # Return the username of the logged-in user
+    return JsonResponse({'username': user.nickname})
+def update_winner(request):
+    try:
+        data = json.loads(request.body)
+        winner_username = data.get('winner')
+        loser_username = data.get('loser')
+        pgame = data.get('game')
+
+        if winner_username == loser_username:
+            return JsonResponse({'status': 'success'})
+        if not winner_username or not loser_username:
+            return JsonResponse({'status': 'error', 'message': 'Missing winner or loser username'}, status=400)
+
+        # Try to update the winner if not 'AI' or 'IA'
+        if winner_username not in ['AaI', 'IaA']:
+            try:
+                winner = CustomUser.objects.get(nickname=winner_username)
+                winner.wins += 1
+                winner.save()
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=404)
+
+        # Try to update the loser if not 'AI' or 'IA'
+        if loser_username not in ['AaI', 'IaA']:
+            try:
+                loser = CustomUser.objects.get(nickname=loser_username)
+                loser.losses += 1
+                loser.save()
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=404)
+
+        # Create a match record
+        Match.objects.create(
+            winner=winner,
+            loser=loser,
+            game=pgame,
+            match_date=timezone.now()
+        )
+
+        return JsonResponse({'status': 'success'})
+
+    except json.JSONDecodeError:
+        return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)

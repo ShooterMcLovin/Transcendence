@@ -20,7 +20,9 @@ if not User.objects.filter(username='Master').exists():
         nickname='$DJANGO_SUPERUSER_NICKNAME',
         username='$DJANGO_SUPERUSER_USERNAME',
         email='$DJANGO_SUPERUSER_EMAIL',
-        password='$DJANGO_SUPERUSER_PASSWORD'
+        password='$DJANGO_SUPERUSER_PASSWORD',
+        avatar_url='https://i.ebayimg.com/images/g/TmcAAOSw14tgpDBN/s-l1600.webp'
+
     )
 EOF
 
