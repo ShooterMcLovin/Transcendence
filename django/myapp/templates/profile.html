@@ -6,6 +6,12 @@
 <!-- Additional CSS if needed -->
 {% endblock %}
 {% block content %}
+{% if user.is_staff%}
+<h2 class="text-center mb-4">Admin Profile</h2>
+<div class="text-center p-2">
+    <a href="{% url 'manage' %}" class="btn btn-info p-2">Manage</a>
+</div>
+{% else %}
 <form id="delete-account-form" action="{% url 'delete' %}" method="post" style="display: none;">
     {% csrf_token %}
     <input type="hidden" name="action" value="delete_account">
@@ -90,4 +96,5 @@
     <div class="text-center p-2">
         <a href="{% url 'manage' %}" class="btn btn-info p-2">Manage</a> -
     </div>
+{% endif %}
 {% endblock %}

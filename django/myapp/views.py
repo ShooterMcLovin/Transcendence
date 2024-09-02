@@ -388,12 +388,12 @@ def Activate(request, user_id):
     target = get_object_or_404(CustomUser, id=user_id)
     clients = CustomUser.objects.all()
     if target.is_active:
-        messages.error(request, 'Target is already active')
+        messages.error(request, target.nickname + ' is already active')
         return redirect('profile')
     if not target.is_active:
         target.is_active = True
         target.save()
-        messages.success(request, 'Target activated')
+        messages.success(request, target.nickname +' has been activated')
     return redirect('profile')
     # return render(request, 'manage.html', {'clients': clients})
 
@@ -404,13 +404,13 @@ def DeActivate(request, user_id):
         messages.error(request, 'Cannot deactivate main account')
         return redirect('profile')
     if not target.is_active:
-        messages.error(request, 'Target is already dactivated')
+        messages.error(request, target.nickname + ' is already dactivated')
         return redirect('profile')
     if target.is_active:
         if target.username != 'Master':
             target.is_active = False
             target.save()
-            messages.success(request, 'Target deactivated')
+            messages.success(request, target.nickname + 'has been deactivated')
     return redirect('profile')
     # return render(request, 'manage.html', {'clients': clients})
 
@@ -418,28 +418,28 @@ def Makestaff(request, user_id):
     target = get_object_or_404(CustomUser, id=user_id)
     
     if target.is_staff:
-        messages.error(request, 'Target is already staff')
+        messages.error(request, target.nickname + ' is already staff')
     clients = CustomUser.objects.all()
     if not target.is_staff:
         target.is_staff = True
         target.save()
-        messages.success(request, 'Target is now staff')
+        messages.success(request, target.nickname + ' is now staff')
     return redirect('profile')
     # return render(request, 'manage.html', {'clients': clients})
     
 def Remstaff(request, user_id):
     target = get_object_or_404(CustomUser, id=user_id)
     if target.username == 'Master':
-        messages.error(request, 'Cannot remove main account')
+        messages.error(request, 'Cannot remove main accounts rights')
         return redirect('profile')
 
     if not target.is_staff:
-        messages.error(request, 'Target is not staff')
+        messages.error(request, target.nickname + ' is not staff')
 
     if target.is_staff:
         target.is_staff = False
         target.save()
-        messages.success(request, 'Target is no more staff')
+        messages.success(request, target.nickname + ' is no more staff')
     return redirect('profile')
     # return render(request, 'manage.html', {'clients': clients})
     

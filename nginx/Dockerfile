@@ -12,7 +12,7 @@ RUN mkdir -p /etc/nginx/ssl
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/nginx/ssl/selfsigned.key \
     -out /etc/nginx/ssl/selfsigned.crt \
-    -subj "/C=US/ST=State/L=City/O=Organization/OU=Unit/CN=localhost"
+    -subj "/C=CA/ST=Quebec/L=42Quebec/O=42School/OU=42Quebec/CN=localhost"
 
 # Copy Nginx configuration files to the correct directory
 COPY default.conf /etc/nginx/conf.d/default.conf
