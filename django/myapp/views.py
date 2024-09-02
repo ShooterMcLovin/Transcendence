@@ -77,8 +77,6 @@ def del_user(request):
     Friendship.objects.filter(friend=user).delete()
     user.is_active = False
     user.save()
-    # user.delete()
-
     return redirect(reverse('logout_done'))
 
 def user_logout(request):
@@ -138,10 +136,6 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.is_online = True
-            user.wins = 0
-            user.losses = 0
-            user.tournament_wins = 0
-            user.tournament_losses = 0
             user.save()
             login(request, user)
             return redirect('home')
