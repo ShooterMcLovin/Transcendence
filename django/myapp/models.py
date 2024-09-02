@@ -119,6 +119,7 @@ class Challenge(models.Model):
         on_delete=models.CASCADE
     )
     is_accepted = models.BooleanField(default=False)
+    is_complete = models.BooleanField(default=False)
 
     def __str__(self):
         return f'{self.challenger} challenged {self.challenged}'

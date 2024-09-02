@@ -69,14 +69,16 @@ def update_winner(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
 
 
-# Basic webpages
 @login_required
 def del_user(request):
     user = request.user
-    user.is_online = False
+    logout(request)
+    Friendship.objects.filter(user=user).delete()
+    Friendship.objects.filter(friend=user).delete()
     user.is_active = False
     user.save()
-    logout(request)
+    # user.delete()
+
     return redirect(reverse('logout_done'))
 
 def user_logout(request):
@@ -85,6 +87,8 @@ def user_logout(request):
     user.save()
     logout(request)
     return redirect(reverse('logout_done'))
+
+
 
 def home(request):
     context = {
@@ -96,11 +100,11 @@ def home(request):
 def pong(request):
     return render(request, 'pong.html')
 
-# def ttt(request):
-#     return render(request, 'ttt.html')
 
 def view_404(request):
     return render(request, '404.html')
+
+
 
 @login_required
 def profile(request):
@@ -134,6 +138,10 @@ def register(request):
         if form.is_valid():
             user = form.save()
             user.is_online = True
+            user.wins = 0
+            user.losses = 0
+            user.tournament_wins = 0
+            user.tournament_losses = 0
             user.save()
             login(request, user)
             return redirect('home')
@@ -160,7 +168,7 @@ def add_friend(request, user_id):
             friend=friend,
             defaults={'is_friend': True}
         )
-        friendship, created = Friendship.objects.get_or_create(
+        friendshipr, created = Friendship.objects.get_or_create(
             user=friend,
             friend=user,
             defaults={'is_friend': True}
@@ -171,7 +179,9 @@ def add_friend(request, user_id):
             else:
                 # Reactivate the friendship if it was previously removed
                 friendship.is_friend = True
+                friendshipr.is_friend = True
                 friendship.save()
+                friendshipr.save()
                 messages.success(request, f"{friend.nickname} has been added back to your friends.")
         else:
             messages.success(request, f"You are now friends with {friend.nickname}.")
@@ -187,8 +197,11 @@ def remove_friend(request, user_id):
     user = request.user
     try:
         friendship = Friendship.objects.get(user=user, friend=friend, is_friend=True)
+        friendshipr = Friendship.objects.get(user=friend, friend=user, is_friend=True)
         friendship.is_friend = False
+        friendshipr.is_friend = False
         friendship.save()
+        friendshipr.save()
         messages.success(request, f"{friend.nickname} has been removed from your friends.")
     except Friendship.DoesNotExist:
         messages.error(request, f"{friend.nickname} is not in your friend list.")
@@ -200,9 +213,11 @@ def my_friends(request):
     user = request.user
     friends = user.friendships.filter(is_friend=True).select_related('friend')
     challenges = Challenge.objects.filter(challenged=user, is_accepted=False)
+    pending_challenges = Challenge.objects.filter(challenger=user, is_accepted=False)
     context = {
         'friends': [f.friend for f in friends],
         'challenges': challenges,
+        'pending_challenges': pending_challenges,
         }
     return render(request, 'my_friends.html', context)
 
@@ -290,7 +305,7 @@ def match_history(request):
     matches_lost = Match.objects.filter(loser=user).order_by('-match_date')
     
     # Get all matches and associated tournaments
-    matches = Match.objects.all().order_by('-match_date')
+    matches = matches_won.union(matches_lost).order_by('-match_date')
     
     # Get all tournaments (optional: filter by current or past tournaments)
     tournaments = Tournament.objects.all().order_by('-start_date')
@@ -342,24 +357,95 @@ def ttt_challenge(request, user_id):
     
     if existing_challenge and not existing_challenge.is_accepted:
         messages.info(request, f"You already challeneged {challenged.nickname}.")
-        return redirect('home')  # or provide a message to the user
+        return redirect('profile')  # or provide a message to the user
     else:
         # Create a new challenge
-        existing_challenge.delete()
-        Challenge.objects.create(
-            challenger=challenger,
-            challenged=challenged,
-            is_accepted=False
-        )
+        if (existing_challenge):
+            existing_challenge.is_accepted = False
+        else:
+            Challenge.objects.create(
+                challenger=challenger,
+                challenged=challenged,
+                is_accepted=False
+            )
     messages.success(request, f"You successfuly challeneged {challenged.nickname}.")
     
-    return redirect('home')
+    return redirect('profile')
 
 def accept_challenge(request, user_id):
     challenged = request.user
     challenger = get_object_or_404(CustomUser, id=user_id)
     challenge = Challenge.objects.get(challenged=challenged, challenger=challenger, is_accepted=False)
     challenge.is_accepted = True
-    challenge.save()
+    challenge.delete()
+    # challenge.save()
 
     return render(request, 'ttt.html' , {'Challenger': challenger, 'Challenged': challenged})
+
+
+
+
+def manage(request):
+    clients = CustomUser.objects.all()
+    return render(request, 'manage.html', {'clients': clients})
+    # return render(request, 'profile')
+
+def Activate(request, user_id):
+    target = get_object_or_404(CustomUser, id=user_id)
+    clients = CustomUser.objects.all()
+    if target.is_active:
+        messages.error(request, 'Target is already active')
+        return redirect('profile')
+    if not target.is_active:
+        target.is_active = True
+        target.save()
+        messages.success(request, 'Target activated')
+    return redirect('profile')
+    # return render(request, 'manage.html', {'clients': clients})
+
+def DeActivate(request, user_id):
+    target = get_object_or_404(CustomUser, id=user_id)
+    clients = CustomUser.objects.all()
+    if target.username == 'Master':
+        messages.error(request, 'Cannot deactivate main account')
+        return redirect('profile')
+    if not target.is_active:
+        messages.error(request, 'Target is already dactivated')
+        return redirect('profile')
+    if target.is_active:
+        if target.username != 'Master':
+            target.is_active = False
+            target.save()
+            messages.success(request, 'Target deactivated')
+    return redirect('profile')
+    # return render(request, 'manage.html', {'clients': clients})
+
+def Makestaff(request, user_id):
+    target = get_object_or_404(CustomUser, id=user_id)
+    
+    if target.is_staff:
+        messages.error(request, 'Target is already staff')
+    clients = CustomUser.objects.all()
+    if not target.is_staff:
+        target.is_staff = True
+        target.save()
+        messages.success(request, 'Target is now staff')
+    return redirect('profile')
+    # return render(request, 'manage.html', {'clients': clients})
+    
+def Remstaff(request, user_id):
+    target = get_object_or_404(CustomUser, id=user_id)
+    if target.username == 'Master':
+        messages.error(request, 'Cannot remove main account')
+        return redirect('profile')
+
+    if not target.is_staff:
+        messages.error(request, 'Target is not staff')
+
+    if target.is_staff:
+        target.is_staff = False
+        target.save()
+        messages.success(request, 'Target is no more staff')
+    return redirect('profile')
+    # return render(request, 'manage.html', {'clients': clients})
+    

@@ -30,6 +30,8 @@ ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr',
 AUTH_USER_MODEL = 'myapp.CustomUser'
 # Application definition
 INSTALLED_APPS = [
+    "admin_interface",
+    "colorfield",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
