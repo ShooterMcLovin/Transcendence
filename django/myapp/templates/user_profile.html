@@ -59,8 +59,8 @@
         <div class="rounded">
             <div><strong>Wins:</strong> {{ user_profile.wins }}</div>
             <div><strong>Losses:</strong> {{ user_profile.losses }}</div>
-            <strong>Tournament Wins:</strong> {{ user_profile.tournament_wins }}
-            <strong>Tournament Losses:</strong> {{ user_profile.tournament_losses }}
+            <div><strong>Tournament Wins:</strong> {{ user_profile.tournament_wins }}</div>
+            <div><strong>Tournament Losses:</strong> {{ user_profile.tournament_losses }}</div>
         </div>  
         <div class="text-center p-3">
             <a href="{% url 'user_history' user_profile.id %}" class="btn btn-info">Match History</a>

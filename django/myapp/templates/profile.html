@@ -93,8 +93,10 @@
             }
         }
     </script>
+    {% if user.is_staff%}
     <div class="text-center p-2">
         <a href="{% url 'manage' %}" class="btn btn-info p-2">Manage</a> -
     </div>
+    {% endif %}
 {% endif %}
 {% endblock %}

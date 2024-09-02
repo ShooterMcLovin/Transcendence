@@ -18,7 +18,8 @@ class CustomUser(AbstractUser):
     def get_friends(self):
         return CustomUser.objects.filter(
             id__in=Friendship.objects.filter(
-                user=self
+                user=self,
+                is_friend=True
             ).values_list('friend', flat=True)
         )
     

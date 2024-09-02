@@ -36,7 +36,11 @@
         {% endfor %}
         {% else %}
             You have no friends
-            <a href="{% url 'user_list' %}" class="btn btn-primary">Find Friends</a>
+            <div class="row ">
+                <div class="col-md-5">
+                </div>
+                <a href="{% url 'user_list' %}" class="btn btn-primary center col-md-2">Find Friends</a>
+            </div>
         {% endif %}
         </ul>
     </div>

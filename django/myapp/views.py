@@ -191,11 +191,13 @@ def remove_friend(request, user_id):
     user = request.user
     try:
         friendship = Friendship.objects.get(user=user, friend=friend, is_friend=True)
-        friendshipr = Friendship.objects.get(user=friend, friend=user, is_friend=True)
         friendship.is_friend = False
-        friendshipr.is_friend = False
         friendship.save()
+        friendshipr = Friendship.objects.get(user=friend, friend=user, is_friend=True)
+        friendshipr.is_friend = False
         friendshipr.save()
+        update_session_auth_hash(request, request.user)
+        update_session_auth_hash(request, friend)
         messages.success(request, f"{friend.nickname} has been removed from your friends.")
     except Friendship.DoesNotExist:
         messages.error(request, f"{friend.nickname} is not in your friend list.")
