@@ -244,9 +244,8 @@ def user_list(request):
     return render(request, 'user_list.html', context)
 
 # 404
-
-def view_404(request):
-    return render(request, '404.html')
+def view_404(request, exception):
+    return render(request, '404.html', status=404)
 
 ###########
 # History #
