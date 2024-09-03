@@ -72,6 +72,10 @@ def register(request):
 @login_required
 def del_user(request):
     user = request.user
+    if (user.username == 'Admin'):
+        messages.error(request,"Can not delete Admin!")
+        return redirect('profile')
+
     logout(request)
     Friendship.objects.filter(user=user).delete()
     Friendship.objects.filter(friend=user).delete()

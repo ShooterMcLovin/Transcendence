@@ -51,7 +51,7 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ./postgresql/data
+      device: ${POSTGRES_DATA}
 
   grafana_data:
 

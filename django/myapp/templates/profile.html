@@ -8,6 +8,7 @@
 {% block content %}
 {% csrf_token %}
 <form id="delete-account-form" action="{% url 'delete' %}" method="post" style="display: none;">
+    {% csrf_token %}
     <input type="hidden" name="action" value="delete_account">
 </form>
 <div class="row">
