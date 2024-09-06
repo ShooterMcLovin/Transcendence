@@ -67,8 +67,15 @@ volumes:
       type: none
       o: bind
       device: /Users/mkramer/Transcendence/postgresql/data
-  prometheus-data:
+  # prometheus-data:
+  #   driver: local
+  prometheus:
+    name: prometheus
     driver: local
+    driver_opts:
+      device: /Users/mkramer/Transcendence/prometheus
+      o: bind
+      type: none
   grafana-data:
     driver: local
 
@@ -112,57 +119,70 @@ services:
     networks:
       - monitoring
 
-#   prometheus:
-#     image: prom/prometheus:v2.37.9
-#     container_name: prometheus
-#     ports:
-#       - 9090:9090
-#     command:
-#       - '--config.file=/etc/prometheus/prometheus.yaml'
-#     volumes:
-#       - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
-#       - ./data:/prometheus
-#     restart: unless-stopped
-#     networks:
-#       - monitoring
+  # prometheus:
+  #   image: prom/prometheus:v2.37.9
+  #   container_name: prometheus
+  #   ports:
+  #     - 9090:9090
+  #   command:
+  #     - '--config.file=/etc/prometheus/prometheus.yaml'
+  #   volumes:
+  #     - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+  #     - ./data:/prometheus
+  #   restart: unless-stopped
+  #   networks:
+  #     - monitoring
+  prometheus:
+    container_name: prometheus
+    build: ./prometheus
+    image: prometheus
+    volumes:
+      - prometheus:/volumes/prometheus
+    ports:
+      - '9090:9090'
+    networks:
+      - monitoring
+    env_file:
+      - .env
+    restart: unless-stopped
 
-#   grafana:
-#     image: grafana/grafana-oss:latest
-#     container_name: grafana
-#     ports:
-#       - '3000:3000'
-#     volumes:
-#       - grafana-data:/var/lib/grafana
-#     restart: unless-stopped
-#     #password: root123
-#     networks:
-#       - monitoring
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana-data:/var/lib/grafana
+    restart: unless-stopped
+    #password: root123
+    networks:
+      - monitoring
 
-#   node_exporter:
-#     image: quay.io/prometheus/node-exporter:v1.5.0
-#     container_name: node_exporter
-#     command: '--path.rootfs=/host'
-#     pid: host
-#     restart: unless-stopped
-#     volumes:
-#       - /:/host:ro,rbind
-#     networks:
-#       - monitoring
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:v1.5.0
+    container_name: node_exporter
+    command: '--path.rootfs=/host'
+    pid: host
+    restart: unless-stopped
+    volumes:
+      - /:/host:ro,rbind
+    networks:
+      - monitoring
 
-#   cadvisor:
-#     image: gcr.io/cadvisor/cadvisor:v0.47.0
-#     container_name: cadvisor
-#     command:
-#       - '-port=8098'
-#     volumes:
-#       - /:/rootfs:ro
-#       - /var/run:/var/run:ro
-#       - /sys:/sys:ro
-#       - /var/lib/docker/:/var/lib/docker:ro
-#       - /dev/disk/:/dev/disk:ro
-#     devices:
-#       - /dev/kmsg
-#     privileged: true
-#     restart: unless-stopped
-#     networks:
-#       - monitoring    
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    container_name: cadvisor
+    command:
+      - '-port=8098'
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    devices:
+      - /dev/kmsg
+    privileged: true
+    restart: unless-stopped
+    networks:
+      - monitoring    
