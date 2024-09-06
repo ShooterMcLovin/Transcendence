@@ -76,8 +76,29 @@ volumes:
       device: /Users/mkramer/Transcendence/prometheus
       o: bind
       type: none
-  grafana-data:
+  grafana:
+    name: grafana
     driver: local
+    driver_opts:
+      device: /Users/mkramer/Transcendence/grafana
+      o: bind
+      type: none
+  node_exporter:
+    name: node_exporter
+    driver: local
+    driver_opts:
+      device: /Users/mkramer/Transcendence/node_exporter
+      o: bind
+      type: none
+  alertmanager:
+    name: alertmanager
+    driver: local
+    driver_opts:
+      device: /Users/mkramer/Transcendence/alertmanager
+      o: bind
+      type: none      
+  # grafana-data:
+  #   driver: local
 
 services:
   web:
@@ -146,43 +167,85 @@ services:
       - .env
     restart: unless-stopped
 
+  # grafana:
+  #   image: grafana/grafana-oss:latest
+  #   container_name: grafana
+  #   ports:
+  #     - '3000:3000'
+  #   volumes:
+  #     - grafana-data:/var/lib/grafana
+  #   restart: unless-stopped
+  #   #password: root123
+  #   networks:
+  #     - monitoring
+
   grafana:
-    image: grafana/grafana-oss:latest
     container_name: grafana
+    build: ./grafana
+    image: grafana
     ports:
-      - '3000:3000'
+      - 3000:3000
     volumes:
-      - grafana-data:/var/lib/grafana
-    restart: unless-stopped
-    #password: root123
+      - grafana:/volumes/grafana
     networks:
       - monitoring
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  # node_exporter:
+  #   image: quay.io/prometheus/node-exporter:v1.5.0
+  #   container_name: node_exporter
+  #   command: '--path.rootfs=/host'
+  #   pid: host
+  #   restart: unless-stopped
+  #   volumes:
+  #     - /:/host:ro,rbind
+  #   networks:
+  #     - monitoring
 
   node_exporter:
-    image: quay.io/prometheus/node-exporter:v1.5.0
     container_name: node_exporter
-    command: '--path.rootfs=/host'
-    pid: host
-    restart: unless-stopped
+    build: ./node_exporter
+    image: node_exporter
     volumes:
-      - /:/host:ro,rbind
+      - node_exporter:/volumes/node_exporter
+    ports:
+      - '9100:9100'
     networks:
       - monitoring
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.47.0
-    container_name: cadvisor
-    command:
-      - '-port=8098'
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    devices:
-      - /dev/kmsg
-    privileged: true
+    env_file:
+      - .env
     restart: unless-stopped
+
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
+  #   container_name: cadvisor
+  #   command:
+  #     - '-port=8098'
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   devices:
+  #     - /dev/kmsg
+  #   privileged: true
+  #   restart: unless-stopped
+  #   networks:
+  #     - monitoring
+
+  alertmanager:
+    container_name: alertmanager
+    build: ./alertmanager
+    image: alertmanager
+    volumes:
+      - alertmanager:/volumes/alertmanager
+    ports:
+      - '9093:9093'
     networks:
-      - monitoring    
+      - monitoring
+    env_file:
+      - .env
+    restart: unless-stopped

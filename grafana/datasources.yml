@@ -10,12 +10,12 @@ datasources:
   - name: PostgreSQL
     type: postgres
     access: proxy
-    url: ${GF_IP}:${DB_PORT}
+    url: ${GF_IP}:5432
     user: ${DB_USER}
     secureJsonData:
-      password: ${DB_PASSWORD}
+      password: ${POSTGRES_PASSWORD}
     jsonData:
-      database: ${DB_NAME}
+      database: ${POSTGRES_DB}
       sslmode: disable
     isDefault: false
 
