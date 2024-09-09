@@ -10,8 +10,8 @@ datasources:
   - name: PostgreSQL
     type: postgres
     access: proxy
-    url: ${GF_IP}:5432
-    user: ${DB_USER}
+    url: localhost:5432
+    user: ${POSTGRES_USER}
     secureJsonData:
       password: ${POSTGRES_PASSWORD}
     jsonData:

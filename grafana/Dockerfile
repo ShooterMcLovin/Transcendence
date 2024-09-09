@@ -1,32 +1,22 @@
-FROM debian:bullseye-slim
+FROM alpine:latest AS builder
 
-RUN apt -y update
-RUN apt -y upgrade
+RUN apk add --no-cache openssl
 
-RUN apt-get install -y apt-transport-https software-properties-common wget gnupg systemctl openssl
-RUN mkdir -p /etc/apt/keyrings/
-RUN wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
-RUN add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
-RUN apt -y update
-RUN apt -y install grafana
+RUN mkdir -p /etc/grafana/certs
 
-RUN rm -rf /var/lib/apt/lists/*
+RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
+    -keyout /etc/grafana/certs/server.key \
+    -out /etc/grafana/certs/server.crt \
+    -subj "/CN=localhost"
 
-RUN openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-	-out /etc/ssl/transcendence.42.fr.pem \
-	-keyout /etc/ssl/transcendence.42.fr.key \
-	-subj "/C=FR/ST=Charente/L=Angouleme/O=42/OU=42/CN=transcendence.42.fr"
+RUN chmod 666 /etc/grafana/certs/*
 
-RUN mkdir -p /usr/share/grafana/conf/provisioning/datasources/
-RUN mkdir -p /usr/share/grafana/conf/provisioning/dashboards/
-RUN mkdir -p /usr/share/grafana/dashboards/
+FROM grafana/grafana:latest
 
-COPY defaults.ini /usr/share/grafana/conf/
-COPY datasources.yml /usr/share/grafana/conf/provisioning/datasources/
-COPY dashboard.yml /usr/share/grafana/conf/provisioning/dashboards/
-COPY default.json /usr/share/grafana/dashboards/
+COPY --from=builder /etc/grafana/certs /etc/grafana/certs
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY grafana.ini /etc/grafana/grafana.ini
 
-ENTRYPOINT ["/entrypoint.sh"]
+EXPOSE 3002
+
+CMD ["grafana-server", "--config=/etc/grafana/grafana.ini"]

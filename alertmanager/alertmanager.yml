@@ -2,17 +2,19 @@ global:
   resolve_timeout: 5m
 
 route:
-  group_by: ['alertname', 'severity']
-  group_wait: 10s
+  receiver: "gmail-notifications"
+  group_by: ["alertname"]
+  group_wait: 30s
   group_interval: 5m
-  repeat_interval: 3h
-  receiver: 'webhook'
+  repeat_interval: 1h
 
 receivers:
-- name: 'webhook'
-  webhook_configs:
-  - url: '${TO_REPLACE}'
-    send_resolved: true
-    http_config:
-      tls_config:
-        insecure_skip_verify: true
+  - name: "gmail-notifications"
+    email_configs:
+      - to: "SMTP_TO"
+        from: "SMTP_FROM"
+        smarthost: "SMTP_SMARTHOST"
+        auth_username: "SMTP_AUTH_USERNAME"
+        auth_identity: "SMTP_AUTH_IDENTITY"
+        auth_password: "SMTP_AUTH_PASSWORD"
+        send_resolved: true
