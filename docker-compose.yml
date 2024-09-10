@@ -99,12 +99,16 @@ volumes:
   #     type: none      
   # grafana-data:
   #   driver: local
-  prom_data:
-  graf_data:  
+  # prom_data:
+  # graf_data:  
 
 services:
   web:
     build: ./django
+    environment:
+      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
+      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
+      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
     volumes:
       - ./django:/code  
     env_file:
