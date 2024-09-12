@@ -315,6 +315,7 @@ document.body.appendChild(renderer.domElement);
 const starGeometry = new THREE.BufferGeometry();
 const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
 const starCount = 500;
+starMaterial.size = 0.5
 const starVertices = [];
 for (let i = 0; i < starCount; i++) {
     const x = THREE.MathUtils.randFloatSpread(200);
@@ -343,12 +344,13 @@ scene.add(light2);
 const commonRotation = -Math.PI / 2;
 
 // Contour de la carte
-const borderGeometry = new THREE.BoxGeometry(10.2, 0.2, 1);
+const borderGeometry = new THREE.BoxGeometry(15.2, 0.2, 1);
 // Créez un chargeur de textures
 const textureLoader = new THREE.TextureLoader();
 
 // Chargez la texture de bois
-const woodTexture = textureLoader.load('/static/wood.jpg');
+const woodTexture = textureLoader.load('/static/wood2.jpg');
+const woodTexture2 = textureLoader.load('/static/wood2.jpg');
 
 // const borderMaterial = new THREE.MeshBasicMaterial({ map: woodTexture }); // Couleur rouge pour le contour
 const borderMaterial = new THREE.MeshPhysicalMaterial({
@@ -360,34 +362,34 @@ const borderMaterial = new THREE.MeshPhysicalMaterial({
   });
 // Bord supérieur
 const topBorder = new THREE.Mesh(borderGeometry, borderMaterial);
-topBorder.position.set(0, 0, 5);
+topBorder.position.set(0, 0, 5.2);
 topBorder.rotation.x = commonRotation;
 scene.add(topBorder);
 
 // Bord inférieur
 const bottomBorder = new THREE.Mesh(borderGeometry, borderMaterial);
-bottomBorder.position.set(0, 0, -5);
+bottomBorder.position.set(0, 0, -5.2);
 bottomBorder.rotation.x = commonRotation;
 scene.add(bottomBorder);
 
 // Bord gauche
-const sideBorderGeometry = new THREE.BoxGeometry(0.2, 10, 1);
+const sideBorderGeometry = new THREE.BoxGeometry(0.2, 10.5, 1);
 const leftBorder = new THREE.Mesh(sideBorderGeometry, borderMaterial);
-leftBorder.position.set(-5, 0, 0);
+leftBorder.position.set(-7.5, 0, 0);
 leftBorder.rotation.x = commonRotation;
 scene.add(leftBorder);
 
 // Bord droit
 const rightBorder = new THREE.Mesh(sideBorderGeometry, borderMaterial);
-rightBorder.position.set(5, 0, 0);
+rightBorder.position.set(7.5, 0, 0);
 rightBorder.rotation.x = commonRotation;
 scene.add(rightBorder);
 
 // Création du plancher
-const floorGeometry = new THREE.PlaneGeometry(10, 10);
+const floorGeometry = new THREE.PlaneGeometry(15, 10);
 // const floorMaterial = new THREE.MeshBasicMaterial({ color: 0x008000 }); // Couleur verte pour le plancher
 const floorMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0x008000, // Couleur de base du matériau
+    color: 0x7C0D0D, // Couleur de base du matériau
     roughness: 0.5, // Rugosité
     metalness: 0.2, // Métal
     clearCoat: 0.3, // Couche de finition
@@ -403,7 +405,7 @@ scene.add(floor);
 // Création des palettes
 const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1); 
 const paddleMaterial = new THREE.MeshPhysicalMaterial({
-    map: woodTexture, // Texture du bois
+    map: woodTexture2, // Texture du bois
     roughness: 0.5, // Rugosité
     metalness: 0.1, // Métal
     clearCoat: 1, // Couche de finition très brillante
@@ -415,13 +417,13 @@ const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 paddle1.rotation.x = commonRotation;
 paddle2.rotation.x = commonRotation;
-paddle1.position.set(-4.5, 0, 0);
-paddle2.position.set(4.5, 0, 0);
+paddle1.position.set(-6.5, 0, 0);
+paddle2.position.set(6.5, 0, 0);
 scene.add(paddle1);
 scene.add(paddle2);
 
 // Création de la balle
-const ballGeometry = new THREE.SphereGeometry(0.1, 32, 32);
+const ballGeometry = new THREE.SphereGeometry(0.2, 32, 32);
 // Créer une lumière ponctuelle
 const pointLight = new THREE.PointLight(0x00ff00, 1, 2); // Couleur verte, intensité 2, distance 50 unités
 // Ajouter la lumière à la scène
@@ -557,7 +559,7 @@ function showWinMessage(winner, loser) {
 function resetBall() {
     ball.position.set(0, 0.1, 0);
     ballDirection = getRandomDirection();
-    ballSpeed = 0.05;
+    ballSpeed = 0.1;
     gameStarted = false;
 }
 
@@ -584,7 +586,7 @@ let isSinglePlayer = false;
 let isMultiplayer = false;
 
 // Variables pour le mouvement de la balle
-let ballSpeed = 0.05;
+let ballSpeed = 0.1;
 let ballDirection = getRandomDirection();
 const speedIncrease = 0.005;
 
@@ -687,10 +689,10 @@ function updateBallPosition() {
         ballDirection.z *= -1;
     }
     
-    if (ball.position.x + 0.2 > 5) {
+    if (ball.position.x + 0.2 > 7.4) {
         score1 += 1;
         resetBall();
-    } else if (ball.position.x - 0.2 < -5) {
+    } else if (ball.position.x - 0.2 < -7.4) {
         score2 += 1;
         resetBall();
     }
@@ -887,8 +889,8 @@ function startGame(mode) {
         isTournament = false;
         ia1Active = true;
         ia2Active = false;
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
+        paddle1.position.set(-6.5, 0, 0);
+        paddle2.position.set(6.5, 0, 0);
         isPaused = false; // Reprendre le jeu
         player1 = "IA";
         player2 = username; // Assign the fetched username to player2
@@ -899,8 +901,8 @@ function startGame(mode) {
         isTournament = false;
         ia1Active = false;
         ia2Active = false;
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
+        paddle1.position.set(-6.5, 0, 0);
+        paddle2.position.set(6.5, 0, 0);
         isPaused = false; // Reprendre le jeu
     } else if (mode === 'tournament') {
         isSinglePlayer = false;

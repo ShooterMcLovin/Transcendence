@@ -27,22 +27,22 @@
                     <a href="{% url 'user_profile' friend.id %}" class="btn btn-info"><img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;"></a>
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-2">
-                    {{ friend.nickname }}
+                    <strong>{{ friend.nickname }}</strong>({{friend.username}})
                 </div>
                 {%if friend.is_online %}
                 <div class="d-flex align-items-center justify-content-center online col-md-2">
-                    Online
+                    <strong>Online</strong>
                 </div>
                 {% else %}
                 <div class="d-flex align-items-center justify-content-center offline col-md-2">
-                    Offline
+                    <strong>Offline</strong>
                 </div>
                 {% endif %}
-                <div class="d-flex align-items-center justify-content-center col-md-3">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
                     <a href="{% url 'ttt' friend.id %}" class="btn btn-primary">Challenge</a>
                     
                 </div>
-                <div class="d-flex align-items-center justify-content-center col-md-3">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
                     <a href="{% url 'remove_friend' friend.id %}" class="btn btn-danger">Remove Friend</a>
                 </div>
             </li>
@@ -71,7 +71,7 @@
                 <a href="{% url 'user_profile' challenge.challenger.id %}" class="btn btn-info">{{ challenge.challenger.nickname }}</a>
             </div>
             <div class="d-flex align-items-center justify-content-center col-md-8">
-                {%if not challenege.is_accepted%}
+                {%if challenge and not challenege.is_accepted %}
                 <a href="{% url 'accept_challenge' challenge.challenger.id %}" class="btn btn-success">Accept Challenge</a>
                 {% endif %}
             </div>

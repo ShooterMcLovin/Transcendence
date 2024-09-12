@@ -8,9 +8,10 @@ To verify:
     - docker scan(requirements.txt) 🟨
     - media (needed?) 🟨
     - Friend 2 ways ✅
+    - postgresql mounted 🟨
 
 To do:
-    - security 🟥
+    - security 🟥 ?? 
     III.4 Security concerns
     In order to create a basic functional website, here are a few security concerns that you
     have to tackle:

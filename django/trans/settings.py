@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =  os.getenv('DJANGO_DEBUG'),
 
-ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
+ALLOWED_HOSTS = ['10.18.200.34','172.16.19.176','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
 
 AUTH_USER_MODEL = 'myapp.CustomUser'
 # Application definition
@@ -141,7 +141,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/New_York'
 
 USE_I18N = True
 
@@ -165,3 +165,5 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 X_FRAME_OPTIONS = 'DENY'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_URL = 'home'

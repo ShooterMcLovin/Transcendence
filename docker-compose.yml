@@ -10,6 +10,7 @@ services:
     depends_on:
       db:
         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+    restart: unless-stopped
 
   db:
     build: ./postgresql
@@ -21,6 +22,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       retries: 5
+    restart: unless-stopped
   
   nginx:
     build: ./nginx
@@ -31,6 +33,7 @@ services:
       - "443:443"
     depends_on:
       - web
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest

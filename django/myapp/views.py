@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, update_session_auth_hash
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.urls import reverse
 from .models import CustomUser, Friendship, Match, Tournament, Challenge
@@ -347,7 +347,7 @@ def accept_challenge(request, user_id):
 ###############
 # Admin stuff #
 ###############
-
+@login_required
 def manage(request):
     clients = CustomUser.objects.all()
     return render(request, 'manage.html', {'clients': clients})

@@ -20,6 +20,7 @@
 {% if user.is_staff %}
 <ul class="list-group">
     {% for client in clients %}
+    {% if not client.username == 'Admin'%}
     <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
         {% if client.is_online%}
         <div class="d-flex align-items-center justify-content-center col-md-2 online">
@@ -43,6 +44,7 @@
             <a href="{% url 'Remstaff' client.id %}" class="btn btn-danger">Remove Staff Rights</a>
         </div>
     </li>
+    {% endif %}
     {% empty %}
         <li class="list-group-item">No clients available.</li>
     {% endfor %}
