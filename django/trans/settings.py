@@ -25,9 +25,10 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG =  os.getenv('DJANGO_DEBUG'),
 
-ALLOWED_HOSTS = ['10.18.200.34','172.16.19.176','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['10.18.200.34','172.16.19.176','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
 
-AUTH_USER_MODEL = 'myapp.CustomUser'
+AUTH_USER_MODEL = 'spa.CustomUser'
 # Application definition
 INSTALLED_APPS = [
     "admin_interface",
@@ -38,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',  # Ensure this app is listed
+    # 'myapp',  # Ensure this app is listed
+    'spa',  # Ensure this app is listed
 ]
 
 MIDDLEWARE = [
@@ -166,4 +168,4 @@ X_FRAME_OPTIONS = 'DENY'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = 'home'
+# LOGIN_URL = 'home'

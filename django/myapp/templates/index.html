@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js SPA</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle, #1c1c1c, #333333);
+        }
+        #ui {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #f7c600;
+            font-size: 18px;
+        }
+        .button {
+            background-color: #f7c600; /* Yellow color */
+            border: none;
+            color: black;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .button:hover {
+            background-color: #e0b800; /* Slightly darker yellow on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="ui">
+        <button class="button" onclick="goHome()">Back Home</button>
+        <button class="button" onclick="manageUsers()">Manage Users</button>
+        <button class="button" onclick="toggleLogin()">
+            Login
+        </button>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.0/build/three.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
