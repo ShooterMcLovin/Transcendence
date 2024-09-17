@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG =  os.getenv('DJANGO_DEBUG'),
+DEBUG =  False
 
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['10.18.200.34','172.16.19.176','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
@@ -95,28 +95,28 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks, in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Define the logging configuration
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'file': {
-            'level': 'DEBUG',  # Change this to 'INFO' or 'ERROR' to reduce verbosity
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'django_debug.log'),  # Log file path
-        },
-        'console': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['file', 'console'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-    },
-}
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'DEBUG',  # Change this to 'INFO' or 'ERROR' to reduce verbosity
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'django_debug.log'),  # Log file path
+#         },
+#         'console': {
+#             'level': 'DEBUG',
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file', 'console'],
+#             'level': 'DEBUG',
+#             'propagate': True,
+#         },
+#     },
+# }
 
 
 # Password validation
