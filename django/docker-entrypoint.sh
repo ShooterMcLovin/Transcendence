@@ -43,4 +43,5 @@ EOF
 
 # Start Gunicorn server
 echo "Starting Gunicorn server on 0.0.0.0:8000..."
+python manage.py runserver 0.0.0.0:8000
 exec gunicorn trans.wsgi:application --bind 0.0.0.0:8000

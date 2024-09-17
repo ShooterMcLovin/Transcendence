@@ -1,8 +1,5 @@
-import argparse
 import bcrypt
 
-parser = argparse.ArgumentParser(description="Generate a bcrypt hash of a password.")
-parser.add_argument("password", type=str, help="The password to hash.")
-args = parser.parse_args()
-hashed_password = bcrypt.hashpw(args.password.encode("utf-8"), bcrypt.gensalt())
-print(hashed_password.decode())
+password = "password123456789"  # Replace with your desired password
+hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+print(hashed.decode('utf-8'))

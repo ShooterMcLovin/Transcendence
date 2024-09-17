@@ -1,123 +1,16 @@
-# services:
-#   web:
-#     build: ./django
-#     volumes:
-#       - ./django:/code  
-#     env_file:
-#       - .env
-#     ports:
-#       - "8000:8000"  
-#     depends_on:
-#       db:
-#         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
-
-#   db:
-#     build: ./postgresql
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
-#     env_file:
-#       - .env
-#     healthcheck:
-#       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-#       interval: 10s
-#       retries: 5
-  
-#   nginx:
-#     build: ./nginx
-#     volumes:
-#       - ./django:/code  
-#     ports:
-#       - "80:80"
-#       - "443:443"
-#     depends_on:
-#       - web
-
-#   grafana:
-#     image: grafana/grafana:latest
-#     environment:
-#       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
-#     ports:
-#       - "3000:3000"
-#     volumes:
-#       - grafana_data:/var/lib/grafana
-#     depends_on:
-#       - db
-#     links:
-#       - db
-
-# volumes:
-#   postgres_data:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       o: bind
-#       device: /Users/mkramer/Transcendence/postgresql/data
-
-#   grafana_data:
-
-networks:
-  monitoring:
-    name: monitoring
-    driver: bridge
-
-volumes:
-  postgres_data:
-    driver: local
-    driver_opts:
-      type: none
-      o: bind
-      device: /Users/mkramer/Transcendence/postgresql/data
-  # prometheus-data:
-  #   driver: local
-  # prometheus:
-  #   name: prometheus
-  #   driver: local
-  #   driver_opts:
-  #     device: /Users/mkramer/Transcendence/prometheus
-  #     o: bind
-  #     type: none
-  # grafana:
-  #   name: grafana
-  #   driver: local
-  #   driver_opts:
-  #     device: /Users/mkramer/Transcendence/grafana
-  #     o: bind
-  #     type: none
-  # node_exporter:
-  #   name: node_exporter
-  #   driver: local
-  #   driver_opts:
-  #     device: /Users/mkramer/Transcendence/node_exporter
-  #     o: bind
-  #     type: none
-  # alertmanager:
-  #   name: alertmanager
-  #   driver: local
-  #   driver_opts:
-  #     device: /Users/mkramer/Transcendence/alertmanager
-  #     o: bind
-  #     type: none      
-  # grafana-data:
-  #   driver: local
-  # prom_data:
-  # graf_data:  
-
 services:
   web:
     build: ./django
-    environment:
-      - DJANGO_SUPERUSER_USERNAME=${DJANGO_SUPERUSER_USERNAME}
-      - DJANGO_SUPERUSER_EMAIL=${DJANGO_SUPERUSER_EMAIL}
-      - DJANGO_SUPERUSER_PASSWORD=${DJANGO_SUPERUSER_PASSWORD}
     volumes:
       - ./django:/code  
     env_file:
       - .env
     ports:
-      - "8000:8000"  
+      - "8000:8000"
+      - "8001:8001"
     depends_on:
       db:
-        condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+        condition: service_healthy
     networks:
       - monitoring
 
@@ -133,11 +26,9 @@ services:
       retries: 5
     networks:
       - monitoring
-        
+
   nginx:
     build: ./nginx
-    volumes:
-      - ./django:/code  
     ports:
       - "80:80"
       - "443:443"
@@ -146,167 +37,54 @@ services:
     networks:
       - monitoring
 
-  # prometheus:
-  #   image: prom/prometheus:v2.37.9
-  #   container_name: prometheus
-  #   ports:
-  #     - 9090:9090
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yaml'
-  #   volumes:
-  #     - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
-  #     - ./data:/prometheus
-  #   restart: unless-stopped
-  #   networks:
-  #     - monitoring
-  # prometheus:
-  #   container_name: prometheus
-  #   build: /Users/mkramer/Transcendence/prometheus
-  #   image: prometheus
-  #   volumes:
-  #     - prometheus:/volumes/prometheus
-  #   ports:
-  #     - '9090:9090'
-  #   networks:
-  #     - monitoring
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
+  nginx-prometheus-exporter:
+    image: nginx/nginx-prometheus-exporter:1.1
+    expose:
+      - 9113
+    env_file:
+      - .env
+    command:
+      -nginx.scrape-uri=https://nginx:443/stub_status
 
-  # grafana:
-  #   image: grafana/grafana-oss:latest
-  #   container_name: grafana
-  #   ports:
-  #     - '3000:3000'
-  #   volumes:
-  #     - grafana-data:/var/lib/grafana
-  #   restart: unless-stopped
-  #   #password: root123
-  #   networks:
-  #     - monitoring
-
-  # grafana:
-  #   container_name: grafana
-  #   build: /Users/mkramer/Transcendence/grafana
-  #   image: grafana
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - grafana:/volumes/grafana
-  #   networks:
-  #     - monitoring
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
-
-  # node_exporter:
-  #   image: quay.io/prometheus/node-exporter:v1.5.0
-  #   container_name: node_exporter
-  #   command: '--path.rootfs=/host'
-  #   pid: host
-  #   restart: unless-stopped
-  #   volumes:
-  #     - /:/host:ro,rbind
-  #   networks:
-  #     - monitoring
-
-  # node_exporter:
-  #   container_name: node_exporter
-  #   build: /Users/mkramer/Transcendence/node_exporter
-  #   image: node_exporter
-  #   volumes:
-  #     - node_exporter:/volumes/node_exporter
-  #   ports:
-  #     - '9100:9100'
-  #   networks:
-  #     - monitoring
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
-
-  # cadvisor:
-  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
-  #   container_name: cadvisor
-  #   command:
-  #     - '-port=8098'
-  #   volumes:
-  #     - /:/rootfs:ro
-  #     - /var/run:/var/run:ro
-  #     - /sys:/sys:ro
-  #     - /var/lib/docker/:/var/lib/docker:ro
-  #     - /dev/disk/:/dev/disk:ro
-  #   devices:
-  #     - /dev/kmsg
-  #   privileged: true
-  #   restart: unless-stopped
-  #   networks:
-  #     - monitoring
-
-  # alertmanager:
-  #   container_name: alertmanager
-  #   build: /Users/mkramer/Transcendence/alertmanager
-  #   image: alertmanager
-  #   volumes:
-  #     - alertmanager:/volumes/alertmanager
-  #   ports:
-  #     - '9093:9093'
-  #   networks:
-  #     - monitoring
-  #   env_file:
-  #     - .env
-  #   restart: unless-stopped
 
   prometheus:
     container_name: prometheus
-    restart: always
-    build:
-        context: ./prometheus
-        dockerfile: Dockerfile
-        args:
-          - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+    depends_on:
+      - web
+    build: ./prometheus
     volumes:
-        - ./prometheus/data:/prometheus/data
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml
+    env_file:
+      - .env
     ports:
-        - '9090:9090'
+      - '9090:9090'
     networks:
-        - monitoring
+      - monitoring
 
   grafana:
     container_name: grafana
-    restart: always
-    build:
-        context: ./grafana
-        dockerfile: Dockerfile
+    depends_on:
+      - web
+    build: ./grafana
     volumes:
-        - ./grafana/provisioning:/etc/grafana/provisioning
-        - ./grafana/dashboards:/var/lib/grafana/dashboards
-        - ./grafana/data:/var/lib/grafana
-    environment:
-        - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
-        - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER}
-        - GF_SERVER_HTTP_PORT=${GF_SERVER_HTTP_PORT}
-        - GF_SERVER_PROTOCOL=${GF_SERVER_PROTOCOL}
-        - GF_SERVER_CERT_FILE=${GF_SERVER_CERT_FILE}
-        - GF_SERVER_CERT_KEY=${GF_SERVER_CERT_KEY}
-        - PROMETHEUS_PASSWORD=${PROMETHEUS_PASSWORD}
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/data:/var/lib/grafana
+    env_file:
+      - .env
     ports:
-        - '3002:3002'
+      - '3002:3002'
     networks:
-        - monitoring
+      - monitoring
 
   alertmanager:
     container_name: alertmanager
-    restart: always
-    build:
-      context: ./alertmanager
-      dockerfile: Dockerfile
-      args:
-        - SMTP_TO=${SMTP_TO}
-        - SMTP_FROM=${SMTP_FROM}
-        - SMTP_SMARTHOST=${SMTP_SMARTHOST}
-        - SMTP_AUTH_USERNAME=${SMTP_AUTH_USERNAME}
-        - SMTP_AUTH_IDENTITY=${SMTP_AUTH_IDENTITY}
-        - SMTP_AUTH_PASSWORD=${SMTP_AUTH_PASSWORD}
+    depends_on:
+      - web
+    build: ./alertmanager
+    env_file:
+      - .env
     volumes:
       - ./alertmanager/data:/alertmanager/data
     networks:
@@ -314,10 +92,9 @@ services:
 
   cadvisor:
     container_name: cadvisor
-    restart: always
-    build:
-      context: ./exporters/cadvisor
-      dockerfile: Dockerfile
+    depends_on:
+      - web
+    build: ./exporters/cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run/docker.sock:/var/run/docker.sock:rw
@@ -329,11 +106,353 @@ services:
 
   postgres-exporter:
     container_name: postgres-exporter
-    restart: always
+    depends_on:
+      - web
     build:
       context: ./exporters/postgres-exporter
-      dockerfile: Dockerfile
     environment:
       - DATA_SOURCE_NAME=${DATA_SOURCE_NAME}
     networks:
       - monitoring
+    platform: linux/amd64
+
+networks:
+  monitoring:
+    name: monitoring
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${POSTGRES_DATA}
+
+  grafana_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${GRAFANA_DATA}
+
+# # services:
+# #   web:
+# #     build: ./django
+# #     volumes:
+# #       - ./django:/code  
+# #     env_file:
+# #       - .env
+# #     ports:
+# #       - "8000:8000"  
+# #     depends_on:
+# #       db:
+# #         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+
+# #   db:
+# #     build: ./postgresql
+# #     volumes:
+# #       - postgres_data:/var/lib/postgresql/data
+# #     env_file:
+# #       - .env
+# #     healthcheck:
+# #       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+# #       interval: 10s
+# #       retries: 5
+  
+# #   nginx:
+# #     build: ./nginx
+# #     volumes:
+# #       - ./django:/code  
+# #     ports:
+# #       - "80:80"
+# #       - "443:443"
+# #     depends_on:
+# #       - web
+
+# #   grafana:
+# #     image: grafana/grafana:latest
+# #     environment:
+# #       - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
+# #     ports:
+# #       - "3000:3000"
+# #     volumes:
+# #       - grafana_data:/var/lib/grafana
+# #     depends_on:
+# #       - db
+# #     links:
+# #       - db
+
+# # volumes:
+# #   postgres_data:
+# #     driver: local
+# #     driver_opts:
+# #       type: none
+# #       o: bind
+# #       device: /Users/mkramer/Transcendence/postgresql/data
+
+# #   grafana_data:
+
+# networks:
+#   monitoring:
+#     name: monitoring
+#     driver: bridge
+
+# volumes:
+#   postgres_data:
+#     driver: local
+#     driver_opts:
+#       type: none
+#       o: bind
+#       device: ${POSTGRES_DATA}
+#   # prometheus-data:
+#   #   driver: local
+#   # prometheus:
+#   #   name: prometheus
+#   #   driver: local
+#   #   driver_opts:
+#   #     device: /Users/mkramer/Transcendence/prometheus
+#   #     o: bind
+#   #     type: none
+#   # grafana:
+#   #   name: grafana
+#   #   driver: local
+#   #   driver_opts:
+#   #     device: /Users/mkramer/Transcendence/grafana
+#   #     o: bind
+#   #     type: none
+#   # node_exporter:
+#   #   name: node_exporter
+#   #   driver: local
+#   #   driver_opts:
+#   #     device: /Users/mkramer/Transcendence/node_exporter
+#   #     o: bind
+#   #     type: none
+#   # alertmanager:
+#   #   name: alertmanager
+#   #   driver: local
+#   #   driver_opts:
+#   #     device: /Users/mkramer/Transcendence/alertmanager
+#   #     o: bind
+#   #     type: none      
+#   # grafana-data:
+#   #   driver: local
+#   # prom_data:
+#   # graf_data:  
+
+# services:
+#   web:
+#     build: ./django
+#     volumes:
+#       - ./django:/code  
+#     env_file:
+#       - .env
+#     ports:
+#       - "8000:8000"  
+#     depends_on:
+#       db:
+#         condition: service_healthy  # Ensures 'db' service is healthy before starting 'web'
+#     
+#     networks:
+#       - monitoring
+
+#   db:
+#     build: ./postgresql
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+#     env_file:
+#       - .env
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+#       interval: 10s
+#       retries: 5
+#     networks:
+#       - monitoring
+        
+#   nginx:
+#     build: ./nginx
+#     volumes:
+#       - ./django:/code  
+#     ports:
+#       - "80:80"
+#       - "443:443"
+#     depends_on:
+#       - web
+#     networks:
+#       - monitoring
+
+#   # prometheus:
+#   #   image: prom/prometheus:v2.37.9
+#   #   container_name: prometheus
+#   #   ports:
+#   #     - 9090:9090
+#   #   command:
+#   #     - '--config.file=/etc/prometheus/prometheus.yaml'
+#   #   volumes:
+#   #     - ./config/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
+#   #     - ./data:/prometheus
+#   #   
+#   #   networks:
+#   #     - monitoring
+#   # prometheus:
+#   #   container_name: prometheus
+#   #   build: /Users/mkramer/Transcendence/prometheus
+#   #   image: prometheus
+#   #   volumes:
+#   #     - prometheus:/volumes/prometheus
+#   #   ports:
+#   #     - '9090:9090'
+#   #   networks:
+#   #     - monitoring
+#   #   env_file:
+#   #     - .env
+#   #   
+
+#   # grafana:
+#   #   image: grafana/grafana-oss:latest
+#   #   container_name: grafana
+#   #   ports:
+#   #     - '3000:3000'
+#   #   volumes:
+#   #     - grafana-data:/var/lib/grafana
+#   #   
+#   #   #password: root123
+#   #   networks:
+#   #     - monitoring
+
+#   # grafana:
+#   #   container_name: grafana
+#   #   build: /Users/mkramer/Transcendence/grafana
+#   #   image: grafana
+#   #   ports:
+#   #     - 3000:3000
+#   #   volumes:
+#   #     - grafana:/volumes/grafana
+#   #   networks:
+#   #     - monitoring
+#   #   env_file:
+#   #     - .env
+#   #   
+
+#   # node_exporter:
+#   #   image: quay.io/prometheus/node-exporter:v1.5.0
+#   #   container_name: node_exporter
+#   #   command: '--path.rootfs=/host'
+#   #   pid: host
+#   #   
+#   #   volumes:
+#   #     - /:/host:ro,rbind
+#   #   networks:
+#   #     - monitoring
+
+#   # node_exporter:
+#   #   container_name: node_exporter
+#   #   build: /Users/mkramer/Transcendence/node_exporter
+#   #   image: node_exporter
+#   #   volumes:
+#   #     - node_exporter:/volumes/node_exporter
+#   #   ports:
+#   #     - '9100:9100'
+#   #   networks:
+#   #     - monitoring
+#   #   env_file:
+#   #     - .env
+#   #   
+
+#   # cadvisor:
+#   #   image: gcr.io/cadvisor/cadvisor:v0.47.0
+#   #   container_name: cadvisor
+#   #   command:
+#   #     - '-port=8098'
+#   #   volumes:
+#   #     - /:/rootfs:ro
+#   #     - /var/run:/var/run:ro
+#   #     - /sys:/sys:ro
+#   #     - /var/lib/docker/:/var/lib/docker:ro
+#   #     - /dev/disk/:/dev/disk:ro
+#   #   devices:
+#   #     - /dev/kmsg
+#   #   privileged: true
+#   #   
+#   #   networks:
+#   #     - monitoring
+
+#   # alertmanager:
+#   #   container_name: alertmanager
+#   #   build: /Users/mkramer/Transcendence/alertmanager
+#   #   image: alertmanager
+#   #   volumes:
+#   #     - alertmanager:/volumes/alertmanager
+#   #   ports:
+#   #     - '9093:9093'
+#   #   networks:
+#   #     - monitoring
+#   #   env_file:
+#   #     - .env
+#   #   
+
+#   prometheus:
+#     container_name: prometheus
+#     
+#     build: 
+#       context: ./prometheus
+#       dockerfile: Dockerfile
+#       args:
+#         PROMETHEUS_PASSWORD: ${PROMETHEUS_PASSWORD}
+#     volumes:
+#       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#       - ./web.yml:/etc/prometheus/web.yml
+#       - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
+#     env_file:
+#       - .env
+#     ports:
+#         - '9090:9090'
+#     networks:
+#         - monitoring
+
+#   grafana:
+#     container_name: grafana
+#     
+#     build: ./grafana
+#     volumes:
+#         - ./grafana/provisioning:/etc/grafana/provisioning
+#         - ./grafana/dashboards:/var/lib/grafana/dashboards
+#         - ./grafana/data:/var/lib/grafana
+#     env_file:
+#       - .env
+#     ports:
+#         - '3002:3002'
+#     networks:
+#         - monitoring
+
+#   alertmanager:
+#     container_name: alertmanager
+#     
+#     build: ./alertmanager
+#     env_file:
+#       - .env
+#     volumes:
+#       - ./alertmanager/data:/alertmanager/data
+#     networks:
+#       - monitoring
+
+#   cadvisor:
+#     container_name: cadvisor
+#     
+#     build: ./exporters/cadvisor
+#     volumes:
+#       - /:/rootfs:ro
+#       - /var/run/docker.sock:/var/run/docker.sock:rw
+#       - /sys:/sys:ro
+#       - /var/lib/docker/:/var/lib/docker:ro
+#       - /dev/disk/:/dev/disk:ro
+#     networks:
+#       - monitoring
+
+#   postgres-exporter:
+#     build: ./exporters/postgres-exporter
+#     platform: linux/amd64  # Adjust to your architecture if needed
+#     environment:
+#       - DATA_SOURCE_NAME=${DATA_SOURCE_NAME}
+#     networks:
+#       - monitoring
