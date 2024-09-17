@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React SPA with Django</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <script src="https://unpkg.com/react-router-dom@5.2.0/umd/react-router-dom.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        nav { margin-bottom: 20px; }
+        button { margin-right: 10px; }
+        input { margin-bottom: 10px; display: block; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { BrowserRouter, Route, Switch, Link } = ReactRouterDOM;
+        function Home() {
+            return (
+                <div>
+                    <h1>Yohoho, 42, ca roule!</h1>
+                    <nav>
+                        <Link to="/login"><button>Login</button></Link>
+                        <Link to="/404"><button>404</button></Link>
+                        <Link to="/pong"><button>Pong</button></Link>
+                    </nav>
+                </div>
+            );
+        }
+        function Login() {
+            return (
+                <div>
+                    <h2>Login</h2>
+                    <input type="text" placeholder="Username" />
+                    <input type="password" placeholder="Password" />
+                    <button>Enter</button>
+                </div>
+            );
+        }
+        function NotFound() {
+            return <h1 style="font-size: 100px; text-align: center;">?</h1>;
+        }
+        function Pong() {
+            return (
+                <div>
+                    <h2>Pong</h2>
+                    <iframe
+                        width="560"
+                        height="315"
+                        src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                        frameBorder="0"
+                        allow="autoplay; encrypted-media"
+                        allowFullScreen
+                    ></iframe>
+                </div>
+            );
+        }
+        function App() {
+            return (
+                <BrowserRouter>
+                    <Switch>
+                        <Route exact path="/" component={Home} />
+                        <Route path="/login" component={Login} />
+                        <Route path="/pong" component={Pong} />
+                        <Route component={NotFound} />
+                    </Switch>
+                </BrowserRouter>
+            );
+        }
+        ReactDOM.render(<App />, document.getElementById('root'));
+    </script>
+</body>
+</html>

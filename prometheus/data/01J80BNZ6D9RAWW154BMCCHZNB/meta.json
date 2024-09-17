@@ -1,0 +1,17 @@
+{
+	"ulid": "01J80BNZ6D9RAWW154BMCCHZNB",
+	"minTime": 1726344013882,
+	"maxTime": 1726351200000,
+	"stats": {
+		"numSamples": 1281764,
+		"numSeries": 14019,
+		"numChunks": 18447
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01J80BNZ6D9RAWW154BMCCHZNB"
+		]
+	},
+	"version": 1
+}
