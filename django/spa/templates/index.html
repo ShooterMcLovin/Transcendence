@@ -1,0 +1,82 @@
+{% load static %}
+{% csrf_token %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="{% static 'js/loginRegister.js' %}"></script>
+        
+    </head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Welcome to the Pong Contest</h1>
+        
+        <div id="login-form" class="mt-3">
+            <h2>Login</h2>
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <div id="login-error" class="mt-2 text-danger"></div>
+            </form>
+        </div>
+        
+        <div id="registration-form" class="mt-5">
+            <h2>Register</h2>
+            <form id="registration-form"> <!-- Fixed ID -->
+                <div class="form-group">
+                    <label for="reg-username">Username</label>
+                    <input type="text" class="form-control" id="reg-username" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password1">Password</label>
+                    <input type="password" class="form-control" id="reg-password1" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-password2">Confirm Password</label>
+                    <input type="password" class="form-control" id="reg-password2" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-nickname">Nickname</label>
+                    <input type="text" class="form-control" id="reg-nickname" maxlength="5">
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" class="form-control" id="reg-email" required>
+                </div>
+                <button type="submit" class="btn btn-success">Register</button>
+                <div id="registration-error" class="mt-2 text-danger"></div>
+            </form>
+        </div>
+        
+        <div id="user-list" class="mt-3" style="display: none;">
+            <!-- User list will be dynamically inserted here -->
+        </div>
+    </div>
+    
+    <div class="container">
+        {% if messages %}
+        <div class="alert alert-info text-center">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}  
+    </div>
+    
+    <!-- Include Bootstrap JavaScript for additional functionality if needed -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+</body>
+</html>

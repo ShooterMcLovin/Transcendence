@@ -35,7 +35,7 @@
     <div class="col-md-1 d-none d-md-block">
         <div class="vertical-separator"></div>
     </div>
-
+    
     <!-- Display Username/Nickname -->
     <div class="col-md-3">
         <div class="text-center mt-5">
@@ -43,9 +43,9 @@
             <div><strong>Nickname:</strong> {{ user_profile.nickname }}</div>
             {% comment %} {% if user_profile.id == request.user.id %} {% endcomment %}
             {% if user_profile.is_online %}
-                <p class="status-online"><strong>Online</strong></p>
+            <p class="status-online"><strong>Online</strong></p>
             {% else %}
-                <p class="status-offline"><strong>Offline</strong></p>
+            <p class="status-offline"><strong>Offline</strong></p>
             {% endif %}
         </div>
     </div>
@@ -73,24 +73,24 @@
 <hr class="my-4 bg-light">
 
 <h5 class="text-center mb-4">{{ user_profile.nickname }}'s Friends</h5>
-    <div class="user-list-container bg-dark p-4 rounded">
-        <ul class="list-group">
-            {%if friends%}
-                {% for friend in friends %}
-                    <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
-                        <div class="col-md-2">
-                            <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle me-2" style="width: 35px; height: 35px;">
-                        </div>
-                        <div class="col-md-10 text-center">
-                            <strong>{{ friend.nickname }}</strong>
-                        </div>
-                    </li>
-                {% endfor %}
-            {% else %}
-                {{user_profile.nickname}} has no friends
-            {% endif %}
-        </ul>
-    </div>
+<div class="user-list-container bg-dark p-4 rounded">
+    <ul class="list-group">
+        {%if friends%}
+        {% for friend in friends %}
+        <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+            <div class="col-md-2">
+                <img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle me-2" style="width: 35px; height: 35px;">
+            </div>
+            <div class="col-md-10 text-center">
+                <strong>{{ friend.nickname }}</strong>
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        {{user_profile.nickname}} has no friends
+        {% endif %}
+    </ul>
+</div>
 
 <!-- Horizontal Separator -->
 <hr class="my-4 bg-light">

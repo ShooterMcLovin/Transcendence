@@ -27,15 +27,15 @@
 <h3>Matches Won</h3>
 <ul class="list-group mb-4">
     {% for match in matches_won %}
-        <li class="list-group-item">
-            <strong>{{ match.winner.nickname }}</strong> <span class="won">defeated </span><strong>{{ match.loser.nickname }}</strong> at {{match.game}}
-            on {{ match.match_date }}
-            {% if match.details %}
-                <p><small>Details: {{ match.details }}</small></p>
-            {% endif %}
-        </li>
+    <li class="list-group-item">
+        <strong>{{ match.winner.nickname }}</strong> <span class="won">defeated </span><strong>{{ match.loser.nickname }}</strong> at {{match.game}}
+        on {{ match.match_date }}
+        {% if match.details %}
+        <p><small>Details: {{ match.details }}</small></p>
+        {% endif %}
+    </li>
     {% empty %}
-        <li class="list-group-item">No matches won.</li>
+    <li class="list-group-item">No matches won.</li>
     {% endfor %}
 </ul>
 
@@ -43,26 +43,26 @@
 <h3>Matches Lost</h3>
 <ul class="list-group mb-4">
     {% for match in matches_lost %}
-        <li class="list-group-item">
-            <strong>{{ match.loser.nickname }}</strong> <span class="lost">lost</span> to <strong>{{ match.winner.nickname }}</strong> at {{match.game}}
-             on {{ match.match_date }}
-            {% if match.details %}
-                <p><small>Details: {{ match.details }}</small></p>
-            {% endif %}
-        </li>
+    <li class="list-group-item">
+        <strong>{{ match.loser.nickname }}</strong> <span class="lost">lost</span> to <strong>{{ match.winner.nickname }}</strong> at {{match.game}}
+        on {{ match.match_date }}
+        {% if match.details %}
+        <p><small>Details: {{ match.details }}</small></p>
+        {% endif %}
+    </li>
     {% empty %}
-        <li class="list-group-item">No matches lost.</li>
+    <li class="list-group-item">No matches lost.</li>
     {% endfor %}
 </ul>
 <!-- Tournaments -->
 <h3>Tournaments</h3>
 <ul class="list-group p-4">
     {% for tournament in tournaments %}
-        <li class="list-group-item">
-            <strong>{{ tournament.name }}</strong> ({{ tournament.start_date|date:"F j, Y" }} - {{ tournament.end_date|date:"F j, Y" }})
-        </li>
+    <li class="list-group-item">
+        <strong>{{ tournament.name }}</strong> ({{ tournament.start_date|date:"F j, Y" }} - {{ tournament.end_date|date:"F j, Y" }})
+    </li>
     {% empty %}
-        <li class="list-group-item">No tournaments available.</li>
+    <li class="list-group-item">No tournaments available.</li>
     {% endfor %}
 </ul>
 {% endblock %}

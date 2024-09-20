@@ -12,18 +12,18 @@
                 <h4 class="mt-4 mb-4">Update Profile</h4>
                 {{ user_profile_form.as_p|safe }}
                 <button type="submit" name="save_changes" class="btn btn-warning btn-lg btn-block">Save Changes</button>
-
+                
                 <!-- Avatar Form -->
                 <h4 class="mt-4 mb-4">Change Avatar</h4>
-                    <!-- Display Avatar -->
-                    <div class="col-md-12">
-                        <div class="text-center mb-4">
-                            <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
-                        </div>
+                <!-- Display Avatar -->
+                <div class="col-md-12">
+                    <div class="text-center mb-4">
+                        <img src="{% if user.avatar_url %}{{ user.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
                     </div>
+                </div>
                 {{ avatar_form.as_p|safe }}
                 <button type="submit" name="update_avatar" class="btn btn-info btn-lg btn-block">Update Avatar</button>
-
+                
             </div>
         </div>
     </form>

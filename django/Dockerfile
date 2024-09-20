@@ -17,6 +17,10 @@ COPY media /code/media
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && \
+    apt-get install -y curl && \
+    apt-get install -y --no-install-recommends openssl
+
 RUN chmod 755 /code/static/
 RUN chmod 755 /code/media/
 
@@ -24,7 +28,7 @@ RUN chmod 755 /code/media/
 COPY . /code/
 
 # Expose port 8000 for the application
-EXPOSE 8000
+EXPOSE 8000 8001
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 

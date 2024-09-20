@@ -25,11 +25,14 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
 
-AUTH_USER_MODEL = 'myapp.CustomUser'
+AUTH_USER_MODEL = 'spa.CustomUser'
 # Application definition
 INSTALLED_APPS = [
+    'django_prometheus',
+    'rest_framework',
     "admin_interface",
     "colorfield",
     'django.contrib.admin',
@@ -38,10 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',  # Ensure this app is listed
+    'spa',  # Ensure this app is listed
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,9 +53,13 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
-
+PROMETHEUS_EXPORT_Metrics = {
+    'addr': '0.0.0.0',
+    'port': 8000,
+}
+# PROMETHEUS_METRICS_EXPORT_PORT = 8000
 ROOT_URLCONF = 'trans.urls'
 
 TEMPLATES = [
@@ -98,19 +106,19 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'DEBUG',  # Change this to 'INFO' or 'ERROR' to reduce verbosity
+            'level': 'ERROR',  # Change this to 'INFO' or 'ERROR' to reduce verbosity
             'class': 'logging.FileHandler',
             'filename': os.path.join(BASE_DIR, 'django_debug.log'),  # Log file path
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'class': 'logging.StreamHandler',
         },
     },
     'loggers': {
         'django': {
             'handlers': ['file', 'console'],
-            'level': 'DEBUG',
+            'level': 'ERROR',
             'propagate': True,
         },
     },
@@ -158,9 +166,9 @@ STATIC_ROOT = '/code/static/'
 MEDIA_ROOT = '/code/media/'
 
 # Additional security settings
-SECURE_SSL_REDIRECT = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = False
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 X_FRAME_OPTIONS = 'DENY'
 

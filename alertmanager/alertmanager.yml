@@ -1,0 +1,20 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "gmail-notifications"
+  group_by: ["alertname"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
+
+receivers:
+  - name: "gmail-notifications"
+    email_configs:
+      - to: "maxkram@pm.me"
+        from: "0m9a8x@gmail.com"
+        smarthost: "smtp.gmail.com:587"  # Ensure this has the port
+        auth_username: "0m9a8x@gmail.com"
+        auth_identity: "0m9a8x@gmail.com"
+        auth_password: "bvzd mivh jmpz lnke"
+        send_resolved: true
