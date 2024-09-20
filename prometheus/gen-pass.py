@@ -1,11 +1,5 @@
-import os
 import bcrypt
 
-# Get the password from an environment variable
-password = os.getenv('PROMETHEUS_PASSWORD')  # Make sure to set this in your environment
-
-if not password:
-    raise ValueError("Please set the PROMETHEUS_PASSWORD environment variable.")
-
-# Hash the password
+password = "password123456789"  # Replace with your desired password
 hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+print(hashed.decode('utf-8'))

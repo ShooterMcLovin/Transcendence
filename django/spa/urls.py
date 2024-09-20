@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/login/', login, name='login'),
     path('api/register/', register, name='register'),
     path('api/users/', user_list, name='user_list'),
+    
     path('api/logout/', logout, name='logout'),
     path('api/profile/', profile, name='profile'),
     path('api/tournaments/', get_tournaments, name='get_tournaments'),
