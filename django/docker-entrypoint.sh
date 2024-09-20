@@ -26,17 +26,17 @@ if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
     )
 EOF
 
-# Create a default user if one does not already exist
 echo "Creating default user..."
 python manage.py shell <<EOF
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='Guest').exists():
     User.objects.create_user(
-        nickname='$DJANGO_GUEST_NICKNAME',
         username='$DJANGO_GUEST_USERNAME',
         email='$DJANGO_GUEST_EMAIL',
-        password='$DJANGO_GUEST_PASSWORD'
+        password='$DJANGO_GUEST_PASSWORD',
+        nickname='$DJANGO_GUEST_NICKNAME',
+        avatar_url='https://upload.wikimedia.org/wikipedia/commons/8/8d/42_Logo.svg'
     )
 EOF
 

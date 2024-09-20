@@ -28,10 +28,11 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
 
-AUTH_USER_MODEL = 'myapp.CustomUser'
+AUTH_USER_MODEL = 'spa.CustomUser'
 # Application definition
 INSTALLED_APPS = [
     'django_prometheus',
+    'rest_framework',
     "admin_interface",
     "colorfield",
     'django.contrib.admin',
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'myapp',  # Ensure this app is listed
+    'spa',  # Ensure this app is listed
 ]
 
 MIDDLEWARE = [
