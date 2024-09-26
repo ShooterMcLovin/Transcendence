@@ -118,6 +118,7 @@ async function registerUser(event) {
             const loginForm = document.getElementById('login-form');
             const registrationForm = document.getElementById('registration-form');
             const userList = document.getElementById('user-list');
+            fetchUserList();
     
             if (loginForm) {
                 loginForm.style.display = 'none';
@@ -129,7 +130,6 @@ async function registerUser(event) {
                 userList.style.display = 'block';
             }
     
-            fetchUserList();
         } else {
             const result = await response.json();
             document.getElementById('login-error').textContent = result.error || 'Login failed';
