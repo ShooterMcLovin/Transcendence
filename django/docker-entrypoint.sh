@@ -32,10 +32,12 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='Guest').exists():
     User.objects.create_user(
+        nickname='$DJANGO_GUEST_NICKNAME',
         username='$DJANGO_GUEST_USERNAME',
         email='$DJANGO_GUEST_EMAIL',
         password='$DJANGO_GUEST_PASSWORD',
-        nickname='$DJANGO_GUEST_NICKNAME'
+        avatar_url='https://i.ebayimg.com/images/g/TmcAAOSw14tgpDBN/s-l1600.webp'
+    
     )
 EOF
 

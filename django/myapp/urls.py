@@ -30,6 +30,7 @@ urlpatterns = [
     path('my_friends/', views.my_friends, name='my_friends'),
     path('match-history/', views.match_history, name='match_history'),
     path('user-history/<int:user_id>/', views.user_history, name='user_history'),
+    
     path('manage/', views.manage, name='manage'), 
     path('Activate/<int:user_id>/', views.Activate, name='Activate'),
     path('DeActivate/<int:user_id>/', views.DeActivate, name='DeActivate'),

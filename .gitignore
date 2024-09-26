@@ -1,2 +1,3 @@
 django/django_debug.log
 data/
+grafana/data/grafana.db
