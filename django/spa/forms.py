@@ -1,13 +1,9 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, User
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import CustomUser
 from django.contrib.auth.forms import PasswordChangeForm
 
-class UserProfileForm(forms.ModelForm):
-    class Meta:
-        model = CustomUser
-        fields = ['nickname', 'email']  # Add other fields as necessary
-        
+     
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
@@ -31,3 +27,9 @@ class AvatarForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['avatar_url'].widget.attrs.update({'class': 'form-control'})
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['nickname','username', 'avatar_url']  # Add other fields as necessary
+   

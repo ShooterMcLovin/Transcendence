@@ -1,13 +1,43 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
     const registrationForm = document.getElementById('registration-form');
+    const logoutButton = document.getElementById('logout-button');
+    
     if (loginForm) {
         loginForm.addEventListener('submit', loginUser);
     }
     if (registrationForm) {
         registrationForm.addEventListener('submit', registerUser);
     }
+    if (logoutButton) {
+        logoutButton.addEventListener('click', logoutUser);
+    }
+
+
+    await checkUserAuthentication(); 
 });
+
+async function checkUserAuthentication() {
+    const response = await fetch('/api/check_authentication/');
+    if (response.ok) {
+        const userData = await response.json();
+        if (userData.isAuthenticated) {
+            // User is logged in, update the UI
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('registration-form').style.display = 'none';
+            document.getElementById('user-list').style.display = 'block';
+            fetchUserList();
+        } else {
+            // User is not logged in
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('registration-form').style.display = 'block';
+            document.getElementById('user-list').style.display = 'none';
+        }
+    } else {
+        console.error('Error checking authentication status');
+    }
+}
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -21,15 +51,15 @@ function getCookie(name) {
         }
     }
     return cookieValue;}
+
 async function registerUser(event) {
     event.preventDefault();
     const csrfToken = getCookie('csrftoken');
 
     const username = document.getElementById('reg-username').value;
+    const nickname = document.getElementById('reg-nickname').value;
     const password1 = document.getElementById('reg-password1').value; 
     const password2 = document.getElementById('reg-password2').value; 
-    const nickname = document.getElementById('reg-nickname').value;
-    const email = document.getElementById('reg-email').value;
 
     try {
         const response = await fetch('/api/register/', {
@@ -38,7 +68,7 @@ async function registerUser(event) {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
             },
-            body: JSON.stringify({ username, nickname, password1, password2, email }),
+            body: JSON.stringify({ username, nickname, password1, password2 }),
         });
 
         if (response.ok) {
@@ -68,29 +98,66 @@ async function registerUser(event) {
         console.error('Error during registration:', error);
         document.getElementById('registration-error').textContent = 'An unexpected error occurred.';
     }}
-async function loginUser(event) {
-    event.preventDefault();
+    async function loginUser(event) {
+        event.preventDefault();
+        const csrfToken = getCookie('csrftoken');
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+    
+        const response = await fetch('/api/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+            body: JSON.stringify({ username, password }),
+        });
+    
+        if (response.ok) {
+            // Check for the elements before trying to access them
+            const loginForm = document.getElementById('login-form');
+            const registrationForm = document.getElementById('registration-form');
+            const userList = document.getElementById('user-list');
+    
+            if (loginForm) {
+                loginForm.style.display = 'none';
+            }
+            if (registrationForm) {
+                registrationForm.style.display = 'none';
+            }
+            if (userList) {
+                userList.style.display = 'block';
+            }
+    
+            fetchUserList();
+        } else {
+            const result = await response.json();
+            document.getElementById('login-error').textContent = result.error || 'Login failed';
+        }
+    }
+
+async function logoutUser() {
     const csrfToken = getCookie('csrftoken');
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const response = await fetch('/api/login/', {
+    const response = await fetch('/api/logout/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrfToken,
         },
-        body: JSON.stringify({ username, password }),
     });
+
     if (response.ok) {
-        document.getElementById('login-form').style.display = 'none';
-        document.getElementById('registration-form').style.display = 'none';
-        document.getElementById('user-list').style.display = 'block';
-        fetchUserList();
+        document.getElementById('user-list').style.display = 'none';
+        document.getElementById('login-form').style.display = 'block';
+        document.getElementById('registration-form').style.display = 'block';
+        document.getElementById('logout-button').style.display = 'none';
+        console.log('Logout successful');
     } else {
-        const result = await response.json();
-        document.getElementById('login-error').textContent = result.error || 'Login failed';
+        console.error('Logout failed');
     }
 }
+
+
 async function fetchUserList() {
     const response = await fetch('/api/users/');
     const users = await response.json();
@@ -102,3 +169,4 @@ async function fetchUserList() {
         </li>
     `).join('') + '</ul>';
 } 
+

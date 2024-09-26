@@ -39,7 +39,6 @@ def register(request):
             'user': {
                 'username': user.username,
                 'nickname': user.nickname,
-                'email': user.email,
                 'avatar_url': user.avatar_url,  # Include avatar_url in the response
             }
         }, status=status.HTTP_201_CREATED)
@@ -86,6 +85,12 @@ def profile(request):
         'avatar_url': user.get_avatar_url()
     }
     return Response(data, status=status.HTTP_200_OK)
+
+
+
+@api_view(['GET'])
+def check_authentication(request):
+    return Response({'isAuthenticated': request.user.is_authenticated})
 
 # API to get a list of all users
 @api_view(['GET'])
