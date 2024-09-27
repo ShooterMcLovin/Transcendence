@@ -160,6 +160,9 @@ USE_TZ = True
 # Define the static root directory
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 MEDIA_URL = '/media/'
 STATIC_ROOT = '/code/static/'
 MEDIA_ROOT = '/code/media/'
