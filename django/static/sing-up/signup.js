@@ -45,8 +45,8 @@ export function loadSignUpPage(e){
 
     let singUpPage = document.getElementById("root");
     Promise.all([
-        fetch('./sing-up/sing_up.html').then(response => response.text()),
-        fetch('./sing-up/sing_up.css').then(response => response.text())
+        fetch('sing_up.html').then(response => response.text()),
+        fetch('sing_up.css').then(response => response.text())
     ]).then(([html, css]) => {
         html += `<style>${css}</style>`;
         singUpPage.innerHTML = html;
