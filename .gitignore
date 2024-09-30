@@ -1,3 +1,6 @@
 django/django_debug.log
 data/
 grafana/data/grafana.db
+grafana/data/*
+grafana/data/
+./grafana/data/grafana.db
