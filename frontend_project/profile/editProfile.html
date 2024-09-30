@@ -1,0 +1,75 @@
+<div class="container mt-5" id="update_forms">
+    <h1 class="commonText text-center">Edit Profile</h1>
+    <div class="row justify-content-center text-center" id="profileOptions">
+        <div class="col-auto">
+            <button type="button" class="profile-button mr-5" id="editProfile">Edit profile</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="profile-button mr-5" id="setMFA">Set MFA</button>
+        </div>
+        <div class="col-auto">
+            <button type="button" class="profile-button" id="changePassword">Change password</button>
+        </div>
+    </div>
+
+    <div class="editProfile mshide" id="edit_profile">
+        <form id="editProfileForm">
+            <div class="mb-3">
+                <label for="new_username" class="commonText">Username</label>
+                <input type="text" class="form-control" id="new_username" autocomplete="off" placeholder="Enter your username">
+            </div>
+            <div class="mb-3">
+                <label for="profilePicture" class="commonText">Profile Picture</label>
+                <br>
+                <div class="file-select" id="src-file" >
+                    <input type="file" id="new_profilePicture" name="src-file1" aria-label="Archivo">
+                </div>
+            </div>
+            <div class="col-md-12 mt-2 text-center">
+				<button type="button" class="back-button mr-5" id="backToEditProfile">Back</button>
+                <button type="submit" class="profile-button">Save Changes</button>
+			</div>
+            <div class="deleteProfilePicture">
+                <button type="button" class="btn btn-danger" id=deleteProfilePicture>Delete Profile Picture</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="changePassword mshide" id="change_password">
+        <form id="changePasswordForm">
+            <div class="mb-3">
+                <label for="old_password" class="commonText">Old password</label>
+                <input type="text" class="form-control mb-5" id="old_password" required="required" placeholder="Enter your old password">
+                <label for="new_password" class="commonText">New password</label>
+                <input type="text" class="form-control mb-5" id="new_password" required="required" placeholder="Enter your new password">
+                <label for="confirm_password" class="commonText">Confirm password</label>
+                <input type="text" class="form-control mb-5" id="confirm_password" required="required" placeholder="Confirm password">
+            </div>
+            <div class="col-md-12 mt-2 text-center">
+                <button type="button" class="back-button mr-5" id="backToEditProfile">Back</button>
+                <button type="submit" class="profile-button">Update your password</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+<div class="system-bar fixed-bottom">
+	<div class="current-time" id="current-time"></div>
+	<div class="menu-icon" id="menu-icon">
+		<div class="menuContainer" id="menuContainer">
+			<img id="menuLogo" class="menuLogo" src="../assets/personBlue.svg" alt="Menu">
+		</div>
+	</div>
+    <div class="popup">
+        <span class="popuptext" id="myPopup"> New friend request has arrived</span>
+    </div>
+</div>
+
+<div class="menu" id="menu">
+	<ul>
+		<li><a id="mainMenuBtn" href="#">Main menu</a></li>
+        <li><a id="editProfileBtn" href="#/edit-profile">Edit profile</a></li>
+        <li><a id="leaderboardBtn" href="#/leaderboard">Leaderboard</a></li>
+        <li><img src="../assets/logout.svg" class="btn btn-primary logOut"></img></li>
+    </ul>
+</div>
