@@ -24,5 +24,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('spa.urls')),  # Your app URLs
     path('api/', include('spa.urls')),
+    path('api/', include('authentication.urls')),
+
     path('metrics/', exports.ExportToDjangoView, name='prometheus-metrics'),
 ]
