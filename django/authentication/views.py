@@ -78,7 +78,6 @@ def check_authentication(request):
 
 
 @api_view(['GET'])
-@login_required
 def user_list(request):
     users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'avatar_url')
     return Response(list(users), status=status.HTTP_200_OK)
