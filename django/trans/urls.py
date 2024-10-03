@@ -17,14 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django_prometheus import exports
-from . import views
+from authentication import views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('spa.urls')),  # Your app URLs
-    path('api/', include('spa.urls')),
     path('api/', include('authentication.urls')),
-
+    path('', views.index, name='index'),  # Serve SPA HTML
     path('metrics/', exports.ExportToDjangoView, name='prometheus-metrics'),
 ]

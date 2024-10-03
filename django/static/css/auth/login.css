@@ -3,44 +3,77 @@
     padding: 0;
     box-sizing: border-box;
 }
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    background-color: #444;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+main {
+    padding: 20px;
+}
+
 body{
     
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #23242a;
+    background-color: #1c1c1c;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #45f3ffb1;
 }
+
 .box{
     position: relative;
-    width: 380px;
-    height: 420px;
+    max-width: 400px;
     background: #1c1c1c;
     border-radius: 8px;
     overflow: hidden;
+    margin: 20px auto;
 }
 .box::before{
     content: '';
     position: absolute;
+    overflow: hidden;
     top: -50%;
-    left: -50%;
-    width: 380px;
-    height: 420px;
+    left: -75%;
+    width: 510px;
+    height: 843px;
     background: linear-gradient(0deg, transparent, #45f3ffb1, #45f3ffb1);
     transform-origin: bottom right;
     animation: animate 40s linear infinite;
+    pointer-events: none;
 }
+
 .box::after{
     content: '';
     position: absolute;
+    overflow: hidden;
     top: -50%;
-    left: -50%;
-    width: 380px;
-    height: 420px;
+    left: -75%;
+    width: 510px;
+    height: 843px;
     background: linear-gradient(0deg, transparent, #45f3ffb1, #45f3ffb1);
     transform-origin: bottom right;
     animation: animate 40s linear infinite;
     animation-delay: -20s;
+    pointer-events: none;
 }
 @keyframes animate{
     0%{
@@ -51,7 +84,7 @@ body{
     }
 }
 .form{
-    position: absolute;
+    position: relative;
     inset: 2px;
     background: #28292d;
     border-radius: 8px;
@@ -67,6 +100,25 @@ body{
     
     text-align: center;
 }
+.form-control {
+    background-color: #28292d;
+    border: none;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important; 
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff !important;
+    max-width: 400px; /* Limit the width of the input fields */
+    
+}
+.form-control:focus {
+    background-color: #28292d;
+    color: #9ff9ff !important;
+}
+.form-control:hover {
+    border-color: #45f3ff;
+}
+
 .inputBox{
     position: relative;
     width: 300px;
@@ -148,6 +200,16 @@ input[type="submit"]{
     border-radius: 4px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.text-center {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically if needed */
+}
+
+.mshide {
+    display: none;
 }
 
 .login-42 {
