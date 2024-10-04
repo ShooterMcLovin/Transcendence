@@ -1,7 +1,7 @@
-import { displayErrorList, displayMessage } from "../components/loader.js"
-import { logOut } from "../index/index.js"
-import { toggleView } from "../games/pong/pongScript.js"
-import { drawTournament } from "../components/tournamentTable.js"
+import { displayErrorList, displayMessage } from "/static/frontend/components/loader.js"
+import { logOut } from "/static/frontend/index/index.js"
+import { toggleView } from "/static/frontend/games/pong/pongScript.js"
+import { drawTournament } from "/static/frontend/components/tournamentTable.js"
 
 let editProfileView, setMFAView, changePasswordView,
     profileOptionsView;
@@ -429,7 +429,7 @@ async function TwoFactorAuthConfirmOTPUpdate() {
             throw new Error(JSON.stringify(error));
         }
         const data = await response.json();
-        document.getElementById('qrCodeImg').src = '../assets/condom.svg';
+        document.getElementById('qrCodeImg').src = '/static/frontend/assets/condom.svg';
         const buttons = document.querySelectorAll('.modal-footer button');
         buttons.forEach(button => {
             button.style.display = 'none';

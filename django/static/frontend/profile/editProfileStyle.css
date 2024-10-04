@@ -4,8 +4,8 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    cursor: url('../assets/cursor3.svg'), auto !important;
-    background-image: url('../assets/wp.gif');
+    cursor: url('/static/frontend/assets/cursor3.svg'), auto !important;
+    background-image: url('/static/frontend/assets/wp.gif');
     user-select: none;
     backdrop-filter: blur(25px);
 }

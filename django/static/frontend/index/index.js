@@ -1,13 +1,13 @@
-import { loadLoginPage } from "../login/login.js";
+import { loadLoginPage } from "/static/frontend/login/login.js";
 
 let hashCleared = false;
 export function loadMainPage() {
 
     let mainPage = document.getElementById("root");
     Promise.all([
-        fetch('./index/index.html').then(response => response.text()),
-        fetch('../styles.css').then(response => response.text()),
-        fetch('./index/styleIndex.css').then(response => response.text())
+        fetch('/static/frontend/index/index.html').then(response => response.text()),
+        fetch('/static/frontend/styles.css').then(response => response.text()),
+        fetch('/static/frontend/index/styleIndex.css').then(response => response.text())
     ]).then(([html, css, css2]) => {
         html += `<style>${css}</style>`;
         html += `<style>${css2}</style>`;
@@ -100,24 +100,24 @@ function selectProgram(e) {
 
 function setWindowContent(uniqueId, customData = null) {
     if (uniqueId == 'myWindowProfile') {
-        var htmlUrl = '../profile/profile.html';
-        var cssUrl = '../profile/profileStyle.css';
-        var scriptUrl = '../profile/profileScript.js';
+        var htmlUrl = '/static/frontend/profile/profile.html';
+        var cssUrl = '/static/frontend/profile/profileStyle.css';
+        var scriptUrl = '/static/frontend/profile/profileScript.js';
     }
     else if (uniqueId == 'myWindowGame') {
-        var htmlUrl = '../games/pong/pong.html';
-        var cssUrl = '../games/pong/pongStyle.css';
-        var scriptUrl = '../games/pong/pongScript.js';
+        var htmlUrl = '/static/frontend/games/pong/pong.html';
+        var cssUrl = '/static/frontend/games/pong/pongStyle.css';
+        var scriptUrl = '/static/frontend/games/pong/pongScript.js';
     }
     else if (uniqueId == 'myWindowPool') {
-        var htmlUrl = '../games/pool/pool.html';
-        var cssUrl = '../games/pool/poolStyle.css';
-        var scriptUrl = '../games/pool/poolScript.js';
+        var htmlUrl = '/static/frontend/games/pool/pool.html';
+        var cssUrl = '/static/frontend/games/pool/poolStyle.css';
+        var scriptUrl = '/static/frontend/games/pool/poolScript.js';
     }
     else if (uniqueId == 'myWindowBrowser') {
-        var htmlUrl = '../gadgets/browser/browser.html';
-        var cssUrl = '../gadgets/browser/browser.css';
-        var scriptUrl = '../gadgets/browser/browser.js';
+        var htmlUrl = '/static/frontend/gadgets/browser/browser.html';
+        var cssUrl = '/static/frontend/gadgets/browser/browser.css';
+        var scriptUrl = '/static/frontend/gadgets/browser/browser.js';
     }
     else {
         return;

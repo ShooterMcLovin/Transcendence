@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 # ALLOWED_HOSTS = ['10.18.200.34','localhost', '127.0.0.1', 'transcendence.42.fr', 'localtoast']
 
-AUTH_USER_MODEL = 'authentication.CustomUser'
+AUTH_USER_MODEL = 'frontend.CustomUser'
 # Application definition
 INSTALLED_APPS = [
     'django_prometheus',
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'authentication',
+    'frontend',
 ]
 
 MIDDLEWARE = [

@@ -4,10 +4,10 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    cursor: url('../assets/cursor3.svg'), auto !important;
+    cursor: url('/static/frontend/assets/cursor3.svg'), auto !important;
     
     /* Фоновое изображение */
-    background-image: url('../assets/wp.gif');
+    background-image: url('/static/frontend/assets/wp.gif');
     
     /* Закрепляем изображение в центре */
     background-position: center;

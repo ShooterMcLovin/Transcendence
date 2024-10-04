@@ -1,5 +1,5 @@
-import { checkLoginStatus, loadLoginPage } from "../login/login.js"
-import { loadMainPage } from "../index/index.js"
+import { checkLoginStatus, loadLoginPage } from "/static/frontend/login/login.js"
+import { loadMainPage } from "/static/frontend/index/index.js"
 
 export function displayMessage(msg, type, id, color='red') {
     const errorElement = document.createElement(type);

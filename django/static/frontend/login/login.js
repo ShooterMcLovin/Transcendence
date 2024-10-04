@@ -1,5 +1,5 @@
-import { displayMessage } from "../components/loader.js"
-import { loadMainPage } from "../index/index.js"
+import { displayMessage } from "/static/frontend/components/loader.js"
+import { loadMainPage } from "/static/frontend/index/index.js"
 
 const TOKEN_KEY = 'token';
 const REFRESH_KEY = 'refresh';
