@@ -1,7 +1,8 @@
 import { loginUser } from './login.js';
 import { logoutUser } from './logout.js';
 import { registerUser } from './register.js';
-// import { userList } from './userList.js';
+import { userList } from '../userList.js';
+
 
 document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
@@ -9,15 +10,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const logoutButton = document.getElementById('logout-button');
 
     if (loginForm) {
-        console.log('Login form found');
         loginForm.addEventListener('submit', loginUser);
     }
     if (registrationForm) {
-        console.log('Registration form found');
         registrationForm.addEventListener('submit', registerUser);
     }
     if (logoutButton) {
-        console.log('Logout button found');
         logoutButton.addEventListener('click', logoutUser);
     }
 
@@ -34,15 +32,15 @@ export async function checkUserAuthentication() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('registration-form').style.display = 'none';
             document.getElementById('logout-button').style.display = 'block';
-            // document.getElementById('user-list').style.display = 'none';
+            document.getElementById('user-list').style.display = 'block';
             document.getElementById('ttt').style.display = 'block';
-            // userList();
+            userList();
         } else {
             // User is not logged in
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('registration-form').style.display = 'block';
             document.getElementById('logout-button').style.display = 'none';
-            // document.getElementById('user-list').style.display = 'none';
+            document.getElementById('user-list').style.display = 'none';
             document.getElementById('ttt').style.display = 'none';
         }
     } else {

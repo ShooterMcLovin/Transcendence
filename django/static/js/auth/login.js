@@ -21,8 +21,10 @@ export async function loginUser(event) {
     });
 
     if (response.ok) {
-        await checkUserAuthentication(); 
+        await checkUserAuthentication();
         console.log('Login successful');
+        // Redirect to the main page
+        
         // Handle successful login
     } else {
         const result = await response.json();

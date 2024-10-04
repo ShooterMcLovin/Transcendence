@@ -13,6 +13,7 @@ export async function logoutUser() {
     if (response.ok) {
         await checkUserAuthentication();
         console.log('Logout successful');
+        window.location.href = '/'; 
     } else {
         console.error('Logout failed');
     }
