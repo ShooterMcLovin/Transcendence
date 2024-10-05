@@ -51,20 +51,3 @@ main {
     display: none;
 }
 
-/* Контейнер для вертикального расположения иконок */
-.icons {
-    display: flex;
-    flex-direction: column;  /* Расположить элементы вертикально */
-    align-items: flex-start; /* Выровнять по левому краю */
-    gap: 20px;               /* Задать расстояние между иконками */
-    position: fixed;         /* Зафиксировать позицию контейнера */
-    left: 20px;              /* Сдвинуть контейнер влево */
-    top: 50px;               /* Отступ сверху */
-}
-
-/* Стили для иконок */
-.profile-ico, .game-ico, .pool-ico {
-    height: 70px;
-    width: 70px;
-    cursor: pointer;
-}
