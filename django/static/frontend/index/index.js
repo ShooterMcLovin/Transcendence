@@ -99,55 +99,69 @@ function selectProgram(e) {
 }
 
 function setWindowContent(uniqueId, customData = null) {
-    if (uniqueId == 'myWindowProfile') {
-        var htmlUrl = '/static/frontend/profile/profile.html';
-        var cssUrl = '/static/frontend/profile/profileStyle.css';
-        var scriptUrl = '/static/frontend/profile/profileScript.js';
+    let htmlUrl, cssUrl, scriptUrl;
+
+    switch (uniqueId) {
+        case 'myWindowProfile':
+            htmlUrl = '/static/frontend/profile/profile.html';
+            cssUrl = '/static/frontend/profile/profileStyle.css';
+            scriptUrl = '/static/frontend/profile/profileScript.js';
+            break;
+        case 'myWindowGame':
+            htmlUrl = '/static/frontend/games/pong/pong.html';
+            cssUrl = '/static/frontend/games/pong/pong.css';
+            scriptUrl = '/static/frontend/games/pong/pong.js';
+            break;
+        case 'myWindowPool':
+            htmlUrl = '/static/frontend/games/pool/pool.html';
+            cssUrl = '/static/frontend/games/pool/pool.css';
+            scriptUrl = '/static/frontend/games/pool/pool.js';
+            break;
+        case 'myWindowBrowser':
+            htmlUrl = '/static/frontend/gadgets/browser/browser.html';
+            cssUrl = '/static/frontend/gadgets/browser/browser.css';
+            scriptUrl = '/static/frontend/gadgets/browser/browser.js';
+            break;
+        default:
+            return;
     }
-    else if (uniqueId == 'myWindowGame') {
-        var htmlUrl = '/static/frontend/games/pong/pong.html';
-        var cssUrl = '/static/frontend/games/pong/pongStyle.css';
-        var scriptUrl = '/static/frontend/games/pong/pongScript.js';
-    }
-    else if (uniqueId == 'myWindowPool') {
-        var htmlUrl = '/static/frontend/games/pool/pool.html';
-        var cssUrl = '/static/frontend/games/pool/poolStyle.css';
-        var scriptUrl = '/static/frontend/games/pool/poolScript.js';
-    }
-    else if (uniqueId == 'myWindowBrowser') {
-        var htmlUrl = '/static/frontend/gadgets/browser/browser.html';
-        var cssUrl = '/static/frontend/gadgets/browser/browser.css';
-        var scriptUrl = '/static/frontend/gadgets/browser/browser.js';
-    }
-    else {
-        return;
-    }
-    console.log(uniqueId);
-    let window = document.getElementById(uniqueId + "-content");
+
+    console.log(`Loading content for: ${uniqueId}`);
+    const windowElement = document.getElementById(`${uniqueId}-content`);
+    
     Promise.all([
         fetch(htmlUrl).then(response => response.text()),
         fetch(cssUrl).then(response => response.text()),
-        import(scriptUrl).then(module => module)
+        import(scriptUrl).then(module => module).catch(err => {
+            console.error(`Error importing module from ${scriptUrl}:`, err);
+            throw err; // Rethrow to handle later
+        })
     ]).then(([html, css, javascript]) => {
+        // Process CSS selectors
         css = css.replace(/(^|{|})\s*([^{}@#\d][^{}@]*?)\s*{/g, (match, before, selectors) => {
             const modifiedSelectors = selectors.split(',').map(selector => {
                 const isClassIDOrElement = /^[.#]?[a-zA-Z][\w-]*$/;
-                if (isClassIDOrElement.test(selector.trim())) {
-                    return `#${uniqueId}-content ${selector.trim()}`;
-                } else {
-                    return selector.trim();
-                }
+                return isClassIDOrElement.test(selector.trim()) 
+                    ? `#${uniqueId}-content ${selector.trim()}` 
+                    : selector.trim();
             }).join(',');
             return `${before} ${modifiedSelectors} {`;
         });
+
+        // Combine HTML and CSS
+        windowElement.innerHTML = `${html}<style>${css}</style>`;
         
-        html += `<style>${css}</style>`;
-        window.innerHTML = html;
-        javascript.init(customData);
+        // Check if init is a function and call it
+        if (typeof javascript.init === 'function') {
+            javascript.init(customData);
+        } else {
+            console.warn(`No init function found in ${scriptUrl}`);
+        }
     }).catch(error => {
-        console.error('Error loading form:', error);
+        console.error('Error loading content:', error);
     });
 }
+
 
 export function createWindow(appName, customData = null) {
     var uniqueId = "myWindow" + appName;
@@ -194,3 +208,5 @@ function closeWindow(e) {
         e.target.closest('.window').remove();
     }
 }
+
+

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <div class="container p-1 mt-4 text-center" id="pool" style="display: block;">
+        <h1>Tic-Tac-Toe</h1>
+        <!-- Player Selection -->
+        <div class="form-group">
+            <label for="player1">Select Player 1</label>
+            <select class="player-select" id="player1"></select>
+        </div>
+        <div class="form-group">
+            <label for="player2">Select Player 2</label>
+            <select class="player-select" id="player2"></select>
+        </div>
+        <button id="lockPlayers" class="btn btn-info">LOCK</button>
+        <div id="print" class="mb-3">Game Status</div>
+
+        <!-- Tic-Tac-Toe Grid -->
+        <div class="ui text-center">
+            <div class="row">
+                <input type="text" id="b1" class="cell" readonly>
+                <input type="text" id="b2" class="cell" readonly>
+                <input type="text" id="b3" class="cell" readonly>
+            </div>
+            <div class="row">
+                <input type="text" id="b4" class="cell" readonly>
+                <input type="text" id="b5" class="cell" readonly>
+                <input type="text" id="b6" class="cell" readonly>
+            </div>
+            <div class="row">
+                <input type="text" id="b7" class="cell" readonly>
+                <input type="text" id="b8" class="cell" readonly>
+                <input type="text" id="b9" class="cell" readonly>
+            </div>
+        </div>
+        <br>
+        <button id="but" class="btn btn-secondary">RESET</button>
+        <br><br>
+    </div>
+    <script type="module">
+        import { init } from '/static/frontend/games/pool/pool.js';
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

@@ -79,7 +79,7 @@ function myfunc() {
         buttons.forEach((btn, index) => { if (board[index] === 'X') btn.style.color = "red"; });
     } else if (checkWin('O')) {
         document.getElementById('print').innerHTML = `${player1 !== player2 ? player2 : "O's"} has won`;
-        sendWinnerMessage(playewr2, player1, 'Tic-Tac-Toe');
+        sendWinnerMessage(player2, player1, 'Tic-Tac-Toe');
         buttons.forEach(btn => btn.disabled = true);
         buttons.forEach((btn, index) => { if (board[index] === 'O') btn.style.color = "red"; });
     } else if (board.every(cell => cell === 'X' || cell === 'O')) {
@@ -141,3 +141,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     await populatePlayerDropdowns();
     myfunc_2();
 });
+
+export function init() {
+    // Bind click handler for the reset button
+    document.getElementById('but').addEventListener('click', myfunc_2);
+    document.getElementById('lockPlayers').addEventListener('click', lockPlayers);
+    populatePlayerDropdowns(); // Call to populate dropdowns
+    myfunc_2(); // Reset the game state on load
+
+    // Bind click handlers to cells
+    document.querySelectorAll('.cell').forEach(cell => {
+        cell.addEventListener('click', () => handleClick(cell.id));
+    });
+}
+
