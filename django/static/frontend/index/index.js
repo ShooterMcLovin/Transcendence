@@ -1,4 +1,5 @@
 import { loadLoginPage } from "/static/frontend/login/login.js";
+import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
 
 let hashCleared = false;
 export function loadMainPage() {
@@ -31,26 +32,51 @@ function removeClassFromClass(classNameToRemove, classNameToFind) {
 
 export async function logOut(e) {
     if (e.target.closest('.logOut')) {
+        const csrfToken = getCookie('csrftoken')
         const token = sessionStorage.getItem('token')
         try {
-            const response = await fetch('/api/pong_auth/logout/', {
+            const csrfToken = getCookie('csrftoken');
+            const response = await fetch('/api/logout/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'X-CSRFToken': csrfToken,
                 },
             });
-            if (!response.ok) {
+            if (response.ok) {
+                console.log('Logout successful');
+                await checkUserAuthentication();
+                window.location.href = '/'; 
+            }
+            else if (!response.ok) {
                 const error = await response.json();
                 console.log(error, error.message);
                 throw new Error(JSON.stringify(error));
             }
             sessionStorage.removeItem("token");
             sessionStorage.removeItem("refresh");
-            loadLoginPage();
+
         } catch (error) {
             console.log("Serious error, bro");
         }
+    }
+}
+// function below for reference
+export async function logoutUser() {
+    const csrfToken = getCookie('csrftoken');
+    const response = await fetch('/api/logout/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+        },
+    });
+
+    if (response.ok) {
+        await checkUserAuthentication();
+        console.log('Logout successful');
+    } else {
+        console.error('Logout failed');
     }
 }
 

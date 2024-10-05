@@ -1,8 +1,5 @@
 import { loginUser } from './login.js';
-import { logoutUser } from './logout.js';
 import { registerUser } from './register.js';
-import { userList } from '../userList.js';
-
 
 document.addEventListener('DOMContentLoaded', async () => {
     const loginForm = document.getElementById('login-form');
@@ -15,10 +12,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (registrationForm) {
         registrationForm.addEventListener('submit', registerUser);
     }
-    if (logoutButton) {
-        logoutButton.addEventListener('click', logoutUser);
-    }
-
     await checkUserAuthentication();
 });
 
@@ -31,14 +24,11 @@ export async function checkUserAuthentication() {
             // User is logged in, update the UI
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('registration-form').style.display = 'none';
-            document.getElementById('logout-button').style.display = 'block';
             document.getElementById('root').style.display = 'block';
-            userList();
         } else {
             // User is not logged in
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('registration-form').style.display = 'block';
-            document.getElementById('logout-button').style.display = 'none';
             document.getElementById('root').style.display = 'none';
         }
     } else {
