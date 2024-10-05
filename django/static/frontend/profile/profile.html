@@ -1,3 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<body>
+    <div class="row" id="user_info">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">My Profile</h2>
+        </div>  
+
+        <!-- Display Avatar -->
+        <div class="col-md-4">
+            <div class="text-center mb-4">
+                <img id="userAvatar" alt="Avatar" class="img-fluid rounded-circle" style="width: 150px; height: 150px;">
+            </div>
+        </div>
+        
+        <!-- Vertical Separator -->
+        <div class="col-md-1 d-none d-md-block">
+            <div class="vertical-separator"></div>
+        </div>
+        
+        <!-- Display Username/Nickname -->
+        <div class="col-md-3">
+            <div class="pr-5 pt-5">
+                <p><strong>Username:</strong> <span id="username"></span></p>
+                <p><strong>Nickname:</strong> <span id="nickname"></span></p>
+            </div>
+        </div>
+    
+    <!-- Vertical Separator -->
+    <div class="col-md-1 d-none d-md-block">
+        <div class="vertical-separator"></div>
+    </div>
+    
+    <!-- FIX FROM HERE --->
+
+    <div class="col-md-3">
+        <h4 class="text-center mb-1">Friends</h4>
+        <br>
+        <div class="text-center mb-3" id="friendsList">
+            <!-- Friends will be populated here via JavaScript -->
+        </div> 
+    </div>
+    </div>
+    
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
+    
+    <!-- Stats Section -->
+    <h4 class="text-center mb-3">STATS</h4>
+    
+    <div class="p-1 rounded" id="statsSection">
+        <p><strong>Wins:</strong> <span id="wins"></span></p>
+        <p><strong>Losses:</strong> <span id="losses"></span></p>
+        <p><strong>Tournament Wins:</strong> <span id="tournamentWins"></span></p>
+        <p><strong>Tournament Losses:</strong> <span id="tournamentLosses"></span></p>
+    </div>  
+    
+    <div class="text-center p-3">
+        <a href="#" class="btn btn-info" id="matchHistoryLink">Match History</a>
+    </div>  
+    
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
+    
+    <!-- Actions Section -->
+    <div class="text-center p-2">
+        <a href="#" class="btn btn-info p-2" id="changePasswordLink">Change Password</a> -
+        <a href="#" class="btn btn-info p-2" id="updateProfileLink">Update Profile</a>  -
+        <a href="#" onclick="confirmDelete(); return false;" class="btn btn-outline-danger p-2">Delete Account</a>
+    </div>
+    
+    <script type="module">
+        import { init } from '/static/frontend/profile/profile.js';
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+    <script>
+        function confirmDelete() {
+            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                document.getElementById('delete-account-form').submit();
+            }
+        }
+    </script>
+    <script src="/static/frontend/profile/profileScript.js"></script>
+    </body>
+    </html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
 <div class="row mshide" id="user_info">
     <div class="col-md-12 mt-5 text-center" id="profileTitle">
     </div>
@@ -62,4 +154,4 @@
     </div>
     <div class="col-md-12" id="tournamentCanva2">
     </div>
-</div>
+</div> -->

@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login as django_login, logout as  
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
@@ -123,3 +125,28 @@ def update_winner(request):
     )
 
     return Response({'status': 'success'}, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_profile(request):
+    # Get the user based on the authenticated request
+    user = get_object_or_404(CustomUser, id=request.user.id)
+    
+    # Assuming this method returns a list of friends
+    friends = user.get_friends()  
+    friends_data = [friend.username for friend in friends]  # Prepare friends data
+
+    # Prepare the user profile data
+    data = {
+        'user_profile': {
+            'username': user.username,
+            'nickname': user.nickname,
+            'wins': user.wins,
+            'losses': user.losses,
+            'tournament_wins': user.tournament_wins,
+            'tournament_losses': user.tournament_losses,
+            'avatar_url': user.avatar_url or '/static/images/logo.png',
+        },
+        'friends': friends_data,
+    }
+    
+    return Response(data)
