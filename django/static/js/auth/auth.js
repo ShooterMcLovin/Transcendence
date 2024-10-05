@@ -32,16 +32,14 @@ export async function checkUserAuthentication() {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('registration-form').style.display = 'none';
             document.getElementById('logout-button').style.display = 'block';
-            document.getElementById('user-list').style.display = 'block';
-            document.getElementById('ttt').style.display = 'block';
+            document.getElementById('root').style.display = 'block';
             userList();
         } else {
             // User is not logged in
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('registration-form').style.display = 'block';
             document.getElementById('logout-button').style.display = 'none';
-            document.getElementById('user-list').style.display = 'none';
-            document.getElementById('ttt').style.display = 'none';
+            document.getElementById('root').style.display = 'none';
         }
     } else {
         console.error('Error checking authentication status');
