@@ -350,3 +350,34 @@ main {
     from {opacity: 0;}
     to {opacity:1 ;}
   }
+
+/* Контейнер для вертикального расположения иконок */
+.icons {
+    display: flex;
+    flex-direction: column;   /* Расположить элементы вертикально */
+    align-items: flex-start;  /* Выровнять по левому краю */
+    gap: 20px;                /* Задать расстояние между иконками */
+    padding-left: 20px;       /* Дополнительный отступ слева */
+}
+
+/* Стили для иконок */
+.icon {
+    width: 125px;             /* Ширина каждой иконки */
+    height: auto;             /* Автоматическая высота для вертикального выравнивания */
+    position: relative;       /* Отмена фиксированного позиционирования */
+}
+
+/* Стили для изображений */
+.profile-ico, .game-ico, .pool-ico {
+    height: 70px;
+    width: 70px;
+    cursor: pointer;
+    margin-bottom: 10px;      /* Отступ между изображением и подписью */
+}
+
+/* Убираем фиксированное позиционирование для иконок */
+#profile, #game, #pool {
+    position: relative;
+    top: auto;
+    left: auto;
+}

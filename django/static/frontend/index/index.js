@@ -78,7 +78,7 @@ function openWindow(e) {
     } else if (parentIcon.id === 'game') {
         createWindow('Game');
     } else if (parentIcon.id === 'pool') {
-        createWindow('Pool');
+        createWindow('TTT');
     } else if (parentIcon.id === 'browser') {
         createWindow('Browser');
     }
