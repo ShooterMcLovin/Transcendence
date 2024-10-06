@@ -4,3 +4,4 @@ grafana/data/grafana.db
 grafana/data/*
 grafana/data/
 ./grafana/data/grafana.db
+.DS_Store

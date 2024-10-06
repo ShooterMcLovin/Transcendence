@@ -1,7 +1,7 @@
 <div class="container-fluid">
 
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -12,29 +12,36 @@
     </div>
 
     <div class="row">
-        <div class="desktop mt-5 col-md-12">
-            <div class="icons d-flex align-items-center justify-content-start">
-                <div id="profile" class="icon text-center col-md-1">
+        <div class="desktop d-flex mt-5">
+            <div class="d-flex align-items-center">
+                <div id="profile" class="icon text-center col-md-3">
                     <div class="icon-content mt-2">
-                        <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="">
+                        <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="Profile Icon"></img>
                         <p class="program_name">Profile</p>
                     </div>
                 </div>
-                <div id="game" class="icon text-center col-md-1">
+                <div id="users" class="icon text-center col-md-3">
                     <div class="icon-content mt-2">
-                        <img class="game-ico" src="/static/frontend/assets/pong_images/pong_image1.svg" alt="">
+                        <img class="user-ico" src="/static/frontend/assets/personBlack.svg" alt="Users Icon">
+                        <p class="program_name">Users</p>
+                    </div>
+                </div>
+                <div id="game" class="icon text-center col-md-3">
+                    <div class="icon-content mt-2">
+                        <img class="game-ico" src="/static/frontend/assets/pong_images/pong_image1.svg" alt="Pong Icon">
                         <p class="program_name">Pong</p>
                     </div>
                 </div>
-                <div id="pool" class="icon text-center col-md-1">
+                <div id="pool" class="icon text-center col-md-3">
                     <div class="icon-content mt-2">
-                        <img class="pool-ico" src="/static/frontend/assets/ttt_images/ttt_image.svg" alt="">
+                        <img class="pool-ico" src="/static/frontend/assets/ttt_images/ttt_image.svg" alt="TTT Icon">
                         <p class="program_name">TTT</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="system-bar fixed-bottom">
         <div class="current-time" id="current-time"></div>
         <div class="menu-icon" id="menu-icon">
@@ -43,16 +50,16 @@
             </div>
         </div>
         <div class="popup">
-            <span class="popuptext" id="myPopup"> New friend request has arrived</span>
+            <span class="popuptext" id="myPopup">New friend request has arrived</span>
         </div>
     </div>
 
-    <div class="menu" id="menu">
+    <nav class="menu" id="menu">
         <ul>
             <li><a id="mainMenuBtn" href="">Main menu</a></li>
             <li><a id="editProfileBtn" href="#/edit-profile">Edit profile</a></li>
             <li><a id="leaderboardBtn" href="#/leaderboard">Leaderboard</a></li>
-            <li><img src="/static/frontend/assets/logout.svg" class="btn btn-primary logOut"></img></li>
+            <li><img src="/static/frontend/assets/logout.svg" class="btn btn-primary logOut" alt="Log Out"></li>
         </ul>
-    </div>
+    </nav>
 </div>

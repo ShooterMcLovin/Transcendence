@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import register, login, logout, check_authentication, user_list, update_winner, user_profile
+from .views import register, login, logout, check_authentication, user_list, update_winner, user_profile, match_history
 
 urlpatterns = [
 
@@ -9,5 +9,6 @@ urlpatterns = [
     path('users/', user_list, name='logout'),
     path('update-winner/', update_winner, name='update_winner'),
     path('user_profile/', user_profile, name='user_profile'),
+    path('match_history/', match_history, name='match_history'),
     path('check_authentication/', check_authentication, name='check_authentication'),
 ]

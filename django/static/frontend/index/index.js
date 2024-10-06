@@ -103,6 +103,8 @@ function openWindow(e) {
         createWindow('Profile');
     } else if (parentIcon.id === 'game') {
         createWindow('Game');
+    } else if (parentIcon.id === 'users') {
+        createWindow('Users');
     } else if (parentIcon.id === 'pool') {
         createWindow('Pool');
     } else if (parentIcon.id === 'browser') {
@@ -132,6 +134,11 @@ function setWindowContent(uniqueId, customData = null) {
             htmlUrl = '/static/frontend/profile/profile.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/profileScript.js';
+            break;
+        case 'myWindowUsers':
+            htmlUrl = '/static/frontend/Users/Users.html';
+            cssUrl = '/static/css/auth/auth.css';
+            scriptUrl = '/static/frontend/Users/userList.js';
             break;
         case 'myWindowGame':
             htmlUrl = '/static/frontend/games/pong/pong.html';

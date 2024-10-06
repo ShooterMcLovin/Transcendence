@@ -12,6 +12,7 @@ from .models import CustomUser, Match, Tournament
 from .forms import CustomUserCreationForm
 import json
 
+
 # Serve the main SPA HTML file
 def index(request):
     context = {
@@ -150,3 +151,54 @@ def user_profile(request):
     }
     
     return Response(data)
+
+
+@api_view(['GET'])
+def match_history(request):
+    """View to display the match history of the logged-in user."""
+    try:
+        user = get_object_or_404(CustomUser, id=request.user.id)
+
+        matches_won = Match.objects.filter(winner=user).order_by('-match_date')
+        matches_lost = Match.objects.filter(loser=user).order_by('-match_date')
+
+        # Serialize match data
+        match_data_won = [
+            {
+                'loser_nickname': match.loser.nickname,
+                'game': match.game,
+                'match_date': match.match_date.strftime('%Y-%m-%d'),  # Format date if needed
+                'details': match.details,
+            }
+            for match in matches_won
+        ]
+
+        match_data_lost = [
+            {
+                'winner_nickname': match.winner.nickname,
+                'game': match.game,
+                'match_date': match.match_date.strftime('%Y-%m-%d'),  # Format date if needed
+                'details': match.details,
+            }
+            for match in matches_lost
+        ]
+
+        tournaments = Tournament.objects.all().order_by('-start_date')
+        tournament_data = [
+            {
+                'name': tournament.name,
+                'start_date': tournament.start_date.strftime('%Y-%m-%d'),  # Format date if needed
+                'end_date': tournament.end_date.strftime('%Y-%m-%d'),  # Format date if needed
+            }
+            for tournament in tournaments
+        ]
+
+        context = {
+            'matches_won': match_data_won,
+            'matches_lost': match_data_lost,
+            'tournaments': tournament_data,
+        }
+
+        return Response(context)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)

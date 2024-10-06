@@ -32,6 +32,6 @@ export async function userList() {
 }
 
 // Initialize the user list when the page loads
-export function initUserList() {
+export function init() {
     userList();
 }

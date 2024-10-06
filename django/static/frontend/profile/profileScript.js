@@ -20,9 +20,40 @@ async function fetchUserProfile() {
     }
 }
 
+async function fetchmatchhistory() {
+    try {
+        const response = await fetch(`/api/match_history/`);
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Accessing the properties correctly based on the updated API response
+        document.getElementById('matches_won').innerHTML = data.matches_won.length > 0 
+            ? data.matches_won.map(match => `You won against ${match.loser_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
+            : 'No matches won.';
+
+        document.getElementById('matches_lost').innerHTML = data.matches_lost.length > 0 
+            ? data.matches_lost.map(match => `You lost to ${match.winner_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
+            : 'No matches lost.';
+
+        // You might want to add a section for tournaments if needed
+        // document.getElementById('tournaments').innerHTML = data.tournaments.length > 0 
+        //     ? data.tournaments.map(tournament => `Tournament: ${tournament.name} (from ${tournament.start_date} to ${tournament.end_date})`).join('<br>')
+        //     : 'No tournaments available.';
+
+    } catch (error) {
+        console.error('Error fetching match history:', error);
+    }
+}
+
+
 function init() {
     // const userId = /* get the user ID from somewhere, e.g., a global variable or data attribute */;
     fetchUserProfile();
+    fetchmatchhistory();
 }
 
 // Set up the window.onload event to call init

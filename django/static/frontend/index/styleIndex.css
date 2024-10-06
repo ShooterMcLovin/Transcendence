@@ -4,10 +4,10 @@ body {
     margin: 0;
     padding: 0;
     height: 100vh;
-    cursor: url('/static/frontend/assets/cursor3.svg'), auto !important;
+    cursor: url('static/frontend/assets/cursor3.svg'), auto !important;
     
     /* Фоновое изображение */
-    background-image: url('/static/frontend/assets/wp.gif');
+    background-image: url('static/frontend/assets/wp.gif');
     
     /* Закрепляем изображение в центре */
     background-position: center;
@@ -98,8 +98,13 @@ main {
 .profile-ico {
     height: 70px;
     width: 70px;
-    left: 38px;
-    top: 40px;
+    position: flex;
+
+}
+.user-ico {
+    height: 70px;
+    width: 70px;
+    position: flex;
 }
 
 .chat-ico {
@@ -119,15 +124,14 @@ main {
 .game-ico {
     height: 70px;
     width: 70px;
-    left: 38px;
-    top: 160px;
+
 }
 
 .pool-ico {
     height: 70px;
     width: 70px;
-    left: 38px;
-    top: 200px;
+
+
 }
 
 .browser-ico {
@@ -137,10 +141,10 @@ main {
     top: 240px;
 }
 
-#profile {
+/* #profile {
     left: 38px;
     top: 50px;
-}
+} */
 
 #chat {
     left: 188px;
@@ -151,7 +155,7 @@ main {
     left: 638px;
     top: 50px;
 }
-
+/* 
 #game {
     left: 338px;
     top: 50px;
@@ -160,7 +164,7 @@ main {
 #pool {
     left: 488px;
     top: 50px;
-}
+} */
 
 #terminal {
     left: 638px;
@@ -181,12 +185,13 @@ main {
 }
 
 .icon {
-    position: fixed;
+    position: flex;
     display: flex;
     justify-content: center;
     gap: 20px;
     height: 125px;
     width: 125px;
+    padding:10px;
 
 }
 
