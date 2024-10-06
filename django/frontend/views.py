@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
-from .models import CustomUser, Match, Tournament
+from .models import CustomUser, Match, Tournament, Friendship
 from .forms import CustomUserCreationForm
 import json
 
@@ -81,6 +81,11 @@ def check_authentication(request):
 
 
 @api_view(['GET'])
+def getUser(request):
+    user = request.user
+    return Response(user.username, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
 def user_list(request):
     users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'avatar_url')
     return Response(list(users), status=status.HTTP_200_OK)
@@ -132,13 +137,21 @@ def user_profile(request):
     # Get the user based on the authenticated request
     user = get_object_or_404(CustomUser, id=request.user.id)
     
-    # Assuming this method returns a list of friends
+    # Get the user's friends
     friends = user.get_friends()  
-    friends_data = [friend.username for friend in friends]  # Prepare friends data
+    friends_data = [{
+        'username': friend.username,
+        'nickname': friend.nickname,
+        'wins': friend.wins,
+        'losses': friend.losses,
+        'tournament_wins': friend.tournament_wins,
+        'tournament_losses': friend.tournament_losses,
+        'avatar_url': friend.avatar_url or '/static/images/logo.png',
+    } for friend in friends]  # Prepare friends data
 
-    # Prepare the user profile data
+    # Prepare the user profile data including the current user
     data = {
-        'user_profile': {
+        'current_user': {
             'username': user.username,
             'nickname': user.nickname,
             'wins': user.wins,
@@ -202,3 +215,43 @@ def match_history(request):
         return Response(context)
     except Exception as e:
         return Response({'error': str(e)}, status=500)
+
+
+@api_view(['POST'])  # Changed to POST as adding a friend is a modification action
+def add_friend(request, user_id):
+    """View to add a friend."""
+    friend = get_object_or_404(CustomUser, id=user_id)
+    user = request.user
+
+    # Check if the user is trying to add themselves
+    if user == friend:
+        return Response({'message': "You cannot add yourself as a friend."}, status=status.HTTP_200_OK)
+
+    try:
+        # Attempt to create the friendship in both directions
+        friendship, created = Friendship.objects.get_or_create(
+            user=user,
+            friend=friend,
+            defaults={'is_friend': True}
+        )
+        friendship_reverse, created_reverse = Friendship.objects.get_or_create(
+            user=friend,
+            friend=user,
+            defaults={'is_friend': True}
+        )
+
+        if created:
+            return Response({'message': f"You are now friends with {friend.nickname}."}, status=status.HTTP_201_CREATED)
+        else:
+            if friendship.is_friend:
+                return Response({'message': f"You are already friends with {friend.nickname}."}, status=status.HTTP_200_OK)
+            else:
+                # Reactivate the friendship if it was previously removed
+                friendship.is_friend = True
+                friendship_reverse.is_friend = True
+                friendship.save()
+                friendship_reverse.save()
+                return Response({'message': f"{friend.nickname} has been added back to your friends."}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'error': f"An error occurred while trying to add {friend.nickname} as a friend. Please try again."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -8,13 +8,17 @@ async function fetchUserProfile() {
 
         const data = await response.json();
 
-        document.getElementById('userAvatar').src = data.user_profile.avatar_url || '/static/images/logo.png';
-        document.getElementById('username').textContent = data.user_profile.username;
-        document.getElementById('nickname').textContent = data.user_profile.nickname;
-        document.getElementById('wins').textContent = data.user_profile.wins;
-        document.getElementById('losses').textContent = data.user_profile.losses;
-        document.getElementById('tournamentWins').textContent = data.user_profile.tournament_wins;
-        document.getElementById('tournamentLosses').textContent = data.user_profile.tournament_losses;
+        // Set user profile data
+        document.getElementById('userAvatar').src = data.current_user.avatar_url || '/static/images/logo.png';
+        document.getElementById('username').textContent = data.current_user.username;
+        document.getElementById('nickname').textContent = data.current_user.nickname;
+        document.getElementById('wins').textContent = data.current_user.wins;
+        document.getElementById('losses').textContent = data.current_user.losses;
+        document.getElementById('tournamentWins').textContent = data.current_user.tournament_wins;
+        document.getElementById('tournamentLosses').textContent = data.current_user.tournament_losses;
+
+        // Fetch friends data
+        fetchFriends(data.friends);
     } catch (error) {
         console.error('Error fetching user profile:', error);
     }
@@ -30,7 +34,6 @@ async function fetchmatchhistory() {
 
         const data = await response.json();
 
-        // Accessing the properties correctly based on the updated API response
         document.getElementById('matches_won').innerHTML = data.matches_won.length > 0 
             ? data.matches_won.map(match => `You won against ${match.loser_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
             : 'No matches won.';
@@ -39,19 +42,32 @@ async function fetchmatchhistory() {
             ? data.matches_lost.map(match => `You lost to ${match.winner_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
             : 'No matches lost.';
 
-        // You might want to add a section for tournaments if needed
-        // document.getElementById('tournaments').innerHTML = data.tournaments.length > 0 
-        //     ? data.tournaments.map(tournament => `Tournament: ${tournament.name} (from ${tournament.start_date} to ${tournament.end_date})`).join('<br>')
-        //     : 'No tournaments available.';
-
     } catch (error) {
         console.error('Error fetching match history:', error);
     }
 }
 
+function fetchFriends(friends) {
+    const friendsList = document.getElementById('friendsList');
+
+    if (friends.length === 0) {
+        friendsList.innerHTML = 'No friends found.';
+        return;
+    }
+
+    // Clear the current friends list
+    friendsList.innerHTML = '';
+
+    // Populate friends list
+    friends.forEach(friend => {
+        const friendDiv = document.createElement('div');
+        friendDiv.className = 'friend-item'; // Add a class for styling, if desired
+        friendDiv.textContent = friend.username + '(' + friend.nickname + ')'; // You can customize this to show more information
+        friendsList.appendChild(friendDiv);
+    });
+}
 
 function init() {
-    // const userId = /* get the user ID from somewhere, e.g., a global variable or data attribute */;
     fetchUserProfile();
     fetchmatchhistory();
 }
@@ -61,6 +77,7 @@ window.onload = init;
 
 // If you're using modules, you can export the init function
 export { init };
+
 // import { displayErrorList, displayMessage } from "/static/frontend/components/loader.js"
 // import { logOut } from "/static/frontend/index/index.js"
 // import { toggleView } from "/static/frontend/games/pong/pongScript.js"

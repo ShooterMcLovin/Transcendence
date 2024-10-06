@@ -1,3 +1,4 @@
+import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
 export async function userList() {
     try {
         const response = await fetch('/api/users/');
@@ -9,6 +10,9 @@ export async function userList() {
 
         const users = await response.json();
         const userListElement = document.getElementById('user-list');
+
+        // Get the current user ID (you may need to adjust this based on your auth method)
+        const currentUser = await fetch('/api/getUser/'); // Adjust this based on how you store/get the current user ID
 
         // Construct the user list HTML
         userListElement.innerHTML = users.map(user => `
@@ -22,14 +26,45 @@ export async function userList() {
                     <strong>${user.nickname || 'No nickname'}</strong>
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-3">
-                    <a href="/add_friend/${user.id}" class="btn btn-primary">Add Friend</a>
+                    ${user.username !== currentUser ? `
+                        <button class="btn btn-primary" onclick="window.addFriend(${user.id}, event)">Add Friend</button>
+                    ` : ''}
                 </div>
             </li>
         `).join('');
     } catch (error) {
         console.error('Error fetching user list:', error);
+        const userListElement = document.getElementById('user-list');
+        userListElement.innerHTML = '<li class="list-group-item text-danger">Failed to load user list.</li>';
     }
 }
+// Function to handle adding a friend
+export async function addFriend(userId, event) {
+    event.preventDefault(); // Prevent the default anchor behavior
+    try {
+        const response = await fetch(`/api/add_friend/${userId}/`, { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || 'Failed to add friend');
+        }
+
+        const result = await response.json();
+        alert(result.message); // Show success or error message
+    } catch (error) {
+        console.error('Error adding friend:', error);
+        alert('An error occurred while trying to add a friend. Please try again.');
+    }
+}
+
+// Attach addFriend to the window object to make it globally accessible
+window.addFriend = addFriend;
 
 // Initialize the user list when the page loads
 export function init() {

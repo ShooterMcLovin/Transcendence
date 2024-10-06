@@ -7,7 +7,7 @@ body {
     cursor: url('static/frontend/assets/cursor3.svg'), auto !important;
     
     /* Фоновое изображение */
-    background-image: url('static/frontend/assets/wp.gif');
+    background-image: url('static/frontend/assets/space.gif');
     
     /* Закрепляем изображение в центре */
     background-position: center;
@@ -185,7 +185,7 @@ main {
 }
 
 .icon {
-    position: flex;
+    position: relative;
     display: flex;
     justify-content: center;
     gap: 20px;
@@ -225,15 +225,16 @@ main {
 }
 
 .window {
-	position: fixed;
+	position: relative;
 	width: 800px;
-	height: 450px;
+	height: auto;
 	border-radius: 10px;
 	border: none;
 	box-shadow: 1px 1px 4px rgba(0,0,0,0,0.9), -1px 1px 4px rgba(0,0,0,0,0.9);
-	background: #C0C0C0;
-    top: calc(50% - 225px);
+	background: transparent;
+    /* top: calc(50% - 225px); */
     left: calc(50% - 400px);
+    
 }
 
 .window-content {
