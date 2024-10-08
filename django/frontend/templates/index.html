@@ -15,52 +15,52 @@
 </head>
 <body>
     <div class="container" >
-    <h2 class="mt-5 text-center custom-text-color">Welcome to Transcendence</h2>
-    <div class="box p-1" id="login-form"> 
-        <div id="login-form" class="mt-3">
-            <h2>Login</h2>
-            <form>
-                <div class="form-group">
-                    <label for="log-username">Username</label>
-                    <input type="text" class="form-control" id="log-username" autocomplete="username" required>
-                </div>
-                <div class="form-group">
-                    <label for="log-password">Password</label>
-                    <input type="password" class="form-control" id="log-password" autocomplete="current-password" required>
-                </div>
-                <button type="submit" class="btn btn-primary">Login</button>
-                <div id="login-error" class="mt-2 text-danger"></div>
-            </form>
+        <div class="box p-1" id="login-form" display="none"> 
+            <div id="login-form" class="mt-3">
+                <h2>Login</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="log-username">Username</label>
+                        <input type="text" class="form-control" id="log-username" autocomplete="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="log-password">Password</label>
+                        <input type="password" class="form-control" id="log-password" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Login</button>
+                    <div id="login-error" class="mt-2 text-danger"></div>
+                </form>
+            </div>
+            
+            <div id="registration-form" class="mt-5" display="none">
+                <h2>Register</h2>
+                <form id="registration-form">
+                    <div class="form-group">
+                        <label for="reg-username">Username</label>
+                        <input type="text" class="form-control" id="reg-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-nickname">Nickname</label>
+                        <input type="text" class="form-control" id="reg-nickname" maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password1">Password</label>
+                        <input type="password" class="form-control" id="reg-password1" autocomplete=0 required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password2">Confirm Password</label>
+                        <input type="password" class="form-control" id="reg-password2" autocomplete=0 required>
+                    </div>
+                    <button type="submit" class="btn btn-warning">Register</button>
+                    <div id="registration-error" class="mt-2 text-danger"></div>
+                </form>
+            </div>
         </div>
-  
-        <div id="registration-form" class="mt-5">
-            <h2>Register</h2>
-            <form id="registration-form">
-                <div class="form-group">
-                    <label for="reg-username">Username</label>
-                    <input type="text" class="form-control" id="reg-username" required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-nickname">Nickname</label>
-                    <input type="text" class="form-control" id="reg-nickname" maxlength="5">
-                </div>
-                <div class="form-group">
-                    <label for="reg-password1">Password</label>
-                    <input type="password" class="form-control" id="reg-password1" autocomplete=0 required>
-                </div>
-                <div class="form-group">
-                    <label for="reg-password2">Confirm Password</label>
-                    <input type="password" class="form-control" id="reg-password2" autocomplete=0 required>
-                </div>
-                <button type="submit" class="btn btn-success">Register</button>
-                <div id="registration-error" class="mt-2 text-danger"></div>
-            </form>
-        </div>
-    </div>
-    <link rel="stylesheet" href="/static/css/auth/auth.css">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <link rel="stylesheet" href="/static/css/auth/auth.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script type="module" src="/static/js/auth/auth.js"></script>
     <main id="root" display="none"></main>
     <script type="module" src="/static/frontend/main.js"></script>

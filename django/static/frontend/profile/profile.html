@@ -70,30 +70,9 @@
         <!-- <h3>Tournaments</h3>
         <div id="tournaments"></div> -->
     </div>
-    
 
-    
-    
     <!-- Horizontal Separator -->
     <hr class="my-4 bg-light">
-    
-    <!-- Actions Section -->
-    <div class="text-center p-2">
-        <a href="#" class="btn btn-info p-2" id="changePasswordLink">Change Password</a> -
-        <a href="#" class="btn btn-info p-2" id="updateProfileLink">Update Profile</a>  -
-        <a href="#" onclick="confirmDelete(); return false;" class="btn btn-outline-danger p-2">Delete Account</a>
-    </div>
-    
-    <script type="module">
-        import { init } from '/static/frontend/profile/profile.js';
-        document.addEventListener('DOMContentLoaded', init);
-    </script>
-    <script>
-        function confirmDelete() {
-            if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-                document.getElementById('delete-account-form').submit();
-            }
-        }
     </script>
     <script src="/static/frontend/profile/profileScript.js"></script>
     </body>

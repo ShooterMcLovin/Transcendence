@@ -5,3 +5,7 @@ django-admin-interface
 django-prometheus
 prometheus_client
 djangorestframework
+nvm
+node
+npm
+three

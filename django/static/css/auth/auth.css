@@ -36,7 +36,7 @@ body{
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    color: #45f3ffb1;
+    color: #FFA500;
 }
 
 .box{
@@ -52,12 +52,12 @@ body{
     position: absolute;
     overflow: hidden;
     top: -50%;
-    left: -75%;
+    left: -125%;
     width: 510px;
     height: 843px;
-    background: linear-gradient(0deg, transparent, #45f3ffb1, #45f3ffb1);
+    background: linear-gradient(0deg, transparent, #ffa60056, #ffa60091);
     transform-origin: bottom right;
-    animation: animate 40s linear infinite;
+    animation: animate 20s linear infinite;
     pointer-events: none;
 }
 
@@ -66,12 +66,12 @@ body{
     position: absolute;
     overflow: hidden;
     top: -50%;
-    left: -75%;
+    left: -25%;
     width: 510px;
     height: 843px;
-    background: linear-gradient(0deg, transparent, #45f3ffb1, #45f3ffb1);
+    background: linear-gradient(0deg, transparent, #ffa60052, #ffa60099);
     transform-origin: bottom right;
-    animation: animate 40s linear infinite;
+    animation: animate 20s linear infinite;
     animation-delay: -20s;
     pointer-events: none;
 }

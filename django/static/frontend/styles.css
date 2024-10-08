@@ -34,17 +34,17 @@ main {
     border-radius: 0 !important;
     box-shadow: none !important;
     outline: none !important; 
-    border-bottom: 1px solid #ffffff;
-    color: #ffffff !important;
+    border-bottom: 1px solid #a36a00;
+    color: #ffa500 !important;
 }
 
 .form-control:focus {
     background-color: #28292d;
-    color: #9ff9ff !important;
+    color: #ffa500 !important;
 }
 
 .form-control:hover {
-    border-color: #45f3ff;
+    border-color: #ffa500;
 }
 
 .mshide {

@@ -225,7 +225,7 @@ main {
 }
 
 .window {
-	position: relative;
+	position: absolute;
 	width: 800px;
 	height: auto;
 	border-radius: 10px;

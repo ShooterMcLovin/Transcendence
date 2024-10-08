@@ -64,6 +64,7 @@ function fetchFriends(friends) {
         friendDiv.className = 'friend-item'; // Add a class for styling, if desired
         friendDiv.textContent = friend.username + '(' + friend.nickname + ')'; // You can customize this to show more information
         friendsList.appendChild(friendDiv);
+        friendsList.appendChild(document.createElement('br'));
     });
 }
 
