@@ -46,9 +46,16 @@ def register(request):
 
     return Response(form.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
 def get_username(request):
     user = request.user
     return Response({'username': user.nickname}) #nickname or username?
+
+@api_view(['GET'])
+def get_usernames(request):
+    # Liste des noms d'utilisateur
+    usernames = list(CustomUser.objects.values_list('nickname', flat=True))
+    return Response({'usernames': usernames})
 
 # API to handle user login
 @api_view(['POST'])
