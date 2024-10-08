@@ -1,3 +1,4 @@
+import { getCookie } from '/static/js/auth/auth.js';
 async function fetchUserProfile() {
     try {
         const response = await fetch(`/api/user_profile/`); // Include user ID in the URL
@@ -23,6 +24,9 @@ async function fetchUserProfile() {
         console.error('Error fetching user profile:', error);
     }
 }
+
+
+
 
 async function fetchmatchhistory() {
     try {
@@ -62,10 +66,56 @@ function fetchFriends(friends) {
     friends.forEach(friend => {
         const friendDiv = document.createElement('div');
         friendDiv.className = 'friend-item'; // Add a class for styling, if desired
-        friendDiv.textContent = friend.username + '(' + friend.nickname + ')'; // You can customize this to show more information
+        friendDiv.textContent = `${friend.username} (${friend.nickname})`;
+
+        // Create a remove button
+        const removeButton = document.createElement('button');
+        removeButton.textContent = 'Remove Friend';
+        removeButton.className = 'remove-friend-button';
+        removeButton.dataset.username = friend.username; // Store the user ID in a data attribute
+        removeButton.addEventListener('click', removeFriend); // Attach the event listener        
+
+        friendDiv.appendChild(removeButton);
         friendsList.appendChild(friendDiv);
-        friendsList.appendChild(document.createElement('br'));
     });
+}
+async function removeFriend(event) {
+    const username = event.target.dataset.username; // Get the username from the button's data attribute
+    console.log(username);
+    if (!username) {
+        console.error('No username found for the friend removal action.');
+        return;
+    }
+
+    console.log('Attempting to remove friend with username: ' + username);
+    
+    // Disable the button to prevent multiple clicks
+    const button = event.target;
+    button.disabled = true;
+
+    try {
+        const response = await fetch(`/api/remove_friend/${username}/`, {
+            method: 'POST', // Use POST method
+            headers: {
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCookie('csrftoken')
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to remove friend');
+        }
+
+        const result = await response.json();
+        alert(result.message); // Show success message
+        fetchUserProfile(); // Refresh the user profile to update the friends list
+    } catch (error) {
+        console.error('Error removing friend:', error);
+        alert('Error removing friend. Please try again.');
+    } finally {
+        button.disabled = false; // Re-enable the button
+    }
 }
 
 function init() {

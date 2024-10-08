@@ -41,6 +41,9 @@ export function displayErrorList(errorData, id) {
     }
 }
 
+export async function displayMenu() {
+    loadMainPage();
+}
 export async function displayLoginOrMenu() {
     // checkLoginStatus() ? loadMainPage() : loadLoginPage();
     loadMainPage(); // проверка без логина. потом убрать

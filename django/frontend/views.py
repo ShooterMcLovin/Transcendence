@@ -255,3 +255,25 @@ def add_friend(request, user_id):
 
     except Exception as e:
         return Response({'error': f"An error occurred while trying to add {friend.nickname} as a friend. Please try again."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+@api_view(['POST'])  # Consider using POST for state-changing operations
+def remove_friend(request, username):
+    """View to remove a friend."""
+    friend = get_object_or_404(CustomUser, username=username)
+    user = request.user
+    
+    try:
+        # Remove the friendship for the user
+        friendship = Friendship.objects.get(user=user, friend=friend, is_friend=True)
+        friendship.is_friend = False
+        friendship.save()
+        
+        # Remove the reverse friendship
+        friendship_reverse = Friendship.objects.get(user=friend, friend=user, is_friend=True)
+        friendship_reverse.is_friend = False
+        friendship_reverse.save()
+        
+        return Response({'message': f"{friend.nickname} has been removed from your friends."}, status=status.HTTP_200_OK)
+    
+    except Friendship.DoesNotExist:
+        return Response({'message': f"{friend.nickname} is not in your friend list."}, status=status.HTTP_200_OK)

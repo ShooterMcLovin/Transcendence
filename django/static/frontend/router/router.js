@@ -1,6 +1,6 @@
 import { checkLoginStatus } from "/static/frontend/login/login.js"
 import { loadSignUpPage } from "/static/frontend/sing-up/signup.js"
-import { displayLoginOrMenu } from "/static/frontend/components/loader.js"
+import { displayLoginOrMenu, displayMenu } from "/static/frontend/components/loader.js"
 
 let debounceTimer;
 
@@ -18,7 +18,7 @@ let menuLoaded = false;
 export function router() {
     let { hash } = location;
     if (!hash) {
-        displayLoginOrMenu();
+        displayMenu();
     }
     else if (hash === '#/signup' && checkLoginStatus() === false) {
         loadSignUpPage();
