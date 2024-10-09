@@ -5,9 +5,12 @@
     <title>Pong 3D</title>
     <style>
         body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
+        canvas { 
+            display: block;
+            position: fixed;
+        }
         #menuP {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -17,6 +20,7 @@
             border-radius: 10px;
             color: white;
             display: none; /* Masquer le menu au début */
+            z-index: 10;
         }
         button {
             display: block;
@@ -26,7 +30,7 @@
             cursor: pointer;
         }
         #nameForm, #tournamentForm {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);

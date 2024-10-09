@@ -474,7 +474,7 @@ function moveAI() {
 // Création d'un canvas secondaire pour les scores
 const scoreCanvas = document.createElement('canvas');
 const scoreContext = scoreCanvas.getContext('2d');
-scoreCanvas.width = window.innerWidth;
+scoreCanvas.width = window.window.innerWidth;
 scoreCanvas.height = 100;
 scoreCanvas.style.position = 'absolute';
 scoreCanvas.style.top = '0';
@@ -955,6 +955,7 @@ setMenuVisibility(true);
 document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
 document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
 document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
-    initializeGame();
+    
+initializeGame();
 
 }
