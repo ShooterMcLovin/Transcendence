@@ -11,25 +11,25 @@ function sendWinnerMessage(win, lose, pgame) {
         },
         body: JSON.stringify({ winner: win, loser: lose, game: pgame }),
     })
-    .then(response => {
-        if (!response.ok) {
-            return response.json().then(data => {
-                console.error('Server responded with error:', data);
-                throw new Error(data.message || 'An unknown error occurred');
-            });
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            console.log('Game result updated successfully.');
-        } else {
-            console.error(`Error: ${data.message}`);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    console.error('Server responded with error:', data);
+                    throw new Error(data.message || 'An unknown error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Game result updated successfully.');
+            } else {
+                console.error(`Error: ${data.message}`);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 //DO NOT REMOVE!!
@@ -64,8 +64,6 @@ function setPauseMenuVisibility(visible) {
     const pauseMenu = document.getElementById('pauseMenu');
     pauseMenu.style.display = visible ? 'block' : 'none';
 }
-
-
 
 function startTournamentMatches() {
     // Assurez-vous que les joueurs sont bien sélectionnés
@@ -118,38 +116,6 @@ function startMatch(playerA, playerB, matchName) {
 
 }
 
-// function sendWinnerMessage(win, lose) {
-//     console.log(`Winner: ${win}, Loser: ${lose}`);
-
-//     fetch('/api/update-winner/', {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'X-CSRFToken': getCookie('csrftoken')
-//         },
-//         body: JSON.stringify({ winner: win, loser: lose }),
-//     })
-//         .then(response => {
-//             if (!response.ok) {
-//                 return response.json().then(data => {
-//                     console.error('Server responded with error:', data);
-//                     throw new Error(data.message || 'An unknown error occurred');
-//                 });
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             if (data.status === 'success') {
-//                 console.log('Game result updated successfully.');
-//             } else {
-//                 console.error(`Error: ${data.message}`);
-//             }
-//         })
-//         .catch(error => {
-//             console.error('Error:', error);
-//         });
-// }
-
 async function populateTournamentDropdowns() {
     try {
         const response = await fetch('/api/get-usernames/');
@@ -195,23 +161,6 @@ function showTournamentForm() {
 
 }
 
-// // Function to get the CSRF token from the cookie
-// function getCookie(name) {
-//     let cookieValue = null;
-//     if (document.cookie && document.cookie !== '') {
-//         const cookies = document.cookie.split(';');
-//         for (let i = 0; i < cookies.length; i++) {
-//             const cookie = cookies[i].trim();
-//             // Does this cookie string begin with the name we want?
-//             if (cookie.substring(0, name.length + 1) === (name + '=')) {
-//                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-//                 break;
-//             }
-//         }
-//     }
-//     return cookieValue;
-// }
-
 // Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
 function startTournamentHandler() {
 
@@ -235,7 +184,6 @@ function startTournamentHandler() {
     startTournamentMatches();
 
 }
-
 
 // Fonction pour ajuster la taille de la police en fonction de la hauteur du canvas
 function getFontSize() {
@@ -261,18 +209,14 @@ function onWindowResize() {
     drawScores();
 }
 
-
-
 ///fonction pour fermer le menu de multijoueur
 function closeNameForm() {
     const nameForm = document.getElementById('nameForm');
     nameForm.style.display = 'none'; // Masquer le formulaire
 }
 
-
 // Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
 window.addEventListener('resize', onWindowResize);
-
 
 async function fetchUser() { // fetch logged in user 
     try {
@@ -325,7 +269,7 @@ scene.background = new THREE.Color(0x000000); // Arrière-plan noir
 
 // Lumière
 const light = new THREE.DirectionalLight(0xffffff, 0.5);
-light.position.set(0,-12, 4).normalize();
+light.position.set(0, -12, 4).normalize();
 scene.add(light);
 
 // Lumière
@@ -349,9 +293,8 @@ const borderMaterial = new THREE.MeshPhysicalMaterial({
     map: woodTexture,
     roughness: 0.6,
     metalness: 0.3,
-    clearCoat: 3.0,
-    clearCoatRoughness: 0.3
-  });
+});
+
 // Bord supérieur
 const topBorder = new THREE.Mesh(borderGeometry, borderMaterial);
 topBorder.position.set(0, 0, 5);
@@ -384,27 +327,23 @@ const floorMaterial = new THREE.MeshPhysicalMaterial({
     color: 0x008000, // Couleur de base du matériau
     roughness: 0.5, // Rugosité
     metalness: 0.2, // Métal
-    clearCoat: 0.3, // Couche de finition
-    clearCoatRoughness: 0.1, // Rugosité de la couche de finition
-
 });
-  
+
 const floor = new THREE.Mesh(floorGeometry, floorMaterial);
 floor.position.y = -0.1; // Positionnement légèrement en dessous des bordures pour éviter tout conflit visuel
 floor.rotation.x = commonRotation; // Incliner pour être à plat
 scene.add(floor);
 
 // Création des palettes
-const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1); 
+const paddleGeometry = new THREE.BoxGeometry(0.3, 2, 1);
 const paddleMaterial = new THREE.MeshPhysicalMaterial({
     map: woodTexture, // Texture du bois
     roughness: 0.5, // Rugosité
     metalness: 0.1, // Métal
-    clearCoat: 1, // Couche de finition très brillante
-    clearCoatRoughness: 1, // Rugosité élevée de la couche de finition
     opacity: 1.0, // Opacité complète
     transparent: false // Le matériau ne sera pas transparent
 });
+
 const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 paddle1.rotation.x = commonRotation;
@@ -425,11 +364,10 @@ const ballMaterial = new THREE.MeshPhysicalMaterial({
     color: 0xffffff, // Couleur de base blanche
     roughness: 0.1, // Réduit la rugosité pour un meilleur reflet
     metalness: 0.1, // Comportement métallique
-    clearCoat: 0.1, // Couche de finition normale
-    clearCoatRoughness: 0.1, // Rugosité faible de la couche de finition
     emissive: 0x00ff00, // Couleur émissive verte
     emissiveIntensity: 5.0 // Intensité de l'émission ajustée
 });
+
 const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
 scene.add(ball);
@@ -467,9 +405,6 @@ function moveAI() {
     const paddleLimitY = 3.9;
     paddle1.position.z = Math.max(-paddleLimitY, Math.min(paddleLimitY, paddle1.position.z));
 }
-
-
-
 
 // Création d'un canvas secondaire pour les scores
 const scoreCanvas = document.createElement('canvas');
@@ -516,12 +451,9 @@ function showWinMessage(winner, loser) {
     else
         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
-    sendWinnerMessage(winner,loser, 'pong'); //// DO NOT REMOVE!
- 
+    sendWinnerMessage(winner, loser, 'pong'); //// DO NOT REMOVE!
 
-
-
-    if (isTournament) {  
+    if (isTournament) {
         if (currentMatch === 1) {
             isFirstMatchComplete = true
             currentMatch = 2;
@@ -544,7 +476,7 @@ function showWinMessage(winner, loser) {
     }
 
     if (!isTournament)
-         setMenuVisibility(true);
+        setMenuVisibility(true);
 }
 
 // Fonction pour réinitialiser la balle
@@ -597,7 +529,7 @@ camera.lookAt(0, 0, 0);
 const cameraStartPosition = new THREE.Vector3();
 
 ///variables mode
-let modeSelected = false; 
+let modeSelected = false;
 
 
 function detectCollision() {
@@ -676,11 +608,11 @@ function updatePaddlesPosition() {
 
 function updateBallPosition() {
     ball.position.add(ballDirection.clone().multiplyScalar(ballSpeed));
-    pointLight.position.set(ball.position.x,0.2,ball.position.z);
+    pointLight.position.set(ball.position.x, 0.2, ball.position.z);
     if (ball.position.z + 0.1 > 5 || ball.position.z - 0.1 < -5) {
         ballDirection.z *= -1;
     }
-    
+
     if (ball.position.x + 0.2 > 5) {
         score1 += 1;
         resetBall();
@@ -689,10 +621,17 @@ function updateBallPosition() {
         resetBall();
     }
 }
-   // Afficher le menu principal
+// Afficher le menu principal
 function checkGameOver() {
-    if (score1 >= 7 || score2 >= 7) {
-        const winner = score1 >= 7 ? player1 : player2;
+   
+    if (score1 >= 7 || score2 >= 7) { 
+        if(!modeSelected)
+        {
+            score1 = 0;
+            score2 = 0;
+        }
+        else{
+              const winner = score1 >= 7 ? player1 : player2;
         const loser = score1 >= 7 ? player2 : player1;
 
         paddle1.position.set(-4.5, 0, 0);
@@ -702,6 +641,8 @@ function checkGameOver() {
 
         if (!isTournament)
             gameOver = true;
+        }
+      
     }
 }
 
@@ -741,7 +682,7 @@ function onDocumentKeyDown(event) {
 
     switch (event.key) {
         case 'Escape':
-            if (menu.style.display === 'block') {
+            if (isPaused === true) {
                 setMenuVisibility(false); // Cacher le menu si déjà visible
                 isPaused = false; // Reprendre le jeu
             } else {
@@ -834,7 +775,6 @@ async function populateUserDropdowns() {
     }
 }
 
-
 function showNameForm() {
     const nameForm = document.getElementById('nameForm');
     nameForm.style.display = 'block';
@@ -912,7 +852,7 @@ function startGame(mode) {
 async function setMenuVisibility(visible) {
     const menu = document.getElementById('menuP');
     menu.style.display = visible ? 'block' : 'none';
-    }
+}
 
 let mode;
 let username;
@@ -928,34 +868,34 @@ async function initializeGame() {
         startGame(mode); // or another mod  e if needed
 }
 
-
 // Fonction pour gérer le clic sur le bouton Start
-export function init(){
-    
+export function init() {
+
     document.getElementById('resumeButton').addEventListener('click', () => {
         setPauseMenuVisibility(false); // Cacher le menu de pause
         isPaused = false; // Reprendre le jeu
     });
     // Call `showTournamentForm` when the tournament button is clicked
-    document.getElementById('tournament').addEventListener('click', showTournamentForm);    
+    document.getElementById('tournament').addEventListener('click', showTournamentForm);
     // Ajouter un écouteur d'événements pour le close du menu multijoueur
     document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
     // Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
     document.getElementById('multiPlayer').addEventListener('click', () => {
-    populateUserDropdowns().then(() => {
-        showNameForm();
+        populateUserDropdowns().then(() => {
+            showNameForm();
+        });
     });
-    });
-    // Fonction pour afficher/masquer le menu
+    // // Fonction pour afficher/masquer le menu
     async function setMenuVisibility(visible) {
-    const menu = document.getElementById('menuP');
-    menu.style.display = visible ? 'block' : 'none';
+        const menu = document.getElementById('menuP');
+        menu.style.display = visible ? 'block' : 'none';
     }
-setMenuVisibility(true);
-document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
-document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
-document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
-    
-initializeGame();
+
+    setMenuVisibility(true);
+    document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
+    document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
+    document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
+    document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
+    initializeGame();
 
 }
