@@ -193,7 +193,7 @@ async function populateTournamentDropdowns() {
 }
 
 function showTournamentForm() {
-    isPaused = true;
+    // isPaused = true;
     document.getElementById('tournamentForm').style.display = 'block';
     populateTournamentDropdowns();
 

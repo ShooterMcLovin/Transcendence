@@ -35,7 +35,7 @@ body {
 }
 
 /* Formulaire de sélection des noms de joueurs */
-#nameForm, #tournamentForm {
+#nameForm, #tournamentForm ,#freeforallForm{
     display: none;
     text-align: center;
     padding: 20px;
@@ -46,19 +46,19 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#nameForm h2, #tournamentForm h2 {
+#nameForm h2, #tournamentForm h2 ,#freeforallForm h2{
     font-size: 28px;
     margin-bottom: 20px;
 }
 
-#nameForm select, #tournamentForm select {
+#nameForm select, #tournamentForm select ,#freeforallForm select{
     padding: 10px;
     font-size: 16px;
     margin: 10px;
     width: 80%;
 }
 
-#nameForm button, #tournamentForm button {
+#nameForm button, #tournamentForm button ,#tournamentForm button ,#freeforallForm button{
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
@@ -69,7 +69,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-#nameForm button:hover, #tournamentForm button:hover {
+#nameForm button:hover, #tournamentForm button:hover , #freeforallForm button:hover{
     background-color: #218838;
 }
 

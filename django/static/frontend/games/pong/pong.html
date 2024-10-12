@@ -29,7 +29,7 @@
             font-size: 18px;
             cursor: pointer;
         }
-        #nameForm, #tournamentForm {
+        #nameForm, #tournamentForm ,#freeforallForm{
             position: fixed;
             top: 50%;
             left: 50%;
@@ -42,7 +42,7 @@
             display: none; /* Masquer les formulaires au début */
             z-index: 10;
         }
-        #nameForm input, #tournamentForm input {
+        #nameForm input, #tournamentForm input, #freeforallForm input{
             display: block;
             margin: 10px auto;
             padding: 10px;
@@ -58,10 +58,10 @@
             width: 80%;
             z-index: 10;
         }
-        #nameForm button, #tournamentForm button {
+        #nameForm button, #tournamentForm button, #freeforallForm button{
             margin: 10px auto;
         }
-        #pauseMenu {
+        #pauseMenu, #pauseMenufreeforall {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -75,7 +75,7 @@
             z-index: 10;
             }
 
-#pauseMenu button {
+#pauseMenu button ,#pauseMenufreeforall button{
     padding: 10px 20px;
     font-size: 18px;
     background-color: #4CAF50;
@@ -86,7 +86,7 @@
     transition: background-color 0.3s ease;
 }
 
-#pauseMenu button:hover {
+#pauseMenu button:hover ,#pauseMenufreeforall button:hover{
     background-color: #388e3c;
 }
     </style>
@@ -138,10 +138,41 @@
     <button id="cancelTournament">Annuler</button>
 </div>
 
+<div id="freeforallForm" style="display: none;">
+    <h2>Choisir les joueurs pour freeforall</h2>
+    <div>
+        <label for="player7Select">Joueur 1:</label>
+        <select id="player7Select"></select>
+    </div>
+    <div>
+        <label for="player8Select">Joueur 2:</label>
+        <select id="player8Select"></select>
+    </div>
+    <div>
+        <label for="player9Select">Joueur 3:</label>
+        <select id="player9Select"></select>
+    </div>
+    <div>
+        <label for="player10Select">Joueur 4:</label>
+        <select id="player10Select"></select>
+    </div>
+    <button id="startfreeforall">Démarrer le tournoi</button>
+    <button id="cancelfreeforall">Annuler</button>
+</div>
+
 <!-- Menu de pause en tournois-->
 <div id="pauseMenu">
     <h1>Jeu en Pause</h1>
     <button id="resumeButton">Start Game</button>
+</div>
+
+<div id="pauseMenufreeforall">
+    <h1>Jeu en Pause</h1>
+    <button id="resumeButtonfree">Start Game</button>
+    <h1>player 1 (blue) gauche  up down</h1>
+    <h1>player 2 (red) droite "w" "s"</h1>
+    <h1>player 3 (yellow) top "z" "x"</h1>
+    <h1>player 4 (white) bottom "o" "p" </h1>
 </div>
 
     <script type="module">

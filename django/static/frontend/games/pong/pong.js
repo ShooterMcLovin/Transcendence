@@ -72,8 +72,13 @@ function startTournamentMatches() {
         console.error('Quatre joueurs doivent être sélectionnés pour commencer le tournoi.');
         return;
     }
-    isPaused = false;
-    if(isTournament === true){
+    // if(isfreeforall === true)
+    //     startGame('freeforall');
+    // else
+    //     startGame('tornament');
+    // // isPaused = false;
+
+    if(isfreeforall === false){
     // Mélanger les joueurs pour obtenir un tirage aléatoire
     const shuffledPlayers = [...tournamentPlayers].sort(() => 0.5 - Math.random());
 
@@ -85,6 +90,7 @@ function startTournamentMatches() {
     console.log(`Match 2: ${match2Players[0]} vs ${match2Players[1]}`);
     // Commencer les matchs
     currentMatch = 1;
+
     startMatch(match1Players[0], match1Players[1], 'Match 1');
     }
     else{
@@ -92,7 +98,7 @@ function startTournamentMatches() {
         player2 = tournamentPlayers[1];
         player3 = tournamentPlayers[2];
         player4 = tournamentPlayers[3];
-        startGame(freeforall);
+        // startGame(freeforall);
 
     }
   
@@ -122,9 +128,10 @@ function startMatch(playerA, playerB, matchName) {
     isSinglePlayer = false;
     isMultiplayer = false;
     isTournament = true;
+    isfreeforall = false;
 
     // Démarrer le jeu pour le match en cours
-    startGame('tournament');
+    // startGame('tournament');
     drawScores();
     setPauseMenuVisibility(true); // Afficher le menu de pause
     isPaused = true;
@@ -157,6 +164,7 @@ async function populateTournamentDropdowns() {
             // Set up event listeners for player selection
             document.getElementById('startTournament').addEventListener('click', startTournamentHandler);
             document.getElementById('cancelTournament').addEventListener('click', () => {
+                
                 document.getElementById('tournamentForm').style.display = 'none';
                 setMenuVisibility(true); // Show the main menu
             });
@@ -170,9 +178,12 @@ async function populateTournamentDropdowns() {
 }
 
 function showTournamentForm() {
-    isPaused = true;
+    // isPaused = true;
     document.getElementById('tournamentForm').style.display = 'block';
-    populateTournamentDropdowns();
+    const startTournamentButton = document.getElementById('startTournament');
+    startTournamentButton.removeEventListener('click', populateTournamentDropdowns); // Supprimer les anciens gestionnaires
+    startTournamentButton.addEventListener('click', populateTournamentDropdowns);
+    // populateTournamentDropdowns();
 
 }
 
@@ -188,9 +199,13 @@ function startTournamentHandler() {
     const selectedPlayers = [player1, player2, player3, player4];
     if (new Set(selectedPlayers).size !== selectedPlayers.length) {
         alert('Chaque joueur doit avoir un nom unique.');
+        showTournamentForm();
         return;
     }
-
+    if(isfreeforall === true)
+        startGame('freeforall');
+    else
+        startGame('tournament');
     // Save the selected players
     tournamentPlayers = selectedPlayers;
 
@@ -908,8 +923,11 @@ function checkGameOver() {
 // Fonction d'animation
 function animate() {
     requestAnimationFrame(animate);
+    if((!isMenuOpen() && !isMenuTournamentFormOpen() )&& isPaused && isModeFreeForAll)
+        setMenuFreeForAllVisibility(true);
 
     if (isPaused || gameOver) return;
+
 
     if (!modeSelected) {
         handleInitialCameraRotation();
@@ -935,19 +953,24 @@ function animate() {
 // Fonction pour gérer les contrôles du clavier
 function onDocumentKeyDown(event) {
 
+    
     if (!gameStarted) {
         gameStarted = true;
     }
 
     switch (event.key) {
         case 'Escape':
-            if (isPaused === true) {
+            if (isPaused === true && !isMenuFormOpen() && !isMenuTournamentFormOpen()) {
                 setMenuVisibility(false); // Cacher le menu si déjà visible
                 isPaused = false; // Reprendre le jeu
-            } else {
-                setMenuVisibility(true); // Afficher le menu sinon
+            } else if(isPaused ===false && !isMenuFormOpen() && !isMenuTournamentFormOpen()){
+                setMenuVisibility(true) ; // Afficher le menu sinon
                 isPaused = true; // Mettre le jeu en pause
             }
+            if(isMenuTournamentFormOpen)
+                document.getElementById('tournamentForm').style.display = 'none';
+            if(isMenuFormOpen)
+                document.getElementById('nameForm').style.display = 'none';
             return; // Sortir après avoir géré l'échappement
 
         case 'ArrowUp':
@@ -1091,97 +1114,67 @@ let isModeFreeForAll = false;
 let ia1Active;
 let ia2Active;
 // Fonction pour démarrer le jeu
+function initializeGameData(){
+
+    paddle1.material =  new THREE.MeshPhysicalMaterial({
+        map: woodTexture, // Texture du bois
+        roughness: 0.5, // Rugosité
+        metalness: 0.1, // Métal
+        opacity: 1.0, // Opacité complète
+        transparent: false // Le matériau ne sera pas transparent
+    });  
+    paddle2.material =  new THREE.MeshPhysicalMaterial({
+        map: woodTexture, // Texture du bois
+        roughness: 0.5, // Rugosité
+        metalness: 0.1, // Métal
+        opacity: 1.0, // Opacité complète
+        transparent: false // Le matériau ne sera pas transparent
+    });
+    paddle1.position.set(-4.5, 0, 0);
+    paddle2.position.set(4.5, 0, 0);
+    paddle3.position.set(100, 100, 0);
+    paddle4.position.set(100, 100, 0);
+    scene.add(paddle1);
+    scene.add(paddle2);
+    scene.remove(paddle3);
+    scene.remove(paddle4);
+}
+
 function startGame(mode) {
         
     if (mode === 'singlePlayer') {
-        paddle1.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });  
-        paddle2.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });
+        initializeGameData();
         isSinglePlayer = true;
         isMultiplayer = false;
         isTournament = false;
         isModeFreeForAll = false;
         ia1Active = true;
         ia2Active = false;
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
-        paddle3.position.set(100, 100, 0);
-        paddle4.position.set(100, 100, 0);
         isPaused = false; 
         player1 = "IA";
         player2 = username; // Assign the fetched username to player2
-        scene.remove(paddle3);
-        scene.remove(paddle4);
 
     } else if (mode === 'multiPlayer') {
-        paddle1.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });  
-        paddle2.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });
+        initializeGameData();
         isSinglePlayer = false;
         isMultiplayer = true;
         isTournament = false;
         isModeFreeForAll = false;
         ia1Active = false;
         ia2Active = false;
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
-        paddle3.position.set(100, 100, 0);
-        paddle4.position.set(100, 100, 0);
         isPaused = false; 
-        scene.remove(paddle3);
-        scene.remove(paddle4);
     } else if (mode === 'tournament') {
-        paddle1.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });  
-        paddle2.material =  new THREE.MeshPhysicalMaterial({
-            map: woodTexture, // Texture du bois
-            roughness: 0.5, // Rugosité
-            metalness: 0.1, // Métal
-            opacity: 1.0, // Opacité complète
-            transparent: false // Le matériau ne sera pas transparent
-        });
+        initializeGameData();
         isSinglePlayer = false;
         isMultiplayer = false;
         isModeFreeForAll = false;
         ia1Active = false;
         ia2Active = false;
-        paddle1.position.set(-4.5, 0, 0);
-        paddle2.position.set(4.5, 0, 0);
-        paddle3.position.set(100, 100, 0);
-        paddle4.position.set(100, 100, 0);
         tournamentScores = { player1: 0, player2: 0 };
         if (!isTournament)
             startTournamentMatches();
+        isPaused = true;
         isTournament = true;
-        scene.remove(paddle3);
-        scene.remove(paddle4);
     } else if (mode === 'freeforall') {
         isSinglePlayer = false;
         isMultiplayer = false;
@@ -1205,11 +1198,7 @@ function startGame(mode) {
         scene.add(paddle4);
         scene.add(paddle1);
         scene.add(paddle2);
-        // scene.remove(paddle3);
-        // scene.remove(paddle4);
-        // tournamentScores = { player1: 0, player2: 0 };
-        // if (!isTournament)
-            startTournamentMatches();
+            // startTournamentMatches();
         isPaused = true;
         
     }
@@ -1234,9 +1223,16 @@ async function setMenuVisibility(visible) {
     menu.style.display = visible ? 'block' : 'none';
 }
 
+ async function setMenuFreeForAllVisibility(visible) {
+        const menufreeforall = document.getElementById('pauseMenufreeforall');
+        menufreeforall.style.display = visible ? 'block' : 'none';
+        if(visible === false)
+            isPaused = false;
+}
+
 let mode;
 let username;
-
+let isfreeforall = false;
 // Lancer l'animation
 async function initializeGame() {
     username = await fetchUser();
@@ -1247,6 +1243,18 @@ async function initializeGame() {
     if (mode)
         startGame(mode); 
 }
+function isMenuOpen() {
+    const menu = document.getElementById('menuP'); // Sélectionner le menu
+    return menu.style.display === 'block'; // Retourne true si le menu est visible
+}
+function isMenuTournamentFormOpen() {
+    const menutournament = document.getElementById('tournamentForm'); // Sélectionner le menu
+    return menutournament.style.display === 'block'; // Retourne true si le menu est visible
+}
+function isMenuFormOpen() {
+    const menumultiplayer = document.getElementById('nameForm'); // Sélectionner le menu
+    return menumultiplayer.style.display === 'block'; // Retourne true si le menu est visible
+}
 
 // Fonction pour gérer le clic sur le bouton Start
 export function init() {
@@ -1255,10 +1263,10 @@ export function init() {
         setPauseMenuVisibility(false);
         isPaused = false;
     });
-      // Call `showTournamentForm` when the tournament button is clicked
-      document.getElementById('freeforall').addEventListener('click', showTournamentForm);
-    // Call `showTournamentForm` when the tournament button is clicked
-    document.getElementById('tournament').addEventListener('click', showTournamentForm);
+    document.getElementById('resumeButtonfree').addEventListener('click', () => {
+        setMenuFreeForAllVisibility(false);
+        isPaused = false;
+    });
     // Ajouter un écouteur d'événements pour le close du menu multijoueur
     document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
     // Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
@@ -1274,13 +1282,27 @@ export function init() {
         if(visible === false)
             isPaused = false;
     }
+    document.getElementById('freeforall').addEventListener('click', () => {
+        populateTournamentDropdowns().then(() => {
+            showTournamentForm();
+            isfreeforall= true;
+        });
+    });
+    document.getElementById('tournament').addEventListener('click', () => {
+        populateTournamentDropdowns().then(() => {
+            showTournamentForm();
+            isfreeforall= false;
+        });
+    });
 
     setMenuVisibility(true);
     document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
     document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
-    document.getElementById('tournament').addEventListener('click', () => startGame('tournament'));
-    document.getElementById('freeforall').addEventListener('click', () => startGame('freeforall'));
     document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
+          // Call `showTournamentForm` when the tournament button is clicked
+          document.getElementById('freeforall').addEventListener('click', showTournamentForm);
+          // Call `showTournamentForm` when the tournament button is clicked
+          document.getElementById('tournament').addEventListener('click', showTournamentForm);
     initializeGame();
 
 }
