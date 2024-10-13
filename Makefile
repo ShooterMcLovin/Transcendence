@@ -24,6 +24,7 @@ down:  ## Stop and remove the containers
 	$(DOCKER_COMPOSE) down -v
 
 clean: down
+		rm -f $(HOME)/Transcendence/django/frontend/migrations/0001_initial.py
 
 fclean: clean
 	docker system prune -f --volumes

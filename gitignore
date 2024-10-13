@@ -6,6 +6,7 @@ logs
 **/.DS_Store
 .DS_Store
 /backup/
+/grafana/data/grafana.db
 
 # Ignore share folders that are created from dockers volumes
 django/*/share
