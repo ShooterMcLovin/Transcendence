@@ -65,6 +65,7 @@ main {
     height: 30px;
     padding-left: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
 }
 
 .menu {
@@ -99,12 +100,13 @@ main {
     height: 70px;
     width: 70px;
     position: flex;
-
+    z-index: 2;
 }
 .user-ico {
     height: 70px;
     width: 70px;
     position: flex;
+    z-index: 2;
 }
 
 .chat-ico {
@@ -124,13 +126,14 @@ main {
 .game-ico {
     height: 70px;
     width: 70px;
+    z-index: 2;
 
 }
 
 .pool-ico {
     height: 70px;
     width: 70px;
-
+    z-index: 2;
 
 }
 

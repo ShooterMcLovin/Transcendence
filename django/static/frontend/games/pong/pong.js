@@ -1,5 +1,10 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 //DO NOT REMOVE!!
+
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
+let renderer = new THREE.WebGLRenderer({ alpha: true });
+
 function sendWinnerMessage(win, lose, pgame) {
     console.log(`Winner: ${win}, Loser: ${lose}, Game: ${pgame}`);
 
@@ -167,6 +172,7 @@ async function populateTournamentDropdowns() {
                 
                 document.getElementById('tournamentForm').style.display = 'none';
                 setMenuVisibility(true); // Show the main menu
+        
             });
 
         } else {
@@ -272,30 +278,37 @@ async function fetchUser() { // fetch logged in user
     }
 }
 
-// Initialisation de la scène, de la caméra et du rendu
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+// // Initialisation de la scène, de la caméra et du rendu
+// const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
+// const renderer = new THREE.WebGLRenderer({ alpha: true });
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+// Créer le renderer avec l'option alpha
 
-// Ajout des étoiles en arrière-plan
-const starGeometry = new THREE.BufferGeometry();
-const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
-const starCount = 500;
-const starVertices = [];
-for (let i = 0; i < starCount; i++) {
-    const x = THREE.MathUtils.randFloatSpread(200);
-    const y = THREE.MathUtils.randFloatSpread(200);
-    const z = THREE.MathUtils.randFloatSpread(200);
-    starVertices.push(x, y, z);
-}
-starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-const stars = new THREE.Points(starGeometry, starMaterial);
-scene.add(stars);
 
-// Arrière-plan (couleur)
-scene.background = new THREE.Color(0x000000); // Arrière-plan noir
+
+
+
+// Définir l'arrière-plan transparent
+// scene.background = null; // ou
+// // Ajout des étoiles en arrière-plan
+// const starGeometry = new THREE.BufferGeometry();
+// const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
+// const starCount = 500;
+// const starVertices = [];
+// for (let i = 0; i < starCount; i++) {
+//     const x = THREE.MathUtils.randFloatSpread(200);
+//     const y = THREE.MathUtils.randFloatSpread(200);
+//     const z = THREE.MathUtils.randFloatSpread(200);
+//     starVertices.push(x, y, z);
+// }
+// starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+// const stars = new THREE.Points(starGeometry, starMaterial);
+// scene.add(stars);
+
+// // Arrière-plan (couleur)
+// scene.background = new THREE.Color(0x000000); // Arrière-plan noir
 
 // Lumière
 const light = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -550,37 +563,46 @@ scoreCanvas.style.left = '0';
 scoreCanvas.style.background = 'transparent';
 document.body.appendChild(scoreCanvas);
 
+// Pour masquer les scores, définis scoresVisible à false
+let scoresVisible = true; // Met à true par défaut
+
 // Fonction pour dessiner les scores
 function drawScores() {
     scoreContext.clearRect(0, 0, scoreCanvas.width, scoreCanvas.height);
-    const fontSize = getFontSize(); // Ajuster la taille de la police
-    scoreContext.font = `${fontSize}px Arial`;
-
-    // Calculer les positions pour centrer les scores
-    const leftScoreX = scoreCanvas.width / 4;
-    const rightScoreX = scoreCanvas.width / 4 * 3;
-    const textY = scoreCanvas.height / 2;
-    const textY2 = 100;
-
-    scoreContext.fillStyle = 'blue';
-    scoreContext.textAlign = 'center';
-    scoreContext.fillText(`Joueur 1 (${player1}): ${score1} `, leftScoreX, textY);
-
-    scoreContext.fillStyle = 'red';
-    scoreContext.textAlign = 'center';
-    scoreContext.fillText(`Joueur 2 (${player2}): ${score2} `, rightScoreX, textY);
-    if(isModeFreeForAll)
-    {
-        scoreContext.fillStyle = 'yellow';
-        scoreContext.textAlign = 'center';
-        scoreContext.fillText(`Joueur 3 (${player3}): ${score3} `, leftScoreX, textY2);
     
-        scoreContext.fillStyle = 'white';
-        scoreContext.textAlign = 'center';
-        scoreContext.fillText(`Joueur 4 (${player4}): ${score4} `, rightScoreX, textY2);
-    }
+    // Vérifie si tu veux afficher les scores
+    if (scoresVisible) { // scoresVisible est une variable booléenne que tu peux définir
+        const fontSize = getFontSize(); // Ajuster la taille de la police
+        scoreContext.font = `${fontSize}px Arial`;
 
+        const leftScoreX = scoreCanvas.width / 4;
+        const rightScoreX = scoreCanvas.width / 4 * 3;
+        const textY = scoreCanvas.height / 2;
+        const textY2 = 100;
+
+        scoreContext.fillStyle = 'blue';
+        scoreContext.textAlign = 'center';
+        scoreContext.fillText(`Joueur 1 (${player1}): ${score1} `, leftScoreX, textY);
+
+        scoreContext.fillStyle = 'red';
+        scoreContext.textAlign = 'center';
+        scoreContext.fillText(`Joueur 2 (${player2}): ${score2} `, rightScoreX, textY);
+
+        if (isModeFreeForAll) {
+            scoreContext.fillStyle = 'yellow';
+            scoreContext.textAlign = 'center';
+            scoreContext.fillText(`Joueur 3 (${player3}): ${score3} `, leftScoreX, textY2);
+
+            scoreContext.fillStyle = 'white';
+            scoreContext.textAlign = 'center';
+            scoreContext.fillText(`Joueur 4 (${player4}): ${score4} `, rightScoreX, textY2);
+        }
+    }
 }
+
+
+
+
 let winners1;
 let winners2;
 
@@ -844,8 +866,17 @@ function updateBallPosition() {
 // Afficher le menu principal
 function checkGameOver() {
     
+    
     if(isModeFreeForAll)
-    {
+    {   
+        if(!modeSelected)
+        {
+            if(score1 === 7 || score2 ===7)
+            {
+                score1 = 0;
+                score2 = 0;
+            }
+        }
         if(score1 === 0)
         {  paddle1.position.set(100, 100, 0);
             scene.remove(paddle1);
@@ -919,10 +950,32 @@ function checkGameOver() {
        
     }
 }
+// function closeGame() {
+
+//             scene.remove(ball);
+//         scene.remove(paddle1);
+//         scene.remove(paddle2);
+//         scene.remove(bottomBorder);
+//         scene.remove(topBorder);
+//         scene.remove(floor);
+//         scene.remove(leftBorder);
+//         scene.remove(rightBorder);
+
+// }
 
 // Fonction d'animation
-function animate() {
-    requestAnimationFrame(animate);
+function animate() { 
+    if(!isGameOpen())
+    
+    animationId = requestAnimationFrame(animate);
+    else
+{
+        // closeGame();
+      
+    }
+    
+//    isGameOpen();
+
     if((!isMenuOpen() && !isMenuTournamentFormOpen() )&& isPaused && isModeFreeForAll)
         setMenuFreeForAllVisibility(true);
 
@@ -967,10 +1020,16 @@ function onDocumentKeyDown(event) {
                 setMenuVisibility(true) ; // Afficher le menu sinon
                 isPaused = true; // Mettre le jeu en pause
             }
-            if(isMenuTournamentFormOpen)
-                document.getElementById('tournamentForm').style.display = 'none';
-            if(isMenuFormOpen)
-                document.getElementById('nameForm').style.display = 'none';
+            if(isMenuTournamentFormOpen())
+            {    document.getElementById('tournamentForm').style.display = 'none';
+                setMenuVisibility(true);
+
+            }
+            if(isMenuFormOpen()){
+                 document.getElementById('nameForm').style.display = 'none';  
+                 setMenuVisibility(true);
+            }
+             
             return; // Sortir après avoir géré l'échappement
 
         case 'ArrowUp':
@@ -1091,6 +1150,8 @@ function showNameForm() {
     const startMultiplayerButton = document.getElementById('startMultiplayer');
     startMultiplayerButton.removeEventListener('click', startMultiplayerHandler); // Supprimer les anciens gestionnaires
     startMultiplayerButton.addEventListener('click', startMultiplayerHandler);
+
+
 }
 
 function startMultiplayerHandler() {
@@ -1245,64 +1306,136 @@ async function initializeGame() {
 }
 function isMenuOpen() {
     const menu = document.getElementById('menuP'); // Sélectionner le menu
+    if(menu)
     return menu.style.display === 'block'; // Retourne true si le menu est visible
+}
+let animationId; // Stocker l'ID de l'animation
+
+function stopGame() {
+    // Vérifier si l'animation est en cours et l'annuler   
+    document.getElementById('welcomeText').style.display = 'block'; // ou 'inline', 'flex', selon le besoin
+
+   
+
+ if (animationId) {
+        cancelAnimationFrame(animationId); 
+        console.log("Animation cancelled");
+    }
+    // renderer.dispose();
+ 
+
+}
+
+// Exemple : fonction qui s'exécute quand on ferme le jeu
+function closeGame() {
+    scoresVisible = false; 
+
+    stopGame(); // Arrêter l'animation et nettoyer la scène
+      closeGameWindow();
+    console.log("Game has been stopped and window closed");
+}
+
+function closeGameWindow() {
+    var gameWindow = document.getElementById('myWindowGame');
+    if (gameWindow) {
+        gameWindow.remove(); // Supprime la fenêtre du jeu
+    }
+
+    // Supprimer également le canvas si nécessaire
+    if (renderer && renderer.domElement) {
+        renderer.dispose(); // Dispose les ressources WebGL
+        document.body.removeChild(renderer.domElement); // Retire le canvas du DOM
+    }
+}
+
+function isGameOpen() {
+    var windowExist = document.getElementById('myWindowGame');
+
+    if (windowExist)
+        return(0);
+    else
+    {
+
+        closeGame();
+       
+       
+         return(1);
+    }
+       
 }
 function isMenuTournamentFormOpen() {
     const menutournament = document.getElementById('tournamentForm'); // Sélectionner le menu
+    if(menutournament)
     return menutournament.style.display === 'block'; // Retourne true si le menu est visible
 }
 function isMenuFormOpen() {
     const menumultiplayer = document.getElementById('nameForm'); // Sélectionner le menu
+    if(menumultiplayer)
     return menumultiplayer.style.display === 'block'; // Retourne true si le menu est visible
 }
 
-// Fonction pour gérer le clic sur le bouton Start
 export function init() {
-
-    document.getElementById('resumeButton').addEventListener('click', () => {
-        setPauseMenuVisibility(false);
-        isPaused = false;
-    });
-    document.getElementById('resumeButtonfree').addEventListener('click', () => {
-        setMenuFreeForAllVisibility(false);
-        isPaused = false;
-    });
-    // Ajouter un écouteur d'événements pour le close du menu multijoueur
-    document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
-    // Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
-    document.getElementById('multiPlayer').addEventListener('click', () => {
-        populateUserDropdowns().then(() => {
-            showNameForm();
-        });
-    });
-    // // Fonction pour afficher/masquer le menu
-    async function setMenuVisibility(visible) {
-        const menu = document.getElementById('menuP');
-        menu.style.display = visible ? 'block' : 'none';
-        if(visible === false)
-            isPaused = false;
-    }
-    document.getElementById('freeforall').addEventListener('click', () => {
-        populateTournamentDropdowns().then(() => {
-            showTournamentForm();
-            isfreeforall= true;
-        });
-    });
-    document.getElementById('tournament').addEventListener('click', () => {
-        populateTournamentDropdowns().then(() => {
-            showTournamentForm();
-            isfreeforall= false;
-        });
-    });
-
-    setMenuVisibility(true);
-    document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
-    document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
-    document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
-          // Call `showTournamentForm` when the tournament button is clicked
-          document.getElementById('freeforall').addEventListener('click', showTournamentForm);
-          // Call `showTournamentForm` when the tournament button is clicked
-          document.getElementById('tournament').addEventListener('click', showTournamentForm);
-    initializeGame();
-
-}
+    scoresVisible = true;
+   renderer.setSize(window.innerWidth, window.innerHeight);
+   document.body.appendChild(renderer.domElement);
+   scene.background = null; 
+        
+       document.getElementById('resumeButton').addEventListener('click', () => {
+           setPauseMenuVisibility(false);
+           isPaused = false;
+       });
+       document.getElementById('quit game').addEventListener('click', () => {
+   
+       
+          closeGame();
+       });
+       document.getElementById('resumeButtonfree').addEventListener('click', () => {
+           setMenuFreeForAllVisibility(false);
+           isPaused = false;
+       });
+       document.getElementById('closeNameForm').addEventListener('click', () => {
+        closeNameForm();
+        setMenuVisibility(true); 
+       });
+       // Ajouter un écouteur d'événements pour le close du menu multijoueur
+       document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
+       // Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
+       document.getElementById('multiPlayer').addEventListener('click', () => {
+           populateUserDropdowns().then(() => {
+               showNameForm();
+               setMenuVisibility(false);
+           });
+       });
+       // // Fonction pour afficher/masquer le menu
+       async function setMenuVisibility(visible) {
+           const menu = document.getElementById('menuP');
+           menu.style.display = visible ? 'block' : 'none';
+           if(visible === false)
+               isPaused = false;
+       }
+       document.getElementById('freeforall').addEventListener('click', () => {
+           populateTournamentDropdowns().then(() => {
+               showTournamentForm();
+               isfreeforall= true;
+               setMenuVisibility(false);
+           });
+       });
+       document.getElementById('tournament').addEventListener('click', () => {
+           populateTournamentDropdowns().then(() => {
+               showTournamentForm();
+               isfreeforall= false;
+               setMenuVisibility(false);
+           });
+       });
+   
+       setMenuVisibility(true);
+       document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
+       document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
+       document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
+             // Call `showTournamentForm` when the tournament button is clicked
+             document.getElementById('freeforall').addEventListener('click', showTournamentForm);
+             // Call `showTournamentForm` when the tournament button is clicked
+             document.getElementById('tournament').addEventListener('click', showTournamentForm);
+       initializeGame();
+   
+   }

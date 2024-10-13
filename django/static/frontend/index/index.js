@@ -85,15 +85,20 @@ export function setClickEvents() {
     document.getElementById('root').addEventListener('dblclick', openWindow);
     document.getElementById('root').addEventListener('click', closeWindow);
     document.getElementById('root').addEventListener('click', logOut);
+    // document.getElementById('Users').addEventListener('click', () => {
+      
+    //     window.location.href = '/';
+    // });
 }
 
-function openWindow(e) {
+export function openWindow(e) {
     var parentIcon = e.target.closest('.icon');
     if (parentIcon === false || !parentIcon) {
         removeClassFromClass('selected_program', 'selected_program')
         return;
     }
-
+ 
+    
     removeClassFromClass('selected_program', 'selected_program')
     var parentIcon = e.target.closest('.icon');
     parentIcon.classList.add('selected_program');
@@ -102,6 +107,7 @@ function openWindow(e) {
     if (parentIcon.id === 'profile') {
         createWindow('Profile');
     } else if (parentIcon.id === 'game') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('Game');
     } else if (parentIcon.id === 'users') {
         createWindow('Users');
@@ -127,8 +133,23 @@ function selectProgram(e) {
 }
 
 function setWindowContent(uniqueId, customData = null) {
-    let htmlUrl, cssUrl, scriptUrl;
+    // Récupérer l'élément de la fenêtre (ou du contenu) correspondant à uniqueId
+    const windowElement = document.getElementById(`${uniqueId}-content`);
 
+   // Vérification que l'élément existe
+   if (!windowElement) {
+    console.error(`Window element #${uniqueId}-content not found.`);
+    return;
+}
+
+// Ajout d'un indicateur pour vérifier si le contenu est déjà chargé
+if (windowElement.dataset.loaded === 'true') {
+    console.log(`Window ${uniqueId} is already open.`);
+    
+}
+    let htmlUrl, cssUrl, scriptUrl;
+    
+    // Définir les URLs en fonction de l'ID unique
     switch (uniqueId) {
         case 'myWindowProfile':
             htmlUrl = '/static/frontend/profile/profile.html';
@@ -160,8 +181,8 @@ function setWindowContent(uniqueId, customData = null) {
     }
 
     console.log(`Loading content for: ${uniqueId}`);
-    const windowElement = document.getElementById(`${uniqueId}-content`);
-    
+   
+    // Charger HTML, CSS, et JavaScript
     Promise.all([
         fetch(htmlUrl).then(response => response.text()),
         fetch(cssUrl).then(response => response.text()),
@@ -170,7 +191,7 @@ function setWindowContent(uniqueId, customData = null) {
             throw err; // Rethrow to handle later
         })
     ]).then(([html, css, javascript]) => {
-        // Process CSS selectors
+        // Processer les sélecteurs CSS pour éviter les conflits
         css = css.replace(/(^|{|})\s*([^{}@#\d][^{}@]*?)\s*{/g, (match, before, selectors) => {
             const modifiedSelectors = selectors.split(',').map(selector => {
                 const isClassIDOrElement = /^[.#]?[a-zA-Z][\w-]*$/;
@@ -181,10 +202,10 @@ function setWindowContent(uniqueId, customData = null) {
             return `${before} ${modifiedSelectors} {`;
         });
 
-        // Combine HTML and CSS
+        // Combiner HTML et CSS dans l'élément cible
         windowElement.innerHTML = `${html}<style>${css}</style>`;
         
-        // Check if init is a function and call it
+        // Exécuter la fonction d'initialisation si elle existe
         if (typeof javascript.init === 'function') {
             javascript.init(customData);
         } else {
@@ -196,26 +217,25 @@ function setWindowContent(uniqueId, customData = null) {
 }
 
 
+
 export function createWindow(appName, customData = null) {
     var uniqueId = "myWindow" + appName;
-    var windowExist = document.getElementById(uniqueId);
-    if (windowExist)
-        return;
 
+    // Fermer toutes les autres fenêtres ouvertes avant d'en ouvrir une nouvelle
+    closeAllWindows(uniqueId);
+
+    // Vérifier si la fenêtre existe déjà
+    var windowgameExist = document.getElementById(uniqueId);
+    if (windowgameExist)
+        return;
+    
+    // Créer la nouvelle fenêtre
     var windowContainer = document.createElement('div');
     windowContainer.id = uniqueId;
     windowContainer.classList.add('window');
 
     var windowTop = document.createElement('div');
     windowTop.classList.add('window-top');
-
-    // var greenButton = document.createElement('button');
-    // greenButton.classList.add('round', 'green');
-    // windowTop.appendChild(greenButton);
-
-    // var yellowButton = document.createElement('button');
-    // yellowButton.classList.add('round', 'yellow');
-    // windowTop.appendChild(yellowButton);
 
     var redButton = document.createElement('button');
     redButton.classList.add('round', 'red');
@@ -232,14 +252,29 @@ export function createWindow(appName, customData = null) {
     var divRow = document.querySelector('.row');
     divRow.appendChild(windowContainer);
 
-
     setWindowContent(uniqueId, customData);
 }
+
+// Fonction pour fermer toutes les fenêtres ouvertes
+function closeAllWindows(exceptWindowId = null) {
+    var openWindows = document.querySelectorAll('.window');
+    openWindows.forEach(function (window) {
+        // Si l'ID de la fenêtre est celui qu'on veut garder, ne pas la supprimer
+        if (window.id !== exceptWindowId) {
+            window.remove();
+        }
+    });
+}
+
+
 
 function closeWindow(e) {
     if (e.target.closest('.round.red')) {
         e.target.closest('.window').remove();
     }
 }
+// document.getElementById('game').addEventListener('click', function() {
+//     document.getElementById('welcomeText').style.display = 'none';
+// });
 
 

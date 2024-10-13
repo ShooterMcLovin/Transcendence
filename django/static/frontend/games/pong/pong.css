@@ -1,49 +1,63 @@
 /* Styles généraux pour l'ensemble du corps */
-body {
-    font-family: Arial, sans-serif;
-    margin: 50%;
-    padding: 0;
-    background-color: #222; /* Fond sombre pour le jeu */
-    color: white;
+html, body {
+   
+    /* margin: 0;   Enlever toute marge par défaut */
+     /* padding: 0; Enlever les espacements par défaut  */
+    /* border: none; /* S'assurer qu'il n'y a pas de bordure  
+    outline: none; S'assurer qu'il n'y a pas de contour*/ 
+    height: 100%; /* Prendre toute la hauteur disponible */
+   
 }
 
+body { 
+    pointer-events: none;
+    font-family: Arial, sans-serif;
+    /* background-color: #222; Fond sombre pour le jeu */
+    color: white;
+    display: flex;
+    justify-content: center; /* Centrer horizontalement */
+    align-items: center; /* Centrer verticalement */
+    height: 100vh; /* Faire en sorte que le corps prenne toute la hauteur de la fenêtre */
+    overflow: hidden; /* Désactiver les barres de défilement si nécessaire */ 
+    z-index: 1;
+}
+
+* {
+    box-sizing: border-box; /* Assurer que les marges internes et bordures ne dépassent pas */
+    outline: none; /* Désactiver tout contour ajouté par le navigateur */
+}
+
+
 /* Style pour le menu principal */
-#menupong {
+#menuP{
     text-align: center;
     margin-top: 50px;
 }
 
-#menupong h1 {
+#menuP h1 {
     font-size: 36px;
     margin-bottom: 30px;
 }
 
-#menupong button {
+#menuP button {
     padding: 10px 20px;
-    font-size: 18px;
-    margin: 10px;
+    font-size: 16px;
     cursor: pointer;
-    background-color: #007BFF;
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
-#menupong button:hover {
-    background-color: #0056b3;
+#menuP button:hover {
+    background-color: #218838;
 }
 
 /* Formulaire de sélection des noms de joueurs */
 #nameForm, #tournamentForm ,#freeforallForm{
-    display: none;
     text-align: center;
-    padding: 20px;
-    background-color: #333;
-    border-radius: 10px;
-    width: 400px;
-    margin: 50px auto;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    margin-top: 50px;
 }
 
 #nameForm h2, #tournamentForm h2 ,#freeforallForm h2{
