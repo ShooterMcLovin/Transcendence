@@ -261,10 +261,3 @@ function closeAllWindows(exceptWindowId = null) {
         }
     });
 }
-
-
-
-
-
-
-
