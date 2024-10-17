@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pong 3D</title>
     <style>
-        body { margin: 0; overflow: hidden; }
+        body  { margin: 0; overflow: hidden; }
         canvas { 
             display: block;
             position: fixed;
@@ -96,10 +96,10 @@
         <h1>Select Game Mode</h1>
         <button id="singlePlayer">Single Player (vs IA)</button>
         <button id="multiPlayer">Multiplayer (1 vs 1)</button>
-        <button id="tournament">Tournament</button>
-        <button id="freeforall">freeforall</button>
+        <button id="tournament">Tournament (4 players)</button>
+        <button id="freeforall">free4all (4 players)</button>
         <button id="resume">resume</button>
-        <button id="quit game">quit game</button>
+        <buttonquit id="quit game">quit game</buttonquit>
     </div>
 
     <div id="nameForm">
@@ -113,12 +113,12 @@
             <!-- Options will be populated dynamically -->
         </select>
         <button id="startMultiplayer">Start Game</button>
-        <button id="closeNameForm">Close</button> <!-- Nouveau bouton pour fermer -->
+        <buttonquit id="closeNameForm">Close</buttonquit> <!-- Nouveau bouton pour fermer -->
     </div>
 
     <!-- Formulaire pour la sélection des joueurs en tournoi -->
 <div id="tournamentForm" style="display: none;">
-    <h2>Choisir les joueurs pour le tournoi</h2>
+    <h2>Select Player Names</h2>
     <div>
         <label for="player5Select">Joueur 1:</label>
         <select id="player5Select"></select>
@@ -135,12 +135,12 @@
         <label for="player4Select">Joueur 4:</label>
         <select id="player4Select"></select>
     </div>
-    <button id="startTournament">Démarrer le tournoi</button>
-    <button id="cancelTournament">Annuler</button>
+    <button id="startTournament">Start Game</button>
+    <button id="cancelTournament">Close</button>
 </div>
 
 <div id="freeforallForm" style="display: none;">
-    <h2>Choisir les joueurs pour freeforall</h2>
+    <h2>Select Player Names</h2>
     <div>
         <label for="player7Select">Joueur 1:</label>
         <select id="player7Select"></select>
@@ -157,8 +157,8 @@
         <label for="player10Select">Joueur 4:</label>
         <select id="player10Select"></select>
     </div>
-    <button id="startfreeforall">Démarrer le tournoi</button>
-    <button id="cancelfreeforall">Annuler</button>
+    <button id="startfreeforall">Start Game</button>
+    <button id="cancelfreeforall">Close</button>
 </div>
 
 <!-- Menu de pause en tournois-->

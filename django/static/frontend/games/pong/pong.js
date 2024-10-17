@@ -1,10 +1,5 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 //DO NOT REMOVE!!
-
-let scene = new THREE.Scene();
-let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
-let renderer = new THREE.WebGLRenderer({ alpha: true });
-
 function sendWinnerMessage(win, lose, pgame) {
     console.log(`Winner: ${win}, Loser: ${lose}, Game: ${pgame}`);
 
@@ -77,11 +72,6 @@ function startTournamentMatches() {
         console.error('Quatre joueurs doivent être sélectionnés pour commencer le tournoi.');
         return;
     }
-    // if(isfreeforall === true)
-    //     startGame('freeforall');
-    // else
-    //     startGame('tornament');
-    // // isPaused = false;
 
     if(isfreeforall === false){
     // Mélanger les joueurs pour obtenir un tirage aléatoire
@@ -103,8 +93,6 @@ function startTournamentMatches() {
         player2 = tournamentPlayers[1];
         player3 = tournamentPlayers[2];
         player4 = tournamentPlayers[3];
-        // startGame(freeforall);
-
     }
   
 }
@@ -123,12 +111,9 @@ function startMatch(playerA, playerB, matchName) {
 
     // Réinitialiser les scores
  
-            score1 = 0;
+    score1 = 0;
     score2 = 0;
  
-
-  
-
     // Mettre à jour le mode du jeu
     isSinglePlayer = false;
     isMultiplayer = false;
@@ -136,7 +121,6 @@ function startMatch(playerA, playerB, matchName) {
     isfreeforall = false;
 
     // Démarrer le jeu pour le match en cours
-    // startGame('tournament');
     drawScores();
     setPauseMenuVisibility(true); // Afficher le menu de pause
     isPaused = true;
@@ -184,16 +168,13 @@ async function populateTournamentDropdowns() {
 }
 
 function showTournamentForm() {
-    // isPaused = true;
     document.getElementById('tournamentForm').style.display = 'block';
     const startTournamentButton = document.getElementById('startTournament');
     startTournamentButton.removeEventListener('click', populateTournamentDropdowns); // Supprimer les anciens gestionnaires
     startTournamentButton.addEventListener('click', populateTournamentDropdowns);
-    // populateTournamentDropdowns();
 
 }
 
-// Modifier la fonction startTournamentHandler pour appeler updateTournamentPlayersDisplay
 function startTournamentHandler() {
 
     const player1 = document.getElementById('player5Select').value || 'Joueur 1';
@@ -208,13 +189,13 @@ function startTournamentHandler() {
         showTournamentForm();
         return;
     }
+    //prendre le bon mode
     if(isfreeforall === true)
         startGame('freeforall');
     else
         startGame('tournament');
     // Save the selected players
     tournamentPlayers = selectedPlayers;
-
     // Close the form and start the tournament
     document.getElementById('tournamentForm').style.display = 'none';
     startTournamentMatches();
@@ -245,12 +226,6 @@ function onWindowResize() {
     drawScores();
 }
 
-///fonction pour fermer le menu de multijoueur
-function closeNameForm() {
-    const nameForm = document.getElementById('nameForm');
-    nameForm.style.display = 'none'; // Masquer le formulaire
-}
-
 // Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
 window.addEventListener('resize', onWindowResize);
 
@@ -277,38 +252,13 @@ async function fetchUser() { // fetch logged in user
         return 'Guest'; // Return fallback value in case of an error
     }
 }
-
-// // Initialisation de la scène, de la caméra et du rendu
-// const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
-// const renderer = new THREE.WebGLRenderer({ alpha: true });
-// renderer.setSize(window.innerWidth, window.innerHeight);
-// document.body.appendChild(renderer.domElement);
-// Créer le renderer avec l'option alpha
-
-
-
-
-
-// Définir l'arrière-plan transparent
-// scene.background = null; // ou
-// // Ajout des étoiles en arrière-plan
-// const starGeometry = new THREE.BufferGeometry();
-// const starMaterial = new THREE.PointsMaterial({ color: 0xffffff });
-// const starCount = 500;
-// const starVertices = [];
-// for (let i = 0; i < starCount; i++) {
-//     const x = THREE.MathUtils.randFloatSpread(200);
-//     const y = THREE.MathUtils.randFloatSpread(200);
-//     const z = THREE.MathUtils.randFloatSpread(200);
-//     starVertices.push(x, y, z);
-// }
-// starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-// const stars = new THREE.Points(starGeometry, starMaterial);
-// scene.add(stars);
-
-// // Arrière-plan (couleur)
-// scene.background = new THREE.Color(0x000000); // Arrière-plan noir
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//                                                     creation d'image                                                                      ///
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//creation de la scene
+let scene = new THREE.Scene();
+let camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 2, 100);
+let renderer = new THREE.WebGLRenderer({ alpha: true });
 
 // Lumière
 const light = new THREE.DirectionalLight(0xffffff, 0.5);
@@ -325,13 +275,10 @@ const commonRotation = -Math.PI / 2;
 
 // Contour de la carte
 const borderGeometry = new THREE.BoxGeometry(10.2, 0.2, 1);
+
 // Créez un chargeur de textures
 const textureLoader = new THREE.TextureLoader();
-
-// Chargez la texture de bois
 const woodTexture = textureLoader.load('/static/wood.jpg');
-
-// const borderMaterial = new THREE.MeshBasicMaterial({ map: woodTexture }); // Couleur rouge pour le contour
 const borderMaterial = new THREE.MeshPhysicalMaterial({
     map: woodTexture,
     roughness: 0.6,
@@ -387,21 +334,13 @@ const paddleMaterial = new THREE.MeshPhysicalMaterial({
     transparent: false // Le matériau ne sera pas transparent
 });
 
-// Exemple pour changer la couleur des palettes ou de la balle
-// const paddleMaterial1 = new THREE.MeshBasicMaterial({ color:  0x0000FF }); // Jaune
-// const paddleMaterial2 = new THREE.MeshBasicMaterial({ color: 0xFF0000 }); // Rouge
-const paddleMaterial3 = new THREE.MeshBasicMaterial({ color: 0xFFFF00}); // Blanc
-const paddleMaterial4 = new THREE.MeshBasicMaterial({ color: 0xFFFFFF }); // Bleu
-
-// const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial1); // Palette 1 en jaune
-// const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial2); // Palette 2 en rouge
-const paddle3 = new THREE.Mesh(paddleGeometry, paddleMaterial3); // Palette 3 en blanc
-const paddle4 = new THREE.Mesh(paddleGeometry, paddleMaterial4); // Palette 4 en bleu
+const paddleMaterial3 = new THREE.MeshBasicMaterial({ color: 0xFFFF00}); 
+const paddleMaterial4 = new THREE.MeshBasicMaterial({ color: 0xFFFFFF }); 
 
 const paddle1 = new THREE.Mesh(paddleGeometry, paddleMaterial);
 const paddle2 = new THREE.Mesh(paddleGeometry, paddleMaterial);
-// const paddle3 = new THREE.Mesh(paddleGeometry, paddleMaterial);
-// const paddle4 = new THREE.Mesh(paddleGeometry, paddleMaterial);
+const paddle3 = new THREE.Mesh(paddleGeometry, paddleMaterial3); // Palette 3 en jaune
+const paddle4 = new THREE.Mesh(paddleGeometry, paddleMaterial4); // Palette 4 en blanc
 
 paddle1.rotation.x = commonRotation;
 paddle2.rotation.x = commonRotation;
@@ -419,8 +358,7 @@ paddle4.position.set(100, 100, 0);
 // Création de la balle
 const ballGeometry = new THREE.SphereGeometry(0.1, 32, 32);
 // Créer une lumière ponctuelle
-const pointLight = new THREE.PointLight(0x00ff00, 1, 2); // Couleur verte, intensité 2, distance 50 unités
-// Ajouter la lumière à la scène
+const pointLight = new THREE.PointLight(0x00ff00, 1, 2); // Couleur, intensité , distance 
 scene.add(pointLight);
 
 const ballMaterial = new THREE.MeshPhysicalMaterial({
@@ -435,8 +373,10 @@ const ball = new THREE.Mesh(ballGeometry, ballMaterial);
 ball.rotation.x = commonRotation;
 scene.add(ball);
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 let lastAi2UpdateTime = 0;  // Temps du dernier calcul d'anticipation pour IA2
-const ai2UpdateInterval = 1500;  // Intervalle de mise à jour pour IA2 (1 seconde)
+const ai2UpdateInterval = 1000;  // Intervalle de mise à jour pour IA2 (1 seconde)
 let ai2TargetZ = 0;  // Position cible de l'IA 2
 
 function predictBallPositionForAI2() {
@@ -444,7 +384,7 @@ function predictBallPositionForAI2() {
     let predictedBallPosition = ball.position.clone();
     let predictedBallDirection = ballDirection.clone();
     let predictedBallSpeed = ballSpeed;
-    const simulationDuration = 750; // 1 seconde en millisecondes
+    const simulationDuration = 500; // 1 seconde en millisecondes
     let timeElapsed = 0;
     const deltaTime = 16; // Approximation de 60 FPS
 
@@ -499,13 +439,13 @@ function predictBallPosition() {
     let predictedBallPosition = ball.position.clone();
     let predictedBallDirection = ballDirection.clone();
     let predictedBallSpeed = ballSpeed;
-    const simulationDuration = 1000; // 1 seconde en millisecondes
+    const simulationDuration = 250; // 1 seconde en millisecondes
     let timeElapsed = 0;
     const deltaTime = 16; // Approximation de 60 FPS
 
     // Simuler le mouvement de la balle pendant une seconde ou jusqu'à ce qu'elle atteigne l'IA
     while (predictedBallPosition.x > paddle1.position.x && timeElapsed < simulationDuration) {
-        predictedBallPosition.add(predictedBallDirection.clone().multiplyScalar(predictedBallSpeed));
+        predictedBallPosition.add(predictedBallDirection.clone().multiplyScalar(predictedBallSpeed *4));
 
         // Gérer les rebonds sur les murs (axe Z)
         if (predictedBallPosition.z + 0.1 > 5 || predictedBallPosition.z - 0.1 < -5) {
@@ -703,18 +643,25 @@ const cameraStartPosition = new THREE.Vector3();
 ///variables mode
 let modeSelected = false;
 
+function detectCollisionPaddle(){
+             // Raycast pour détecter les collisions avec les côtés des palettes
+             const ballRay = new THREE.Raycaster(ball.position, ballDirection.clone().normalize());
+             const intersections = ballRay.intersectObject(paddle3);
+     
+             if (intersections.length > 0) {
+                 ballDirection.z *= -1; // Rebondir horizontalement
+                 ballSpeed += speedIncrease; // Augmenter la vitesse après la collision
+             }
+}
 
 function detectCollision() {
     const paddle1Box = new THREE.Box3().setFromObject(paddle1);
     const paddle2Box = new THREE.Box3().setFromObject(paddle2);
-        const paddle3Box = new THREE.Box3().setFromObject(paddle3);
-        const paddle4Box = new THREE.Box3().setFromObject(paddle4);
+    const paddle3Box = new THREE.Box3().setFromObject(paddle3);
+    const paddle4Box = new THREE.Box3().setFromObject(paddle4);
     // Créer une boîte autour de la balle pour la détection de collision
     const ballBox = new THREE.Box3().setFromCenterAndSize(ball.position, new THREE.Vector3(0.355, 0.355, 0.355));
-
-  
-
-              
+     
         // Vérifier collision avec paddle3
                if (paddle3Box.intersectsBox(ballBox)) {
                 // Raycast pour détecter les collisions avec les côtés des palettes
@@ -882,19 +829,19 @@ function checkGameOver() {
             scene.remove(paddle1);
         }
        
-        if(score2 === 0)
+        else if(score2 === 0)
         { 
             paddle2.position.set(100, 100, 0);
            scene.remove(paddle2); 
         }
             
-        if(score3 === 0)
+        else if(score3 === 0)
         {
             paddle3.position.set(100, 100, 0);
             scene.remove(paddle3); 
         }
            
-        if(score4 === 0)
+        else if(score4 === 0)
         {
             paddle4.position.set(100, 100, 0);
            scene.remove(paddle4); 
@@ -905,19 +852,19 @@ function checkGameOver() {
              gameOver = true;
         }
            
-        if(score4 === 0 && score2 === 0 && score3 === 0)
+        else if(score4 === 0 && score2 === 0 && score3 === 0)
         {
              showWinMessage(player1,player2);
              gameOver = true;
         }
            
-        if(score1 === 0 && score4 === 0 && score3 === 0)
+        else if(score1 === 0 && score4 === 0 && score3 === 0)
         {
            showWinMessage(player2,player3); 
            gameOver = true;
         }
             
-        if(score1 === 0 && score2 === 0 && score4 === 0)
+        else if(score1 === 0 && score2 === 0 && score4 === 0)
         {
             showWinMessage(player3,player4);
             gameOver = true;
@@ -950,18 +897,6 @@ function checkGameOver() {
        
     }
 }
-// function closeGame() {
-
-//             scene.remove(ball);
-//         scene.remove(paddle1);
-//         scene.remove(paddle2);
-//         scene.remove(bottomBorder);
-//         scene.remove(topBorder);
-//         scene.remove(floor);
-//         scene.remove(leftBorder);
-//         scene.remove(rightBorder);
-
-// }
 
 // Fonction d'animation
 function animate() { 
@@ -1304,6 +1239,13 @@ async function initializeGame() {
     if (mode)
         startGame(mode); 
 }
+
+///fonction pour fermer le menu de multijoueur
+function closeNameForm() {
+    const nameForm = document.getElementById('nameForm');
+    nameForm.style.display = 'none'; // Masquer le formulaire
+}
+
 function isMenuOpen() {
     const menu = document.getElementById('menuP'); // Sélectionner le menu
     if(menu)
@@ -1315,15 +1257,10 @@ function stopGame() {
     // Vérifier si l'animation est en cours et l'annuler   
     document.getElementById('welcomeText').style.display = 'block'; // ou 'inline', 'flex', selon le besoin
 
-   
-
  if (animationId) {
         cancelAnimationFrame(animationId); 
         console.log("Animation cancelled");
     }
-    // renderer.dispose();
- 
-
 }
 
 // Exemple : fonction qui s'exécute quand on ferme le jeu
@@ -1355,10 +1292,7 @@ function isGameOpen() {
         return(0);
     else
     {
-
-        closeGame();
-       
-       
+        closeGame();  
          return(1);
     }
        
@@ -1376,6 +1310,7 @@ function isMenuFormOpen() {
 
 export function init() {
     scoresVisible = true;
+    
    renderer.setSize(window.innerWidth, window.innerHeight);
    document.body.appendChild(renderer.domElement);
    scene.background = null; 
@@ -1385,8 +1320,6 @@ export function init() {
            isPaused = false;
        });
        document.getElementById('quit game').addEventListener('click', () => {
-   
-       
           closeGame();
        });
        document.getElementById('resumeButtonfree').addEventListener('click', () => {
@@ -1397,9 +1330,7 @@ export function init() {
         closeNameForm();
         setMenuVisibility(true); 
        });
-       // Ajouter un écouteur d'événements pour le close du menu multijoueur
        document.getElementById('closeNameForm').addEventListener('click', closeNameForm);
-       // Modifier l'événement pour `multiPlayer` en appelant `populateUserDropdowns` et `showNameForm`
        document.getElementById('multiPlayer').addEventListener('click', () => {
            populateUserDropdowns().then(() => {
                showNameForm();
@@ -1430,12 +1361,10 @@ export function init() {
    
        setMenuVisibility(true);
        document.getElementById('singlePlayer').addEventListener('click', () => startGame('singlePlayer'));
-       document.getElementById('multiPlayer').addEventListener('click', showNameForm); // Afficher le formulaire pour les noms
+       document.getElementById('multiPlayer').addEventListener('click', showNameForm); 
        document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
-             // Call `showTournamentForm` when the tournament button is clicked
-             document.getElementById('freeforall').addEventListener('click', showTournamentForm);
-             // Call `showTournamentForm` when the tournament button is clicked
-             document.getElementById('tournament').addEventListener('click', showTournamentForm);
+       document.getElementById('freeforall').addEventListener('click', showTournamentForm);
+       document.getElementById('tournament').addEventListener('click', showTournamentForm);
        initializeGame();
    
    }

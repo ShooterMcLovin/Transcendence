@@ -2,6 +2,7 @@ import { loadLoginPage } from "/static/frontend/login/login.js";
 import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
 
 let hashCleared = false;
+
 export function loadMainPage() {
 
     let mainPage = document.getElementById("root");
@@ -32,10 +33,9 @@ function removeClassFromClass(classNameToRemove, classNameToFind) {
 
 export async function logOut(e) {
     if (e.target.closest('.logOut')) {
-        const csrfToken = getCookie('csrftoken')
-        const token = sessionStorage.getItem('token')
+        const csrfToken = getCookie('csrftoken');
+        const token = sessionStorage.getItem('token');
         try {
-            const csrfToken = getCookie('csrftoken');
             const response = await fetch('/api/logout/', {
                 method: 'POST',
                 headers: {
@@ -47,8 +47,7 @@ export async function logOut(e) {
                 console.log('Logout successful');
                 await checkUserAuthentication();
                 window.location.href = '/'; 
-            }
-            else if (!response.ok) {
+            } else {
                 const error = await response.json();
                 console.log(error, error.message);
                 throw new Error(JSON.stringify(error));
@@ -61,48 +60,27 @@ export async function logOut(e) {
         }
     }
 }
-// function below for reference
-export async function logoutUser() {
-    const csrfToken = getCookie('csrftoken');
-    const response = await fetch('/api/logout/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': csrfToken,
-        },
-    });
-
-    if (response.ok) {
-        await checkUserAuthentication();
-        console.log('Logout successful');
-    } else {
-        console.error('Logout failed');
-    }
-}
 
 export function setClickEvents() {
+    
     document.getElementById('root').addEventListener('click', selectProgram);
     document.getElementById('root').addEventListener('dblclick', openWindow);
-    document.getElementById('root').addEventListener('click', closeWindow);
+    
+    // document.getElementById('root').addEventListener('click', closeWindow);
     document.getElementById('root').addEventListener('click', logOut);
-    // document.getElementById('Users').addEventListener('click', () => {
-      
-    //     window.location.href = '/';
-    // });
 }
 
 export function openWindow(e) {
+   
     var parentIcon = e.target.closest('.icon');
-    if (parentIcon === false || !parentIcon) {
-        removeClassFromClass('selected_program', 'selected_program')
+    if (!parentIcon) {
+        removeClassFromClass('selected_program', 'selected_program');
         return;
     }
- 
-    
-    removeClassFromClass('selected_program', 'selected_program')
-    var parentIcon = e.target.closest('.icon');
+   
+    removeClassFromClass('selected_program', 'selected_program');
     parentIcon.classList.add('selected_program');
-    e.preventDefault()
+    e.preventDefault();
 
     if (parentIcon.id === 'profile') {
         createWindow('Profile');
@@ -120,36 +98,33 @@ export function openWindow(e) {
 
 function selectProgram(e) {
     var parentIcon = e.target.closest('.icon');
-    if (parentIcon === false || !parentIcon) {
-        removeClassFromClass('selected_program', 'selected_program')
+    
+    if (!parentIcon) {
+        removeClassFromClass('selected_program', 'selected_program');
         return;
     }
 
-    removeClassFromClass('selected_program', 'selected_program')
-    var parentIcon = e.target.closest('.icon');
+    removeClassFromClass('selected_program', 'selected_program');
     parentIcon.classList.add('selected_program');
-    e.preventDefault()
-
+    e.preventDefault();
 }
+
 
 function setWindowContent(uniqueId, customData = null) {
-    // Récupérer l'élément de la fenêtre (ou du contenu) correspondant à uniqueId
     const windowElement = document.getElementById(`${uniqueId}-content`);
 
-   // Vérification que l'élément existe
-   if (!windowElement) {
-    console.error(`Window element #${uniqueId}-content not found.`);
-    return;
-}
+    if (!windowElement) {
+        console.error(`Window element #${uniqueId}-content not found.`);
+        return;
+    }
 
-// Ajout d'un indicateur pour vérifier si le contenu est déjà chargé
-if (windowElement.dataset.loaded === 'true') {
-    console.log(`Window ${uniqueId} is already open.`);
-    
-}
+    if (windowElement.dataset.loaded === 'true') {
+        console.log(`Window ${uniqueId} is already open.`);
+        return;
+    }
+
     let htmlUrl, cssUrl, scriptUrl;
     
-    // Définir les URLs en fonction de l'ID unique
     switch (uniqueId) {
         case 'myWindowProfile':
             htmlUrl = '/static/frontend/profile/profile.html';
@@ -182,16 +157,14 @@ if (windowElement.dataset.loaded === 'true') {
 
     console.log(`Loading content for: ${uniqueId}`);
    
-    // Charger HTML, CSS, et JavaScript
     Promise.all([
         fetch(htmlUrl).then(response => response.text()),
         fetch(cssUrl).then(response => response.text()),
         import(scriptUrl).then(module => module).catch(err => {
             console.error(`Error importing module from ${scriptUrl}:`, err);
-            throw err; // Rethrow to handle later
+            throw err;
         })
     ]).then(([html, css, javascript]) => {
-        // Processer les sélecteurs CSS pour éviter les conflits
         css = css.replace(/(^|{|})\s*([^{}@#\d][^{}@]*?)\s*{/g, (match, before, selectors) => {
             const modifiedSelectors = selectors.split(',').map(selector => {
                 const isClassIDOrElement = /^[.#]?[a-zA-Z][\w-]*$/;
@@ -202,10 +175,8 @@ if (windowElement.dataset.loaded === 'true') {
             return `${before} ${modifiedSelectors} {`;
         });
 
-        // Combiner HTML et CSS dans l'élément cible
         windowElement.innerHTML = `${html}<style>${css}</style>`;
         
-        // Exécuter la fonction d'initialisation si elle existe
         if (typeof javascript.init === 'function') {
             javascript.init(customData);
         } else {
@@ -216,44 +187,69 @@ if (windowElement.dataset.loaded === 'true') {
     });
 }
 
-
-
 export function createWindow(appName, customData = null) {
-    var uniqueId = "myWindow" + appName;
-
-    // Fermer toutes les autres fenêtres ouvertes avant d'en ouvrir une nouvelle
+    const uniqueId = "myWindow" + appName;
     closeAllWindows(uniqueId);
 
-    // Vérifier si la fenêtre existe déjà
-    var windowgameExist = document.getElementById(uniqueId);
-    if (windowgameExist)
-        return;
-    
-    // Créer la nouvelle fenêtre
-    var windowContainer = document.createElement('div');
+    const windowExists = document.getElementById(uniqueId);
+    if (windowExists) return;
+
+    const windowContainer = document.createElement('div');
     windowContainer.id = uniqueId;
     windowContainer.classList.add('window');
 
-    var windowTop = document.createElement('div');
-    windowTop.classList.add('window-top');
+    if (uniqueId !== 'myWindowGame') {
+        const windowTop = document.createElement('div');
+        windowTop.classList.add('window-top');
 
-    var redButton = document.createElement('button');
-    redButton.classList.add('round', 'red');
-    redButton.id = 'red-' + uniqueId;
-    windowTop.appendChild(redButton);
+        const redButton = document.createElement('button');
+        redButton.classList.add('round', 'red');
+        redButton.id = 'red-' + uniqueId;
 
-    var windowContent = document.createElement('div');
+        windowTop.appendChild(redButton);
+        windowContainer.appendChild(windowTop);
+
+        redButton.addEventListener('click', function () {
+            closeWindowById(uniqueId);
+        });
+    }
+
+    const windowContent = document.createElement('div');
     windowContent.classList.add('window-content');
     windowContent.id = uniqueId + '-content';
-
-    windowContainer.appendChild(windowTop);
     windowContainer.appendChild(windowContent);
 
-    var divRow = document.querySelector('.row');
-    divRow.appendChild(windowContainer);
+    const divRow = document.querySelector('.row');
+    if (divRow) {
+        divRow.appendChild(windowContainer);
+    }
 
     setWindowContent(uniqueId, customData);
 }
+
+function closeWindowById(uniqueId) {
+    const windowToClose = document.getElementById(uniqueId);
+    if (windowToClose) {
+        windowToClose.remove();
+    }
+}
+
+function closeWindow(e) {
+    const closeButton = e.target.closest('.round.red');
+    
+    if (!closeButton) {
+        console.warn("Aucun bouton de fermeture trouvé !");
+        return;
+    }
+
+    const windowElement = closeButton.closest('.window');
+    if (windowElement) {
+        windowElement.remove();
+    } else {
+        console.warn("Aucune fenêtre associée trouvée !");
+    }
+}
+
 
 // Fonction pour fermer toutes les fenêtres ouvertes
 function closeAllWindows(exceptWindowId = null) {
@@ -268,13 +264,7 @@ function closeAllWindows(exceptWindowId = null) {
 
 
 
-function closeWindow(e) {
-    if (e.target.closest('.round.red')) {
-        e.target.closest('.window').remove();
-    }
-}
-// document.getElementById('game').addEventListener('click', function() {
-//     document.getElementById('welcomeText').style.display = 'none';
-// });
+
+
 
 

@@ -1,10 +1,10 @@
 /* Styles généraux pour l'ensemble du corps */
 html, body {
    
-    /* margin: 0;   Enlever toute marge par défaut */
-     /* padding: 0; Enlever les espacements par défaut  */
-    /* border: none; /* S'assurer qu'il n'y a pas de bordure  
-    outline: none; S'assurer qu'il n'y a pas de contour*/ 
+   margin: 0;  /*   Enlever toute marge par défaut  */
+     padding: 0;  /* Enlever les espacements par défaut  */
+    border: none; /* S'assurer qu'il n'y a pas de bordure   */
+    outline: none; /* S'assurer qu'il n'y a pas de contour*/ 
     height: 100%; /* Prendre toute la hauteur disponible */
    
 }
@@ -50,6 +50,19 @@ body {
     transition: background-color 0.3s ease;
 }
 
+#menuP buttonquit {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #d10c0c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+#menuP buttonquit:hover {
+    background-color: #6c0505;
+}
 #menuP button:hover {
     background-color: #218838;
 }
@@ -70,6 +83,17 @@ body {
     font-size: 16px;
     margin: 10px;
     width: 80%;
+}
+
+#nameForm button, #tournamentForm button ,#tournamentForm button ,#freeforallForm button{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
 }
 
 #nameForm button, #tournamentForm button ,#tournamentForm button ,#freeforallForm button{
