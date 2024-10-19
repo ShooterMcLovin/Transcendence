@@ -1,4 +1,5 @@
 import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
+
 export async function userList() {
     try {
         const response = await fetch('/api/users/');
@@ -9,8 +10,8 @@ export async function userList() {
         }
 
         const users = await response.json();
+        console.log(users);
         const userListElement = document.getElementById('user-list');
-
         // Get the current user ID (you may need to adjust this based on your auth method)
         const currentUser = await fetch('/api/getUser/'); // Adjust this based on how you store/get the current user ID
 
@@ -24,6 +25,9 @@ export async function userList() {
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-2 custom-text-color">
                     <strong>${user.nickname || 'No nickname'}</strong>
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-2 custom-text-color">
+                    <strong>${user.is_online === true ? 'Online' : 'Offline'}</strong>
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-3">
                     ${user.username !== currentUser ? `

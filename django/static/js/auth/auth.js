@@ -23,7 +23,9 @@ export async function checkUserAuthentication() {
         if (userData.isAuthenticated) {
             // User is logged in, update the UI
             document.getElementById('login-form').style.display = 'none';
+            document.getElementById('login-form').style.pointerEvents = 'none';
             document.getElementById('registration-form').style.display = 'none';
+            document.getElementById('registration-form').style.pointerEvents = 'none';
             document.getElementById('root').style.display = 'block';
         } else {
             // User is not logged in

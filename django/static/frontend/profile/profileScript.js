@@ -1,4 +1,5 @@
 import { getCookie } from '/static/js/auth/auth.js';
+
 async function fetchUserProfile() {
     try {
         const response = await fetch(`/api/user_profile/`); // Include user ID in the URL

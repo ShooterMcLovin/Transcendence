@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth import authenticate, login as django_login, logout as  django_logout
+from django.contrib.auth import authenticate, login as django_login, logout as  django_logout, update_session_auth_hash
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Match, Tournament, Friendship
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ChangePasswordForm
 import json
 
 
@@ -70,6 +70,7 @@ def login(request):
     if user is not None:
         django_login(request, user)
         user.is_online = True
+        user.save()
         return Response({'csrfToken': get_token(request)}, status=status.HTTP_200_OK)
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
@@ -85,6 +86,9 @@ def logout(request):
 def check_authentication(request):
     return Response({'isAuthenticated': request.user.is_authenticated})
 
+@api_view(['GET'])
+def check_online(request):
+    return Response({'isonline': request.user.is_online})
 
 
 @api_view(['GET'])
@@ -94,7 +98,7 @@ def getUser(request):
 
 @api_view(['GET'])
 def user_list(request):
-    users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'avatar_url')
+    users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'avatar_url','is_online', 'is_staff')
     return Response(list(users), status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -284,3 +288,15 @@ def remove_friend(request, username):
     
     except Friendship.DoesNotExist:
         return Response({'message': f"{friend.nickname} is not in your friend list."}, status=status.HTTP_200_OK)
+
+@login_required    
+@api_view(['POST'])
+def update_password(request):
+    form = ChangePasswordForm(user=request.user, data=request.data)
+    
+    if form.is_valid():
+        user = form.save()
+        update_session_auth_hash(request, user)  # Important!
+        return Response({'message': 'Password updated successfully.'}, status=200)
+    else:
+        return Response({'errors': form.errors}, status=400)

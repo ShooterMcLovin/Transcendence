@@ -19,7 +19,7 @@ body {
     align-items: center; /* Centrer verticalement */
     height: 100vh; /* Faire en sorte que le corps prenne toute la hauteur de la fenêtre */
     overflow: hidden; /* Désactiver les barres de défilement si nécessaire */ 
-    z-index: 1;
+    z-index: 15;
 }
 
 * {

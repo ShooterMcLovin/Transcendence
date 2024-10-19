@@ -215,6 +215,7 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+
 }
 
 .icon:hover {
@@ -237,17 +238,20 @@ main {
 	background: transparent;
     /* top: calc(50% - 225px); */
     left: calc(50% - 400px);
+    z-index: 15;
+    
     
 }
 
 .window-content {
-	background: #28292d;
+    background: transparent;
 	color: #C0C0C0;
 	height: 100%;
 	font-family: monospace;
 	padding: 5px;
     overflow-y: auto;
     overflow-x: hidden;
+    z-index: 15;
 }
 
 .window-top, .window-top-no-bind {
@@ -259,6 +263,7 @@ main {
 	border-top-left-radius: 5px;
 	padding: 5px;
 	background-color: #C0C0C033;
+    display: none;
 }
 
 .window-top-no-bind {

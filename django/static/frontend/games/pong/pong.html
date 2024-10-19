@@ -7,7 +7,10 @@
         body  { margin: 0; overflow: hidden; }
         canvas { 
             display: block;
-            position: fixed;
+            position: absolute;
+            z-index: 10;
+            overflow: hidden;
+            pointer-events: none
         }
         #menuP {
             position: fixed;
@@ -20,7 +23,7 @@
             border-radius: 10px;
             color: white;
             display: none; /* Masquer le menu au début */
-            z-index: 10;
+            z-index: 15;
         }
         button {
             display: block;
@@ -40,7 +43,7 @@
             border-radius: 10px;
             color: white;
             display: none; /* Masquer les formulaires au début */
-            z-index: 10;
+            z-index: 15;
         }
         #nameForm input, #tournamentForm input, #freeforallForm input{
             display: block;
@@ -48,7 +51,7 @@
             padding: 10px;
             font-size: 18px;
             width: 80%;
-            z-index: 10;
+            z-index: 15;
         }
         #nameForm select {
             display: block;
@@ -56,7 +59,7 @@
             padding: 10px;
             font-size: 18px;
             width: 80%;
-            z-index: 10;
+            z-index: 15;
         }
         #nameForm button, #tournamentForm button, #freeforallForm button{
             margin: 10px auto;
@@ -72,7 +75,7 @@
             border-radius: 10px;
             color: white;
             display: none; /* Masquer le menu au début */
-            z-index: 10;
+            z-index: 15;
             }
 
 #pauseMenu button ,#pauseMenufreeforall button{

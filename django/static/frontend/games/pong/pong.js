@@ -1270,6 +1270,7 @@ function closeGame() {
     stopGame(); // Arrêter l'animation et nettoyer la scène
       closeGameWindow();
     console.log("Game has been stopped and window closed");
+    window.location.href = '/'; 
 }
 
 function closeGameWindow() {
