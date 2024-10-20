@@ -1,0 +1,30 @@
+<div class="container mt-5 custom-text-color">
+    <h2 class="justify-content-center mb-4">Update Password</h2>
+    <form id="password-update-form" class="form-group">
+        <!-- Hidden username field -->
+        <input type="text" name="username" style="display:none;" autocomplete="username">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-danger" id="error-messages" style="display: none;"></div>
+
+                <h4 class="mt-4 text-center mb-4">Change Password</h4>
+                <div class="form-group">
+                    <label for="old_password">Old Password</label>
+                    <input type="password" id="old_password" name="old_password" class="form-control" required autocomplete="current-password">
+                </div>
+                <div class="form-group">
+                    <label for="new_password1">New Password</label>
+                    <input type="password" id="new_password1" name="new_password1" class="form-control" required autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="new_password2">Confirm New Password</label>
+                    <input type="password" id="new_password2" name="new_password2" class="form-control" required autocomplete="new-password">
+                </div>
+                <button type="button" class="btn btn-warning btn-block" id="update-password-button">Update Password</button>
+                <button type="button" class="btn btn-outline-danger btn-block" onclick="window.location.href='/'">Cancel</button>
+
+            </div>
+        </div>
+    </form>
+</div>
+<script type="module" src="./updatePassword.js"></script>

@@ -60,6 +60,7 @@ window.addEventListener("popstate", function(event) {
     }
 });
 
+
 function updateTime() {
     let currTime = document.getElementById('current-time');
     if(!currTime)

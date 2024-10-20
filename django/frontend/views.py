@@ -75,6 +75,7 @@ def login(request):
     else:
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
     
+    
 @api_view(['POST'])
 def logout(request):
     request.user.is_online = False
@@ -98,8 +99,9 @@ def getUser(request):
 
 @api_view(['GET'])
 def user_list(request):
-    users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'avatar_url','is_online', 'is_staff')
+    users = CustomUser.objects.all().values('id', 'username', 'nickname', 'wins', 'losses', 'tournament_wins','tournament_losses' ,'avatar_url','is_online', 'is_staff')
     return Response(list(users), status=status.HTTP_200_OK)
+
 
 @api_view(['POST'])
 def update_winner(request):
@@ -120,6 +122,8 @@ def update_winner(request):
         try:
             winner = CustomUser.objects.get(nickname=winner_username)
             winner.wins += 1
+            if pgame == "tournement":
+                winner.tournament_wins +=1 
             winner.save()
         except CustomUser.DoesNotExist:
             return Response({'status': 'error', 'message': f'Winner not found: {winner_username}'}, status=status.HTTP_404_NOT_FOUND)
@@ -129,6 +133,8 @@ def update_winner(request):
         try:
             loser = CustomUser.objects.get(nickname=loser_username)
             loser.losses += 1
+            if pgame == "tournement":
+                loser.tournament_losses +=1 
             loser.save()
         except CustomUser.DoesNotExist:
             return Response({'status': 'error', 'message': f'Loser not found: {loser_username}'}, status=status.HTTP_404_NOT_FOUND)
@@ -140,7 +146,13 @@ def update_winner(request):
         game=pgame,
         match_date=timezone.now()
     )
-
+    if pgame == "tournements":
+        Tournament.objects.create(
+        winner=winner,
+        loser=loser,
+        game="tournement",
+        match_date=timezone.now()
+        )
     return Response({'status': 'success'}, status=status.HTTP_200_OK)
 
 @api_view(['GET'])

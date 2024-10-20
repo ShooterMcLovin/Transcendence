@@ -205,21 +205,14 @@ export function createWindow(appName, customData = null) {
     windowContainer.id = uniqueId;
     windowContainer.classList.add('window');
 
-    if (uniqueId !== 'myWindowGame') {
-        const windowTop = document.createElement('div');
-        windowTop.classList.add('window-top');
+    // if (uniqueId !== 'myWindowGame') {
+    //     const windowTop = document.createElement('div');
+    //     windowTop.classList.add('window-top');
 
-        const redButton = document.createElement('button');
-        redButton.classList.add('round', 'red');
-        redButton.id = 'red-' + uniqueId;
-
-        windowTop.appendChild(redButton);
-        windowContainer.appendChild(windowTop);
-
-        redButton.addEventListener('click', function () {
-            closeWindowById(uniqueId);
-        });
-    }
+    //     redButton.addEventListener('click', function () {
+    //         closeWindowById(uniqueId);
+    //     });
+    // }
 
     const windowContent = document.createElement('div');
     windowContent.classList.add('window-content');

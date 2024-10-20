@@ -27,6 +27,7 @@ export async function checkUserAuthentication() {
             document.getElementById('registration-form').style.display = 'none';
             document.getElementById('registration-form').style.pointerEvents = 'none';
             document.getElementById('root').style.display = 'block';
+            // document.getElementById('root').style.max-width = ';
         } else {
             // User is not logged in
             document.getElementById('login-form').style.display = 'block';

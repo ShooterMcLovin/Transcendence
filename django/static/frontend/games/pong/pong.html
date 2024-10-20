@@ -8,7 +8,7 @@
         canvas { 
             display: block;
             position: absolute;
-            z-index: 10;
+            z-index: 1;
             overflow: hidden;
             pointer-events: none
         }
@@ -63,6 +63,7 @@
         }
         #nameForm button, #tournamentForm button, #freeforallForm button{
             margin: 10px auto;
+            z-index: 15;
         }
         #pauseMenu, #pauseMenufreeforall {
             position: fixed;
@@ -76,22 +77,24 @@
             color: white;
             display: none; /* Masquer le menu au début */
             z-index: 15;
-            }
-
-#pauseMenu button ,#pauseMenufreeforall button{
-    padding: 10px 20px;
-    font-size: 18px;
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-#pauseMenu button:hover ,#pauseMenufreeforall button:hover{
-    background-color: #388e3c;
-}
+        }
+        
+        #pauseMenu button ,#pauseMenufreeforall button{
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            z-index: 15;
+        }
+        
+        #pauseMenu button:hover ,#pauseMenufreeforall button:hover{
+        z-index: 15;
+        background-color: #388e3c;
+        }
     </style>
 </head>
 <body>
@@ -102,7 +105,7 @@
         <button id="tournament">Tournament (4 players)</button>
         <button id="freeforall">free4all (4 players)</button>
         <button id="resume">resume</button>
-        <buttonquit id="quit game">quit game</buttonquit>
+        <!-- <buttonquit id="quit game">quit game</buttonquit> -->
     </div>
 
     <div id="nameForm">

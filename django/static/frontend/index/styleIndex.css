@@ -5,7 +5,7 @@ body {
     padding: 0;
     height: 100vh;
     cursor: url('static/frontend/assets/cursor3.svg'), auto !important;
-    
+    overflow: hidden; 
     /* Фоновое изображение */
     background-image: url('static/frontend/assets/space.gif');
     
@@ -23,9 +23,11 @@ body {
 
 
 main {
+    /* width: max-content; */
     margin: 0;
     padding: 0;
     height: 100vh;
+
 }
 
 .div-table-container {
@@ -61,7 +63,7 @@ main {
 }
 
 .menuContainer {
-    width: 100px;
+    width: 35px;
     height: 30px;
     padding-left: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -215,7 +217,6 @@ main {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
 }
 
 .icon:hover {
@@ -238,23 +239,22 @@ main {
 	background: transparent;
     /* top: calc(50% - 225px); */
     left: calc(50% - 400px);
-    z-index: 15;
-    
+    z-index: 10;
     
 }
 
 .window-content {
-    background: transparent;
+	background: #0000006a;
 	color: #C0C0C0;
 	height: 100%;
 	font-family: monospace;
 	padding: 5px;
     overflow-y: auto;
     overflow-x: hidden;
-    z-index: 15;
 }
 
 .window-top, .window-top-no-bind {
+    background: #0000006a;
 	cursor: move;
 	text-align: right;
 	height: 40px;
@@ -262,9 +262,8 @@ main {
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 	padding: 5px;
-	background-color: #C0C0C033;
-    display: none;
-}
+	/* background-color: #c0c0c000; */
+} 
 
 .window-top-no-bind {
 	cursor: inherit;

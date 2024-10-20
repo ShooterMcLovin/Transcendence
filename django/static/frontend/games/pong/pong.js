@@ -558,8 +558,10 @@ function showWinMessage(winner, loser) {
     else
         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
-    if(!isModeFreeForAll)
-    sendWinnerMessage(winner, loser, 'pong'); //// DO NOT REMOVE!
+    if(!isModeFreeForAll && !isTournament)
+    sendWinnerMessage(winner, loser, 'Pong'); //// DO NOT REMOVE!
+    else if (isTournament)
+    sendWinnerMessage(winner, loser, 'tournement'); //// DO NOT REMOVE! tournement est sposer updater les tournement win/losses
 
     if (isTournament) {
         if (currentMatch === 1) {
@@ -1270,7 +1272,6 @@ function closeGame() {
     stopGame(); // Arrêter l'animation et nettoyer la scène
       closeGameWindow();
     console.log("Game has been stopped and window closed");
-    window.location.href = '/'; 
 }
 
 function closeGameWindow() {
@@ -1320,9 +1321,9 @@ export function init() {
            setPauseMenuVisibility(false);
            isPaused = false;
        });
-       document.getElementById('quit game').addEventListener('click', () => {
-          closeGame();
-       });
+    //    document.getElementById('quit game').addEventListener('click', () => {
+    //       closeGame();
+    //    });
        document.getElementById('resumeButtonfree').addEventListener('click', () => {
            setMenuFreeForAllVisibility(false);
            isPaused = false;
