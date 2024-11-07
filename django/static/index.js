@@ -591,7 +591,7 @@ const speedIncrease = 0.005;
 // Variables pour le mouvement des palettes
 let paddle1Speed = 0;
 let paddle2Speed = 0;
-const paddleSpeed = 0.1;
+const d = 0.1;
 
 // Variables pour la rotation de la caméra
 let initialCameraRotation = true;

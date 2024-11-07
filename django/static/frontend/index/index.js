@@ -62,6 +62,10 @@ export async function logOut(e) {
 }
 
 export function setClickEvents() {
+    window.addEventListener('resize', () => {
+        document.querySelector('.container-fluid').style.transform = `scale(${window.innerWidth / 1920})`;
+    });
+    
     
     document.getElementById('root').addEventListener('click', selectProgram);
     document.getElementById('root').addEventListener('dblclick', openWindow);
@@ -83,17 +87,22 @@ export function openWindow(e) {
     e.preventDefault();
 
     if (parentIcon.id === 'profile') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('Profile');
     } else if (parentIcon.id === 'game') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Game');
     } else if (parentIcon.id === 'users') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('Users');
     } else if (parentIcon.id === 'EditProfile') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('EditProfile');
     } else if (parentIcon.id === 'pool') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('Pool');
     } else if (parentIcon.id === 'browser') {
+        document.getElementById('welcomeText').style.display = 'none';
         createWindow('Browser');
     }
 }
@@ -261,3 +270,5 @@ function closeAllWindows(exceptWindowId = null) {
         }
     });
 }
+
+

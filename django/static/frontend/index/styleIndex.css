@@ -1,48 +1,40 @@
+/* Styles de base pour le corps de la page */
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: #28292d;
     margin: 0;
     padding: 0;
     height: 100vh;
+    width: 100vw;
     cursor: url('static/frontend/assets/cursor3.svg'), auto !important;
-    overflow: hidden; 
-    /* Фоновое изображение */
-    background-image: url('static/frontend/assets/space.gif');
-    
-    /* Закрепляем изображение в центре */
-    background-position: center;
-    
-    /* Делаем так, чтобы изображение не повторялось */
-    background-repeat: no-repeat;
-    
-    /* Масштабируем изображение пропорционально размеру экрана */
-    background-size: cover;
-    
+    overflow: hidden;
+    background-image: url('static/frontend/assets/space.gif'); /* Image de fond */
+    background-position: center; /* Centrage de l'image */
+    background-repeat: no-repeat; /* Pas de répétition */
+    background-size: cover; /* Mise à l'échelle */
     user-select: none;
 }
 
-
+/* Conteneur principal */
 main {
-    /* width: max-content; */
     margin: 0;
     padding: 0;
     height: 100vh;
-
 }
 
 .div-table-container {
     display: flex;
     flex-direction: row;
-    
 }
 
+/* Style des images d'utilisateur dans un tableau */
 .div-table-container #user-table-body img {
     height: 40px;
     width: 40px;
-    border-radius: 50%
+    border-radius: 50%;
 }
 
-
+/* Barre système en bas */
 .system-bar {
     background-color: #333;
     color: #fff;
@@ -67,9 +59,9 @@ main {
     height: 30px;
     padding-left: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-
 }
 
+/* Styles de menu */
 .menu {
     display: none;
     flex-direction: column;
@@ -81,7 +73,7 @@ main {
     color: #fff;
     max-height: 80vh;
     overflow-y: auto;
-	z-index: 9999;
+    z-index: 1;
 }
 
 .menu ul {
@@ -98,106 +90,65 @@ main {
     text-decoration: none;
 }
 
-.profile-ico {
-    height: 70px;
-    width: 70px;
-    position: flex;
-    z-index: 2;
-}
-.user-ico {
-    height: 70px;
-    width: 70px;
-    position: flex;
-    z-index: 2;
-}
-
-.chat-ico {
-    height: 70px;
-    width: 70px;
-    left: 38px;
-    top: 80px;
+/* Icônes de profil, utilisateur, etc. */
+/* Colonne gauche pour les icônes */
+/* Colonne gauche pour les icônes */
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 80vh ;               /* Prend toute la hauteur de la fenêtre */
+    width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
+    background-color: rgba(51, 51, 51, 0.0); /* Couleur de fond semi-transparente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding-top: 7vh; */
+    overflow-y: auto;             /* Barre de défilement si nécessaire */
+    z-index: 1000;                /* S'assure que la colonne reste au-dessus des autres éléments */
 }
 
-.terminal-ico {
-    height: 70px;
-    width: 70px;
-    left: 38px;
-    top: 120px;
+
+/* Alignement des icônes dans la colonne */
+.icon {
+    /* margin-bottom: 20px; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.game-ico {
-    height: 70px;
-    width: 70px;
-    z-index: 2;
 
+
+/* Style du texte sous chaque icône */
+.program_name {
+    font-size: 0.8rem;       /* Taille de texte ajustée */
+    color: #C0C0C0;          /* Couleur du texte */
 }
 
-.pool-ico {
-    height: 70px;
-    width: 70px;
-    z-index: 2;
+/* Assure que la colonne de gauche ne bouge pas avec le contenu principal
+.container-fluid {
+    margin-left: 7vw;       /* Compense la largeur de la colonne de gauche */
+/* } */ 
 
+.icon:hover {
+    background-color: #C0C0C033;
 }
 
-.browser-ico {
-    height: 70px;
-    width: 70px;
-    left: 38px;
-    top: 240px;
+.profile-ico, .user-ico, .chat-ico, .terminal-ico, .game-ico, .pool-ico, .browser-ico {
+    height: 7vh;  /* La taille est maintenant relative à la largeur de la fenêtre */
+    width: 7vw;   /* 7vw est 7% de la largeur de la fenêtre */
+    z-index: 1000;
 }
 
-/* #profile {
-    left: 38px;
-    top: 50px;
-} */
 
-#chat {
-    left: 188px;
-    top: 50px;
-}
-
-#terminal {
-    left: 638px;
-    top: 50px;
-}
-/* 
-#game {
-    left: 338px;
-    top: 50px;
-}
-
-#pool {
-    left: 488px;
-    top: 50px;
-} */
-
-#terminal {
-    left: 638px;
-    top: 50px;
-}
-
-#browser {
-    left: 788px;
-    top: 50px;
-}
-
+/* Styles supplémentaires pour la sélection et le nom de programme */
 .program_name {
     color: #C0C0C0;
 }
 
 .selected_program {
     background-color: #C0C0C033 !important;
-}
-
-.icon {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    height: 125px;
-    width: 125px;
-    padding:10px;
-
 }
 
 .logOut {
@@ -212,91 +163,79 @@ main {
     background-color: red;
 }
 
-.icon-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.icon:hover {
-    background-color: #C0C0C033;
-}
-
-/* Estilo del modal de carga */
-.modal-content {
-    background-color: #C0C0C033;
-    border-color: #C0C0C0;
-}
-
+/* Styles pour la fenêtre */
 .window {
-	position: absolute;
-	width: 800px;
-	height: auto;
-	border-radius: 10px;
-	border: none;
-	box-shadow: 1px 1px 4px rgba(0,0,0,0,0.9), -1px 1px 4px rgba(0,0,0,0,0.9);
-	background: transparent;
-    /* top: calc(50% - 225px); */
-    left: calc(50% - 400px);
-    z-index: 10;
-    
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+      text-align: center;
+    /* border-radius: 10px; */
+    /* border: none; */
+
+    /* box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.0), -1px 1px 4px rgba(0, 0, 0, 0.0); */
+    /* background: transparent; */
+    background: rgba(51, 51, 51, 0.0);
+    left: 50%; 
+    /* bottom: 7vw; */
+    top:50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto; 
+    z-index: 2;
 }
 
 .window-content {
-	background: #0000006a;
-	color: #C0C0C0;
-	height: 100%;
-	font-family: monospace;
-	padding: 5px;
-    overflow-y: auto;
-    overflow-x: hidden;
+     background: #0000006a;
+    /* color: #C0C0C0;  */
+    height: auto ;
+
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin-bottom: 60px;
+    margin-top: 7vw;
+
+    /* font-family: 'Courier New', Courier, monospace; */
+    /* padding: 5px; */
+    overflow-y: auto; 
+     z-index: 1;
+
 }
 
+/* En-tête de la fenêtre
 .window-top, .window-top-no-bind {
     background: #0000006a;
-	cursor: move;
-	text-align: right;
-	height: 40px;
-	border-bottom: 1px solid rgba(0,0,0,0.5);
-	border-top-right-radius: 5px;
-	border-top-left-radius: 5px;
-	padding: 5px;
-	/* background-color: #c0c0c000; */
-} 
+    cursor: move;
+    text-align: right;
+    height: 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.0);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding: 5px;
+} */
 
-.window-top-no-bind {
-	cursor: inherit;
-}
-
+/* Boutons d'interface de la fenêtre */
 .round {
-	height: 16px;
-	width: 16px;
-	border-radius: 50%;
-	border: none;
-	margin-right: 6px;
-	box-shadow: 1px 1px 2px #000;
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    border: none;
+    margin-right: 6px;
+    box-shadow: 1px 1px 2px #000;
 }
-
 
 .green {
-	background-color: limegreen;
+    background-color: limegreen;
 }
 
 .yellow {
-	background-color: yellow;
+    background-color: yellow;
 }
 
-.red {
-	cursor: pointer;
-	background-color: red;
-}
+/* .red {
+    cursor: pointer;
+    background-color: red;
+} */
 
-
-.window-content {
-    font-family: 'Courier New', Courier, monospace;
-}
-
+/* Styles de chargement */
 .loading {
     height: 45vh;
     display: flex;
@@ -319,11 +258,13 @@ main {
         transform: rotate(360deg);
     }
 }
+
+/* Popup de notification */
 .popup {
     cursor: pointer;
-  }
-  
-  .popup .popuptext {
+}
+
+.popup .popuptext {
     visibility: hidden;
     width: 160px;
     background-color: #555;
@@ -335,9 +276,9 @@ main {
     bottom: 125%;
     left: 20%;
     margin-left: -80px;
-  }
-  
-  .popup .popuptext::after {
+}
+
+.popup .popuptext::after {
     content: "";
     position: absolute;
     top: 100%;
@@ -346,20 +287,14 @@ main {
     border-width: 5px;
     border-style: solid;
     border-color: #555 transparent transparent transparent;
-  }
-  
-  .popup .show {
+}
+
+.popup .show {
     visibility: visible;
-    -webkit-animation: fadeIn 1s;
-    animation: fadeIn 1s
-  }
-  
-  @-webkit-keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-  
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
-  }
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

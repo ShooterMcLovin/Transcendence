@@ -3,7 +3,8 @@ body {
     background-color: #28292d;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    height: 90vh;
+    width: 90vw;
     cursor: url('/static/frontend/assets/cursor3.svg'), auto !important;
     background-image: url('/static/frontend/assets/wp.gif');
     user-select: none;
