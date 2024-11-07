@@ -453,9 +453,18 @@ let username;
 let isfreeforall = false;
 // Lancer l'animation
 async function initializeGame() {
+    initializeGameData();
     username = await fetchUser();
     console.log('Fetched Username:', username);
     player2 = "IA2"; 
+    modeSelected = false;
+    isMultiplayer = false;
+    isTournament = false;
+   isModeFreeForAll = false;
+    isSinglePlayer = false;
+    ia1Active= true;
+    ia2Active= true;
+    initialCameraRotation = true;
     animate();
     // Initialize and start the game
     if (mode)
