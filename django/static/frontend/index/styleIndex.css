@@ -52,6 +52,7 @@ main {
 .menuLogo {
     width: 25px;
     height: 25px;
+    z-index: 9999;
 }
 
 .menuContainer {
@@ -59,6 +60,7 @@ main {
     height: 30px;
     padding-left: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
 }
 
 /* Styles de menu */
@@ -73,7 +75,7 @@ main {
     color: #fff;
     max-height: 80vh;
     overflow-y: auto;
-    z-index: 1;
+    z-index: 9999;
 }
 
 .menu ul {
@@ -200,7 +202,7 @@ main {
 
 }
 
-/* En-tête de la fenêtre
+/* En-tête de la fenêtre */
 .window-top, .window-top-no-bind {
     background: #0000006a;
     cursor: move;
@@ -210,7 +212,7 @@ main {
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
     padding: 5px;
-} */
+} 
 
 /* Boutons d'interface de la fenêtre */
 .round {
