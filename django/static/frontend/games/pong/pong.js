@@ -92,6 +92,10 @@ function showWinMessage(winner, loser) {
     else
         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
     scoreContext.font = '20px Arial';
+    // Masquer le canvas après un délai, par exemple 3 secondes
+setTimeout(() => {
+    scoreCanvas.style.display = 'none';
+}, 3000); // Délai en millisecondes
     // if(!isModeFreeForAll && !isTournament)
     sendWinnerMessage(winner, loser, 'Pong'); //// DO NOT REMOVE!
     // else if (isTournament)
@@ -304,6 +308,7 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+
 function startMultiplayerHandler() {
     const player1Select = document.getElementById('player1Select');
     const player2Select = document.getElementById('player2Select');
@@ -483,7 +488,7 @@ function stopGame() {
 // Exemple : fonction qui s'exécute quand on ferme le jeu
 function closeGame() {
   closeScoreVisible(false);
-
+   
     stopGame(); // Arrêter l'animation et nettoyer la scène
       closeGameWindow();
     console.log("Game has been stopped and window closed");
