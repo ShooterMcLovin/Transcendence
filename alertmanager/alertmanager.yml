@@ -11,10 +11,10 @@ route:
 receivers:
   - name: "gmail-notifications"
     email_configs:
-      - to: "maxkram@pm.me"
+      - to: "quebec42max@gmail.com"
         from: "0m9a8x@gmail.com"
         smarthost: "smtp.gmail.com:587"  # Ensure this has the port
         auth_username: "0m9a8x@gmail.com"
         auth_identity: "0m9a8x@gmail.com"
-        auth_password: "bvzd mivh jmpz lnke"
+        auth_password: "jsss pikr oaur xblo"
         send_resolved: true
