@@ -87,15 +87,25 @@ function showWinMessage(winner, loser) {
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
     scoreContext.textAlign = 'center';
-    if (!isTournament && (currentMatch === 1 || currentMatch === 2))
-        scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    if (!isTournament || (currentMatch === 1 || currentMatch === 2))
+    {
+         scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+        //  setTimeout(() => {
+        //     scoreCanvas.style.display = 'none';
+        // }, 3000);
+    }  
     else
-        scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+    {
+         scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
+        //  setTimeout(() => {
+        //     scoreCanvas.style.display = 'none';
+        // }, 3000);
+    }
+       
     scoreContext.font = '20px Arial';
     // Masquer le canvas après un délai, par exemple 3 secondes
-setTimeout(() => {
-    scoreCanvas.style.display = 'none';
-}, 3000); // Délai en millisecondes
+
+ // Délai en millisecondes
     // if(!isModeFreeForAll && !isTournament)
     sendWinnerMessage(winner, loser, 'Pong'); //// DO NOT REMOVE!
     // else if (isTournament)
@@ -333,7 +343,6 @@ let ia2Active;
 function initializeGameData(){
     score1 = 0;
     score2 = 0; 
-
     paddle1.material =  new THREE.MeshPhysicalMaterial({
         map: woodTexture, // Texture du bois
         roughness: 0.5, // Rugosité
@@ -383,6 +392,7 @@ function startGame(mode) {
         isPaused = false; 
     } else if (mode === 'tournament') {
         initializeGameData();
+        currentMatch= 1;
         isSinglePlayer = false;
         isMultiplayer = false;
         isModeFreeForAll = false;
@@ -464,6 +474,7 @@ async function initializeGame() {
     isSinglePlayer = false;
     ia1Active= true;
     ia2Active= true;
+    currentMatch= 1;
     initialCameraRotation = true;
     animate();
     // Initialize and start the game
@@ -497,7 +508,7 @@ function stopGame() {
 // Exemple : fonction qui s'exécute quand on ferme le jeu
 function closeGame() {
   closeScoreVisible(false);
-   
+  scoreCanvas.style.display = 'none';
     stopGame(); // Arrêter l'animation et nettoyer la scène
       closeGameWindow();
     console.log("Game has been stopped and window closed");
@@ -541,7 +552,7 @@ function isMenuFormOpen() {
 
 export function init() {
     closeScoreVisible(true);
-    
+    scoreCanvas.style.display = 'block'; 
    renderer.setSize(window.innerWidth, window.innerHeight);
    document.body.appendChild(renderer.domElement);
    scene.background = null; 
@@ -597,4 +608,4 @@ export function init() {
    
    }
 
-   export {setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};
+   export {isMenuOpen,setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,modeSelected,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};

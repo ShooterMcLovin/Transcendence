@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 
-import {isMenuTournamentFormOpen,setMenuVisibility,isMenuFormOpen,isPaused,gameStarted,setgameStarted,ia1Active,ia2Active,ballDirection,resetBall,ballSpeed,score1,score2,score3,score4,ball,paddle1,paddle2,paddle3,paddle4,pointLight,isModeFreeForAll,agScore,decscore, upgradeBallSpeed, setIsPaused} from './pong.js';
+import {isMenuOpen,isMenuTournamentFormOpen,modeSelected,setMenuVisibility,isMenuFormOpen,isPaused,gameStarted,setgameStarted,ia1Active,ia2Active,ballDirection,resetBall,ballSpeed,score1,score2,score3,score4,ball,paddle1,paddle2,paddle3,paddle4,pointLight,isModeFreeForAll,agScore,decscore, upgradeBallSpeed, setIsPaused} from './pong.js';
 // Variables pour le mouvement des palettes
 let paddle1Speed = 0;
 let paddle2Speed = 0;
@@ -140,11 +140,12 @@ function onDocumentKeyDown(event) {
 
     switch (event.key) {
         case 'Escape':
-            if (isPaused === true && !isMenuFormOpen() && !isMenuTournamentFormOpen()) {
-                setMenuVisibility(false); // Cacher le menu si déjà visible
+            if (isMenuOpen() === true && !isMenuFormOpen() && !isMenuTournamentFormOpen()) {
+                setMenuVisibility(false);// Cacher le menu si déjà visible
                 setIsPaused(false);
-            } else if(isPaused ===false && !isMenuFormOpen() && !isMenuTournamentFormOpen()){
+            } else if(isMenuOpen() ===false && !isMenuFormOpen() && !isMenuTournamentFormOpen()){
                 setMenuVisibility(true) ; // Afficher le menu sinon
+                if(modeSelected)
                 setIsPaused(true);// Mettre le jeu en pause
             }
             if(isMenuTournamentFormOpen())

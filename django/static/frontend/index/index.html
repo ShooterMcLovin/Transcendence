@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-
-<!-- <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interface utilisateur</title>
-    <link rel="stylesheet" href="style.css"> Assurez-vous que le fichier CSS est dans le même répertoire -->
-<!-- </head> --> 
-
-
 <div class="container-fluid">
-
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -20,73 +9,90 @@
             </div>
         </div>
     </div>
-<h2 id="welcomeText" class="mt-5 text-center custom-text-color">Welcome to Transcendency</h2>
+    <h2 id="welcomeText" class="mt-5 text-center custom-text-color">Welcome to Transcendency</h2>
 </div>
-    <div class="row">
-        <div class="desktop d-flex flex-column mt-5">
-            <div class="d-flex align-items-center mb-3">
-                <div id="profile" class="icon text-center">
-                    <div class="icon-content mt-2">
-                        <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="Profile Icon">
-                        <p class="program_name">Profile</p>
-                    </div>
-                </div> 
-                
-            </div>
-            <div class="d-flex align-items-center mb-3">
-                <div id="EditProfile" class="icon text-center">
-                    <div class="icon-content mt-2">
-                        <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="EditProfile Icon">
-                        <p class="program_name">Edit Profile</p>
-                    </div>
+
+<div class="row">
+    <div class="desktop d-flex flex-column mt-5">
+        <div class="d-flex align-items-center mb-3">
+            <div id="profile" class="icon text-center">
+                <div class="icon-content mt-2">
+                    <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="Profile Icon">
+                    <p class="program_name">Profile</p>
                 </div>
             </div>
-            <div class="d-flex align-items-center mb-3">
-                <div id="users" class="icon text-center">
-                    <div class="icon-content mt-2">
-                        <img class="user-ico" src="/static/frontend/assets/personBlack.svg" alt="Users Icon">
-                        <p class="program_name">Users</p>
-                    </div>
+        </div>
+        <div class="d-flex align-items-center mb-3">
+            <div id="EditProfile" class="icon text-center">
+                <div class="icon-content mt-2">
+                    <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="EditProfile Icon">
+                    <p class="program_name">Edit Profile</p>
                 </div>
             </div>
-            <div class="d-flex align/Users/alpicard/Desktop/Transcendence-items-center mb-3">
-                <div id="game"  class="icon text-center">
-                    <div class="icon-content mt-2">
-                        <img class="game-ico" src="/static/frontend/assets/pong_images/pong_image1.svg" alt="Pong Icon">
-                        <p class="program_name">Pong</p>
-                    </div>
+        </div>
+        <div class="d-flex align-items-center mb-3">
+            <div id="users" class="icon text-center">
+                <div class="icon-content mt-2">
+                    <img class="user-ico" src="/static/frontend/assets/personBlack.svg" alt="Users Icon">
+                    <p class="program_name">Users</p>
                 </div>
             </div>
-            <div class="d-flex align-items-center">
-                <div id="pool" class="icon text-center">
-                    <div class="icon-content mt-2">
-                        <img class="pool-ico" src="/static/frontend/assets/ttt_images/ttt_image.svg" alt="TTT Icon">
-                        <p class="program_name">TTT</p>
-                    </div>
+        </div>
+        <div class="d-flex align-items-center mb-3">
+            <div id="game" class="icon text-center">
+                <div class="icon-content mt-2">
+                    <img class="game-ico" src="/static/frontend/assets/pong_images/pong_image1.svg" alt="Pong Icon">
+                    <p class="program_name">Pong</p>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex align-items-center">
+            <div id="pool" class="icon text-center">
+                <div class="icon-content mt-2">
+                    <img class="pool-ico" src="/static/frontend/assets/ttt_images/ttt_image.svg" alt="TTT Icon">
+                    <p class="program_name">TTT</p>
                 </div>
             </div>
         </div>
     </div>
-    
+</div>
 
-    <div class="system-bar fixed-bottom">
-        <div class="current-time" id="current-time"></div>
-        <div class="menu-icon" id="menu-icon" > 
-            <div class="menuContainer" id="menuContainer">
-            <img id="menuLogo" class="menuLogo" src="/static/frontend/assets/personBlue.svg"  alt="Menu">
-            </div>
-        </div>
-        <div class="popup">
-            <span class="popuptext" id="myPopup">New friend request has arrived</span>
-        </div>
+<div class="system-bar fixed-bottom">
+    <div class="current-time" id="current-time"></div>
+
+        <label for="logoutCheckbox">
+            <img src="/static/frontend/assets/logout.svg" class="round " alt="Log Out">
+        </label>
+  
+    <div class="popup">
+        <span class="popuptext" id="myPopup">New friend request has arrived</span>
     </div>
+</div>
 
-    <nav class="menu" id="menu">
-        <ul>
-            <li><a id="mainMenuBtn" href="">Main menu</a></li>
-            <li><a id="editProfileBtn" href="#/edit-profile">Edit profile</a></li>
-            <li><a id="leaderboardBtn">Leaderboard</a></li>
-            <li><img src="/static/frontend/assets/logout.svg" class="btn btn-primary logOut" alt="Log Out"></li>
-        </ul>
-    </nav>
+<!-- <nav class="menu" id="menu">
+    <ul>
+        <li><a id="mainMenuBtn" href="">Main menu</a></li>
+        <li><a id="editProfileBtn" href="#/edit-profile">Edit profile</a></li> -->
+        <!-- <li><a id="leaderboardBtn">Leaderboard</a></li> 
+       
+        <li>
+    <label for="logoutCheckbox">
+        <img src="/static/frontend/assets/logout.svg" class="btn btn-primary " alt="Log Out">
+    </label>
+</li>
+      
+    </ul>
+</nav> -->
+
+
+<!-- Case à cocher pour contrôler l'affichage du modal -->
+<input type="checkbox" id="logoutCheckbox" class="logout-checkbox">
+
+<!-- Modal de confirmation de déconnexion -->
+<div class="modal">
+    <div class="modal-content">
+        <p>Are you sure you want to log out?</p>
+        <a alt= "log Out" class="modal-button logOut">Yes</a>
+        <label for="logoutCheckbox" class="modal-button">No</label>
+    </div>
 </div>
