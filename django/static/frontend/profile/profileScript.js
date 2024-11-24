@@ -14,41 +14,10 @@ async function fetchUserProfile() {
         document.getElementById('userAvatar').src = data.current_user.avatar_url || '/static/images/logo.png';
         document.getElementById('username').textContent = data.current_user.username;
         document.getElementById('nickname').textContent = data.current_user.nickname;
-        document.getElementById('wins').textContent = data.current_user.wins;
-        document.getElementById('losses').textContent = data.current_user.losses;
-        document.getElementById('tournamentWins').textContent = data.current_user.tournament_wins;
-        document.getElementById('tournamentLosses').textContent = data.current_user.tournament_losses;
-
         // Fetch friends data
         fetchFriends(data.friends);
     } catch (error) {
         console.error('Error fetching user profile:', error);
-    }
-}
-
-
-
-
-async function fetchmatchhistory() {
-    try {
-        const response = await fetch(`/api/match_history/`);
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-
-        document.getElementById('matches_won').innerHTML = data.matches_won.length > 0 
-            ? data.matches_won.map(match => `You won against ${match.loser_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
-            : 'No matches won.';
-
-        document.getElementById('matches_lost').innerHTML = data.matches_lost.length > 0 
-            ? data.matches_lost.map(match => `You lost to ${match.winner_nickname} at ${match.game} on ${match.match_date}`).join('<br>')
-            : 'No matches lost.';
-
-    } catch (error) {
-        console.error('Error fetching match history:', error);
     }
 }
 
@@ -121,7 +90,6 @@ async function removeFriend(event) {
 
 function init() {
     fetchUserProfile();
-    fetchmatchhistory();
 }
 
 // Set up the window.onload event to call init

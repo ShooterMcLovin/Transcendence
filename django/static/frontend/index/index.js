@@ -98,6 +98,9 @@ export function openWindow(e) {
     } else if (parentIcon.id === 'EditProfile') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('EditProfile');
+    } else if (parentIcon.id === 'matchHistory') {
+        document.getElementById('welcomeText').style.display = 'none';
+        createWindow('matchHistory');
     } else if (parentIcon.id === 'pool') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Pool');
@@ -142,10 +145,15 @@ function setWindowContent(uniqueId, customData = null) {
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/profileScript.js';
             break;
-        case 'myWindowEditProfile':
+        case 'myWindowEditProfile': // update password
             htmlUrl = '/static/frontend/editProfile/updateProfile.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/editProfile/updatePassword.js';
+            break;
+        case 'myWindowmatchHistory': // matches history
+            htmlUrl = '/static/frontend/profile/matchHistory/matchHistory.html';
+            cssUrl = '/static/frontend/profile/profileStyle.css';
+            scriptUrl = '/static/frontend/profile/matchHistory/matchHistory.js';
             break;
         case 'myWindowUsers':
             htmlUrl = '/static/frontend/Users/Users.html';

@@ -31,7 +31,7 @@ export async function userList() {
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-3">
                     ${user.username !== currentUser ? `
-                        <button class="btn btn-primary" onclick="window.addFriend(${user.id}, event)">Add Friend</button>
+                        <button class="btn btn-primary btn-sm" onclick="window.addFriend(${user.id}, event)">Add Friend</button>
                     ` : ''}
                 </div>
             </li>

@@ -263,7 +263,7 @@ def add_friend(request, user_id):
             defaults={'is_friend': True}
         )
 
-        if created:
+        if created and created_reverse:
             return Response({'message': f"You are now friends with {friend.nickname}."}, status=status.HTTP_201_CREATED)
         else:
             if friendship.is_friend:

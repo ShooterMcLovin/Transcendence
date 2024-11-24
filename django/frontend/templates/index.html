@@ -42,10 +42,11 @@
                     <div id="login-error" class="mt-2 text-danger"></div>
                 </form>
             </div>
-            
+        </div>
+        <div class="box p-1" id="registration-form" display="none"> 
             <div id="registration-form" class="mt-5" display="none">
                 <h2>Register</h2>
-                <form id="registration-form">
+                <form>
                     <div class="form-group">
                         <label for="reg-username">Username</label>
                         <input type="text" class="form-control" id="reg-username" required>
@@ -67,6 +68,7 @@
                 </form>
             </div>
         </div>
+
         <link rel="stylesheet" href="/static/css/auth/auth.css">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
@@ -77,7 +79,7 @@
         
     </div>
     
-    <div class="fixed-bottom text-center mb-3"> Hi {{user.username}} !!
+    <div class="fixed-bottom text-center ml-5"> Hi {{user.username}} !!
         
     </div>
 </body>
