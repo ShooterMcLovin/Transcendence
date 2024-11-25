@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        /* Styles pour le menu overlay */
+        .avatar-menu {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            z-index: 1000;
+        }
+
+        .menu-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .menu-avatar:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="row" id="user_info">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">My Profile</h2>
+        </div>  
+
+        <!-- Section de l'avatar -->
+        <div class="col-md-4">
+            <div class="text-center mb-4">
+                <img id="userAvatar" src="/static/images/default-avatar.png" alt="Avatar" class="img-fluid rounded-circle" style="width: 7vw; height: 7vh; cursor: pointer;" onclick="showMenu()" />
+            </div>
+        </div>
+
+        <!-- Menu des options d'images -->
+        <div id="avatarMenu" class="avatar-menu" style="display: none;">
+            <p>Choisissez un avatar :</p>
+            <img src="/static/images/avatar1.png" alt="Avatar 1" class="menu-avatar" onclick="selectAvatar('/static/images/avatar1.png')" />
+            <img src="/static/images/avatar2.png" alt="Avatar 2" class="menu-avatar" onclick="selectAvatar('/static/images/avatar2.png')" />
+            <img src="/static/images/avatar3.png" alt="Avatar 3" class="menu-avatar" onclick="selectAvatar('/static/images/avatar3.png')" />
+            <!-- Ajoutez d'autres images selon les besoins -->
+            <button onclick="hideMenu()">Fermer</button>
+        </div>
+
+        <div id="EditProfile" class="icon text-center">
+            <div class="icon-content mb-14">
+                <img class="profile-ico" src="/static/frontend/assets/personBlue.svg" alt="EditProfile Icon">
+                <p class="program_name">Change Password</p>
+            </div>
+        </div>
+
+        <!-- Vertical Separator -->
+        <div class="col-md-1 d-none d-md-block">
+            <div class="vertical-separator"></div>
+        </div>
+        
+        <!-- Display Username/Nickname -->
+        <div class="col-md-3">
+            <div class="pr-5 pt-5">
+                <p><strong>Username:</strong> <span id="username"></span></p>
+                <p><strong>Nickname:</strong> <span id="nickname"></span></p>
+            </div>
+        </div>
+    
+        <!-- Vertical Separator -->
+        <div class="col-md-1 d-none d-md-block">
+            <div class="vertical-separator"></div>
+        </div>
+    
+        <!-- FIX FROM HERE --->
+        <div class="col-md-3">
+            <h4 class="text-center mb-1">Friends</h4>
+            <br>
+            <div class="text-center mb-3" id="friendsList">
+                <!-- Friends will be populated here via JavaScript -->
+            </div> 
+        </div>
+    </div>
+    
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
+    
+    <!-- Stats Section -->
+    <h4 class="text-center mb-3">STATS</h4>
+    
+    <div class="p-1 rounded" id="statsSection">
+        <p><strong>Wins:</strong> <span id="wins"></span></p>
+        <p><strong>Losses:</strong> <span id="losses"></span></p>
+        <p><strong>Tournament Wins:</strong> <span id="tournamentWins"></span></p>
+        <p><strong>Tournament Losses:</strong> <span id="tournamentLosses"></span></p>
+    </div>  
+    
+    
+    <!-- Match History -->
+    <div>
+        <h3>Matches Won</h3>
+        <div id="matches_won"></div>
+        
+        <h3>Matches Lost</h3>
+        <div id="matches_lost"></div>
+        
+        <!-- Uncomment and add tournaments if needed -->
+        <!-- <h3>Tournaments</h3>
+        <div id="tournaments"></div> -->
+    </div>
+
+    <!-- Horizontal Separator -->
+    <hr class="my-4 bg-light">
+
+    <script>
+        function showMenu() {
+            document.getElementById("avatarMenu").style.display = "block";
+        }
+
+        function hideMenu() {
+            document.getElementById("avatarMenu").style.display = "none";
+        }
+
+        function selectAvatar(imageSrc) {
+            const userAvatar = document.getElementById("userAvatar");
+            userAvatar.src = imageSrc;
+            hideMenu(); // Ferme le menu après la sélection
+        }
+    </script>
+
+    <!-- Script externe -->
+    <script src="/django/static/frontend/profile/profileScript.js"></script>
+
+</body>
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+</head>
+<div class="row mshide" id="user_info">
+    <div class="col-md-12 mt-5 text-center" id="profileTitle">
+    </div>
+    <div class="col-md-6 cuadroProfile">
+        <ul class="nav nav-tabs" id="profileTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-list="stats">Stats</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-list="matches">Matches</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-list="tournaments">Tournaments</a>
+            </li>
+        </ul>
+        <div class="userInfo vertical-center">
+            <div id="secStats" class="fullest tab-content active">
+                <table table class="fullest">
+                    <tr class="mb-5">
+                        <td class="text-start">Pong Wins:</td>
+                        <td class="d-flex justify-content-end" id="WINS_PONG"></td>
+                    </tr>
+                    <tr class="mb-5">
+                        <td class="text-start">Pong Loses:</td>
+                        <td class="d-flex justify-content-end" id="LOSSES_PONG"></td>
+                    </tr>
+                    <tr class="mb-5">
+                        <td class="text-start">Pong elo:</td>
+                        <td class="d-flex justify-content-end" id="ELO_PONG"></td>
+                    </tr>
+                    <tr class="mb-5">
+                        <td class="text-start">Pool Wins:</td>
+                        <td class="d-flex justify-content-end" id="WINS_POOL"></td>
+                    </tr>
+                    <tr class="mb-5">
+                        <td class="text-start">Pool Loses:</td>
+                        <td class="d-flex justify-content-end" id="LOSSES_POOL"></td>
+                    </tr>
+                    <tr class="mb-5">
+                        <td class="text-start">Pool elo:</td>
+                        <td class="d-flex justify-content-end" id="ELO_POOL"></td>
+                    </tr>
+                </table>
+            </div>
+            <div id="secMatches" class="fullest tab-content mshide">
+                <ul id="profileMatchesList" class="scrollable-list list-unstyled mt-2 mb-0"></ul>
+            </div>
+            <div id="secTournaments" class="fullest tab-content mshide">
+                <ul id="profileTournamentList" class="scrollable-list list-unstyled mt-2 mb-0"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 text-center ProfilePicture">
+        <img id="userPhoto" class="userPhoto" src='./assets/face.jpg' alt="Profile picture">
+    </div>
+</div>
+
+<div class="row history mshide" id="tournamentHistory">
+    <div class="col-md-12 text-center">
+        <br>
+        <h1> Tournament History </h1>
+    </div>
+    <div class="col-md-12" id="tournamentCanva2">
+    </div>
+</div> -->
+<!-- <script>
+    // Fonction pour afficher/masquer le menu
+    function toggleMenu() {
+        const menu = document.getElementById("avatarMenu");
+        menu.style.display = menu.style.display === "none" ? "block" : "none";
+    }
+
+    // Fonction pour sélectionner un avatar
+    function selectAvatar(imageSrc) {
+        const userAvatar = document.getElementById("userAvatar");
+        userAvatar.src = imageSrc;
+        toggleMenu(); // Ferme le menu après la sélection
+    }
+</script> -->

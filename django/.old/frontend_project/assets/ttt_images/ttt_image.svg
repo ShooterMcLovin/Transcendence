@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 100 100" fill="#C0C0C0">
+  <!-- Horizontal Lines -->
+  <line x1="10" y1="30" x2="90" y2="30" stroke="#C0C0C0" stroke-width="4" />
+  <line x1="10" y1="60" x2="90" y2="60" stroke="#C0C0C0" stroke-width="4" />
+  
+  <!-- Vertical Lines -->
+  <line x1="30" y1="10" x2="30" y2="90" stroke="#C0C0C0" stroke-width="4" />
+  <line x1="60" y1="10" x2="60" y2="90" stroke="#C0C0C0" stroke-width="4" />
+  
+  <!-- "X" in the top-left cell -->
+  <line x1="15" y1="15" x2="25" y2="25" stroke="#C0C0C0" stroke-width="4" />
+  <line x1="25" y1="15" x2="15" y2="25" stroke="#C0C0C0" stroke-width="4" />
+  
+  <!-- "O" in the center cell -->
+  <circle cx="50" cy="50" r="8" stroke="#C0C0C0" stroke-width="4" fill="none" />
+</svg>

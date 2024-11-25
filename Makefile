@@ -35,6 +35,8 @@ fclean: clean
 reset_db: fclean
 	rm -rf postgresql/data
 
+remake: reset_db up
+
 re: down clean up
 
 handle_error:

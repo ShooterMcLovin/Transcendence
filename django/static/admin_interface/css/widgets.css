@@ -40,6 +40,19 @@
 }
 /* end-fix */
 
+/* fix user reset password form */
+.admin-interface #user_form #id_password p bdi::after {
+    content: "";
+    display: block;
+}
+
+.admin-interface #user_form #id_password a.button {
+    display: inline-block;
+    padding: 6px 12px;
+    text-decoration: none !important;
+}
+/* end-fix */
+
 /* fixed time widget header border radius */
 .admin-interface .clockbox.module h2 {
     border-bottom-left-radius: 0;
@@ -64,8 +77,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 34px;
-    height: 34px;
+    width: 28px;
+    height: 32px;
+}
+.admin-interface .related-widget-wrapper .related-widget-wrapper-link:first-of-type {
+    margin-left: 8px;
+}
+.admin-interface .related-widget-wrapper .related-widget-wrapper-link:hover {
+    filter: brightness(80%);
 }
 .admin-interface .related-widget-wrapper .related-widget-wrapper-link img {
     width: 16px;

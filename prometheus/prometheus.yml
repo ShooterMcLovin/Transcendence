@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - 'alertmanager:9093'
+
+rule_files:
+  - './alert_rules.yml'
+
+scrape_configs:
+  - job_name: 'django-prometheus'
+    static_configs:
+      - targets: ['web:8000']
+      
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:9092']
+
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres-exporter:9187']
+
+
+

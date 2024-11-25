@@ -1,0 +1,226 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav {
+    background-color: #444;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+main {
+    padding: 20px;
+}
+
+body{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #1c1c1c;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #FFA500;
+}
+
+.box{
+    position: relative;
+    max-width: 400px;
+    background: #1c1c1c;
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 20px auto;
+}
+.box::before{
+    content: '';
+    position: absolute;
+    overflow: hidden;
+    top: -50%;
+    left: -125%;
+    width: 510px;
+    height: 843px;
+    background: linear-gradient(0deg, transparent, #ffa60056, #ffa60091);
+    transform-origin: bottom right;
+    animation: animate 20s linear infinite;
+    pointer-events: none;
+}
+
+.box::after{
+    content: '';
+    position: absolute;
+    overflow: hidden;
+    top: -50%;
+    left: -25%;
+    width: 510px;
+    height: 843px;
+    background: linear-gradient(0deg, transparent, #ffa60052, #ffa60099);
+    transform-origin: bottom right;
+    animation: animate 20s linear infinite;
+    animation-delay: -20s;
+    pointer-events: none;
+}
+@keyframes animate{
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+.form{
+    position: relative;
+    inset: 2px;
+    background: #28292d;
+    border-radius: 8px;
+    z-index: 10;
+    padding: 50px 40px;
+    display: flex;
+    flex-direction: column;
+}
+.form h2{
+    color: #45f3ff;
+    font-family: Verdana;
+    font-weight: 500;
+    
+    text-align: center;
+}
+.form-control {
+    background-color: #28292d;
+    border: none;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    outline: none !important; 
+    border-bottom: 1px solid #ffffff;
+    color: #ffffff !important;
+    max-width: 400px; /* Limit the width of the input fields */
+    
+}
+.form-control:focus {
+    background-color: #28292d;
+    color: #9ff9ff !important;
+}
+.form-control:hover {
+    border-color: #45f3ff;
+}
+
+.inputBox{
+    position: relative;
+    width: 300px;
+    margin-top: 35px;
+}
+
+.inputBox input{
+    position: relative;
+    width: 100%;
+    padding: 20px 10px 10px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #23242a;
+    font-size: 1em;
+    letter-spacing: 0.05em;
+    z-index: 10;
+}
+
+.inputBox span
+{
+    position: absolute;
+    left: 0;
+    padding: 20px 10px 10px;
+    font-size: 1em;
+    color: #8f8f8f;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+    transition: 0.5s;
+}
+
+.inputBox input:valid ~ span,
+.inputBox input:focus ~ span{
+    color: #45f3ff;
+    transform: translateX(-0px) translateY(-34px);
+    font-size: 0.75em;
+}
+.inputBox i{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 2px;
+    background: #45f3ff;
+    border-radius: 4px;
+    transition: 0.5s;
+    pointer-events: none;
+    z-index: 9;
+}
+
+.inputBox input:valid ~ i,
+.inputBox input:focus ~ i{
+    height: 44px;
+}
+
+.links{
+    display: flex;
+    justify-content: space-between;
+}
+
+.links a{
+    margin: 10px 0;
+    font-size: 0.75em;
+    color: #8f8f8f;
+    text-decoration: none;
+}
+.links a:hover,
+.links a:nth-child(2){
+    color: #45f3ff;
+}
+
+input[type="submit"]{
+    border: none;
+    outline: none;
+    background: #45f3ff;
+    padding: 11px 25px;
+    width: 100px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.text-center {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically if needed */
+}
+
+.mshide {
+    display: none;
+}
+
+.login-42 {
+    padding: 11px 10px !important;
+}
+
+.login-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+input[type="submit"]:active{
+    opacity: 0.8;
+}

@@ -1,0 +1,365 @@
+/* Styles de base pour le corps de la page */
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #28292d;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    cursor: url('static/frontend/assets/cursor3.svg'), auto !important;
+    overflow: hidden;
+    background-image: url('static/frontend/assets/space.gif'); /* Image de fond */
+    background-position: center; /* Centrage de l'image */
+    background-repeat: no-repeat; /* Pas de répétition */
+    background-size: cover; /* Mise à l'échelle */
+    user-select: none;
+}
+
+/* Conteneur principal */
+main {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.div-table-container {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Style des images d'utilisateur dans un tableau */
+.div-table-container #user-table-body img {
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+}
+
+/* Barre système en bas */
+.system-bar {
+    background-color: #333;
+    color: #fff;
+    /* padding: 1px; */
+    /* position: fixed; */
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+   
+}
+
+.current-time {
+    float: right;
+    color: #C0C0C0;
+}
+
+/* .menuLogo {
+    cursor:none; 
+    width: 25px;
+    height: 25px;
+    z-index: 1;
+}
+
+.menu-icon {
+    z-index: 9999;
+    width: 30px; /* Ajustez la taille selon vos besoins */
+    /* height: 30px;
+    cursor: pointer; /* Change le curseur pour indiquer que c'est cliquable */
+
+.menuContainer {
+    width: 35px;
+    height: 30px;
+    padding-left: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+}
+
+/* Styles de menu */
+.menu {
+    display: none;
+    flex-direction: column;
+    justify-content: flex-end;
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    background-color: #333;
+    color: #fff;
+    max-height: 80vh;
+    overflow-y: auto;  
+    z-index: 9998;
+
+}
+
+.menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.menu ul li {
+    padding: 10px;
+}
+
+.menu ul li a {
+    color: #C0C0C0;
+    text-decoration: none;
+}
+
+/* Icônes de profil, utilisateur, etc. */
+/* Colonne gauche pour les icônes */
+/* Colonne gauche pour les icônes */
+.desktop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 80vh ;               /* Prend toute la hauteur de la fenêtre */
+    width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
+    background-color: rgba(51, 51, 51, 0.0); /* Couleur de fond semi-transparente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* padding-top: 7vh; */
+    overflow-y: auto;             /* Barre de défilement si nécessaire */
+    z-index: 1000;                /* S'assure que la colonne reste au-dessus des autres éléments */
+}
+
+
+/* Alignement des icônes dans la colonne */
+.icon {
+    /* margin-bottom: 20px; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+
+/* Style du texte sous chaque icône */
+.program_name {
+    font-size: 0.8rem;       /* Taille de texte ajustée */
+    color: #C0C0C0;          /* Couleur du texte */
+}
+
+/* Assure que la colonne de gauche ne bouge pas avec le contenu principal
+.container-fluid {
+    margin-left: 7vw;       /* Compense la largeur de la colonne de gauche */
+/* } */ 
+
+.icon:hover {
+    background-color: #C0C0C033;
+}
+
+.profile-ico, .user-ico, .chat-ico, .terminal-ico, .game-ico, .pool-ico, .browser-ico {
+    height: 7vh;  /* La taille est maintenant relative à la largeur de la fenêtre */
+    width: 7vw;   /* 7vw est 7% de la largeur de la fenêtre */
+    z-index: 1000;
+}
+
+
+/* Styles supplémentaires pour la sélection et le nom de programme */
+.program_name {
+    color: #C0C0C0;
+}
+
+.selected_program {
+    background-color: #C0C0C033 !important;
+}
+
+.logOut {
+    background-color: transparent;
+    height: 50px;
+    width: 50px;
+    border: none;
+}
+
+.logOut:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+/* Styles pour la fenêtre */
+.window {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+      text-align: center;
+    /* border-radius: 10px; */
+    /* border: none; */
+
+    /* box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.0), -1px 1px 4px rgba(0, 0, 0, 0.0); */
+    /* background: transparent; */
+    background: rgba(51, 51, 51, 0.0);
+    left: 50%; 
+    /* bottom: 7vw; */
+    top:50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto; 
+    z-index: 2;
+}
+
+.window-content {
+     background: #0000006a;
+    /* color: #C0C0C0;  */
+    height: auto ;
+
+    margin-left: 15vw;
+    margin-right: 15vw;
+    margin-bottom: 60px;
+    margin-top: 7vw;
+
+    /* font-family: 'Courier New', Courier, monospace; */
+    /* padding: 5px; */
+    overflow-y: auto; 
+     z-index: 1;
+
+}
+
+/* En-tête de la fenêtre */
+.window-top, .window-top-no-bind {
+    background: #0000006a;
+    cursor: move;
+    text-align: right;
+    height: 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.0);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    padding: 5px;
+} 
+
+/* Boutons d'interface de la fenêtre */
+.round {
+    /* height: 25px; */
+    width: 30px;
+    margin: 10px;
+    /* border: none; */
+    /* text-decoration: none; */
+    cursor: pointer;
+    /* border-radius: 4px; */
+}
+
+.green {
+    background-color: limegreen;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+/* .red {
+    cursor: pointer;
+    background-color: red;
+} */
+
+/* Styles de chargement */
+.loading {
+    height: 45vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.LoadingImg {
+    max-width: 100%;
+    max-height: 100%;
+    animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Popup de notification */
+.popup {
+    cursor: pointer;
+}
+
+.popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px 0;
+    position: absolute;
+    bottom: 125%;
+    left: 20%;
+    margin-left: -80px;
+}
+
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.popup .show {
+    visibility: visible;
+    animation: fadeIn 1s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Masquer la case à cocher */
+.logout-checkbox {
+    display: none;
+}
+
+/* Styles pour le modal */
+.modal {
+
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background-color: #0d0b0b;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 4px;
+}
+
+.modal-button:hover {
+    background-color: #0056b3;
+}
+
+/* Affiche le modal lorsque la case à cocher est cochée */
+.logout-checkbox:checked ~ .modal {
+    display: flex;
+}
+

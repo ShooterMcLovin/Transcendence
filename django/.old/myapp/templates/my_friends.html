@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Friends{% endblock %}
+{% block extra_css %}
+<style>
+    .der{
+
+    }
+    .online{
+        color: lightgreen
+    }
+    .offline{
+        color: lightcoral
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container mt-5 custom-text-color">
+    <h2 class="text-center mb-4">Friends</h2>
+    <div class="user-list-container bg-dark p-2 rounded">
+        <ul class="list-group">
+            {%if friends%}
+            {% for friend in friends %}
+            {%if friend.is_active%}
+            <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center justify-content-center col-md-2">
+                    <a href="{% url 'user_profile' friend.id %}" class="btn btn-info"><img src="{% if friend.avatar_url %}{{ friend.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;"></a>
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-2">
+                    {{ friend.nickname }}
+                </div>
+                {%if friend.is_online %}
+                <div class="d-flex align-items-center justify-content-center online col-md-2">
+                    Online
+                </div>
+                {% else %}
+                <div class="d-flex align-items-center justify-content-center offline col-md-2">
+                    Offline
+                </div>
+                {% endif %}
+                <div class="d-flex align-items-center justify-content-center col-md-3">
+                    <a href="{% url 'ttt' friend.id %}" class="btn btn-primary">Challenge</a>
+                    
+                </div>
+                <div class="d-flex align-items-center justify-content-center col-md-3">
+                    <a href="{% url 'remove_friend' friend.id %}" class="btn btn-danger">Remove Friend</a>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            You have no friends
+            <div class="row ">
+                <div class="col-md-5">
+                </div>
+                <a href="{% url 'user_list' %}" class="btn btn-primary center col-md-2">Find Friends</a>
+            </div>
+            {% endif %}
+        </ul>
+    </div>
+    <h2 class="text-center mt-4">Challenges</h2>
+    <div class="user-list-container bg-dark p-2 rounded">
+        {%if challenges or pending_challenges%}
+        {% for challenge in challenges %}
+        {%if not challenge.is_accpted%}
+        <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center justify-content-center col-md-2">
+                <img src="{% if challenge.challenger.avatar_url %}{{ challenge.challenger.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
+            </div>
+            <div class="d-flex align-items-center justify-content-center col-md-2">
+                <a href="{% url 'user_profile' challenge.challenger.id %}" class="btn btn-info">{{ challenge.challenger.nickname }}</a>
+            </div>
+            <div class="d-flex align-items-center justify-content-center col-md-8">
+                {%if not challenege.is_accepted%}
+                <a href="{% url 'accept_challenge' challenge.challenger.id %}" class="btn btn-success">Accept Challenge</a>
+                {% endif %}
+            </div>
+        </li>
+        {% endif %}
+        {% endfor %}
+        {% for pending_challenge in pending_challenges %}
+        <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center justify-content-center col-md-2">
+                <img src="{% if pending_challenge.challenged.avatar_url %}{{ pending_challenge.challenged.avatar_url }}{% else %}{% static 'images/logo.png' %}{% endif %}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
+            </div>
+            <div class="d-flex align-items-center justify-content-center col-md-2">
+                <a href="{% url 'user_profile' pending_challenge.challenged.id %}" class="btn btn-info">{{ pending_challenge.challenged.nickname }}</a>
+            </div>
+            <div class="d-flex align-items-center justify-content-center col-md-8">
+                {%if not pending_challenege.is_accepted%}
+                {{pending_challenge.challenged.nickname }} Has not accepted your challenge yet
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+        {% else %}
+        You have no challenges
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

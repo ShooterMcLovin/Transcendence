@@ -6,6 +6,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends openssl && \
     rm -rf /var/lib/apt/lists/*
 # Create necessary directories for SSL certificates
+RUN rm -rf /etc/nginx/ssl
 RUN mkdir -p /etc/nginx/ssl
 
 # Generate self-signed SSL certificates

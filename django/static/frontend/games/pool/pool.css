@@ -1,0 +1,148 @@
+h1 { 
+	color: orangered; 
+	margin-bottom: -5px; 
+} 
+
+p { 
+    margin-bottom: -10px; 
+} 
+
+.ui { 
+    display: flex; 
+	flex-direction: column; 
+	align-items: center; /* Center items horizontally */
+} 
+
+.row { 
+    display: flex; 
+	justify-content: center; /* Center items in each row */
+} 
+
+.cell { 
+    border: none; 
+	width: 80px; 
+	height: 80px; 
+	display: flex; 
+	align-items: center; 
+	justify-content: center; 
+	font-size: 48px; 
+	text-align: center; 
+	cursor: pointer; 
+	color: #FFA500; 
+	background: radial-gradient(circle, #333333, #333333);
+    transition: background 0.3s; /* Smooth background transition */
+} 
+
+.cell:hover {
+    background: radial-gradient(circle, #444444, #333333); /* Change on hover */
+}
+
+.cell:active { 
+    outline: none; 
+    background: radial-gradient(circle, #222222, #111111); /* Darker on click */
+} 
+
+#b1 { 
+	border-bottom: 1px solid gray; 
+	border-right: 1px solid gray; 
+} 
+
+#b2 { 
+	border-bottom: 1px solid gray; 
+	border-right: 1px solid gray; 
+	border-left: 1px solid gray; 
+} 
+
+#b3 { 
+	border-bottom: 1px solid gray; 
+	border-left: 1px solid gray; 
+} 
+
+#b4 { 
+	border-top: 1px solid gray; 
+	border-bottom: 1px solid gray; 
+	border-right: 1px solid gray; 
+} 
+	
+#b5 { 
+	border: 1px solid gray; 
+} 
+
+#b6 { 
+	border-top: 1px solid gray; 
+	border-bottom: 1px solid gray; 
+	border-left: 1px solid gray; 
+} 
+
+#b7 { 
+	border-top: 1px solid gray; 
+	border-right: 1px solid gray; 
+} 
+
+#b8 { 
+	border-top: 1px solid gray; 
+	border-right: 1px solid gray; 
+	border-left: 1px solid gray; 
+} 
+
+#b9 { 
+	border-top: 1px solid gray; 
+	border-left: 1px solid gray; 
+} 
+
+#lockPlayers {
+    box-sizing: border-box; 
+	width: 95px; 
+	height: 40px; 
+	border: 1px solid grey; 
+	margin-left: 55px; 
+	border-radius: 8px; 
+	font-family: Verdana, Geneva, Tahoma, sans-serif; 
+	background-color: whitesmoke; 
+	color: #FFA500; 
+	font-size: 20px; 
+	cursor: pointer; 
+	transition: background 0.3s; /* Smooth background transition */
+}
+
+#lockPlayers:hover {
+    background-color: #f0f0f0; /* Lighten on hover */
+}
+
+#but { 
+	box-sizing: border-box; 
+	width: 95px; 
+	height: 40px; 
+	border: 1px solid grey; 
+	margin-left: 55px; 
+	border-radius: 8px; 
+	font-family: Verdana, Geneva, Tahoma, sans-serif; 
+	background-color: whitesmoke; 
+	color: #FFA500; 
+	font-size: 20px; 
+	cursor: pointer; 
+	transition: background 0.3s; /* Smooth background transition */
+} 
+
+#but:hover {
+    background-color: #f0f0f0; /* Lighten on hover */
+} 
+
+#print { 
+	font-family: Verdana, Geneva, Tahoma, sans-serif; 
+	color: orangered; 
+	font-size: 20px; 
+} 
+
+#main { 
+	text-align: center; 
+} 
+
+#ins { 
+	font-family: Verdana, Geneva, Tahoma, sans-serif; 
+	color: #FFA500; 
+}
+
+.text-center {
+    text-align: center; /* Center text */
+}

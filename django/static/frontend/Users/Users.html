@@ -1,0 +1,22 @@
+
+<body>
+    <div class="container mt-5 custom-text-color">
+        <h2 class="text-center mb-4">Users</h2>
+        <div class="user-list-container bg-dark p-4 rounded">
+            <ul class="list-group" id="user-list">
+                <!-- User list items will be populated here via JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { userList, addFriend, init } from '/static/frontend/Users/userList.js'; // Update with your actual file name
+
+        // Attach addFriend to the window object to make it globally accessible
+        window.addFriend = addFriend;
+
+        // Initialize the user list when the page loads
+        window.onload = init;
+    </script>
+</body>
+</html>

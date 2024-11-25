@@ -26,7 +26,6 @@ if not User.objects.filter(username='$DJANGO_SUPERUSER_USERNAME').exists():
     )
 EOF
 
-# Create a default user if one does not already exist
 echo "Creating default user..."
 python manage.py shell <<EOF
 from django.contrib.auth import get_user_model
@@ -36,11 +35,14 @@ if not User.objects.filter(username='Guest').exists():
         nickname='$DJANGO_GUEST_NICKNAME',
         username='$DJANGO_GUEST_USERNAME',
         email='$DJANGO_GUEST_EMAIL',
-        password='$DJANGO_GUEST_PASSWORD'
+        password='$DJANGO_GUEST_PASSWORD',
+        avatar_url='https://i.ebayimg.com/images/g/TmcAAOSw14tgpDBN/s-l1600.webp'
+    
     )
 EOF
 
 
 # Start Gunicorn server
 echo "Starting Gunicorn server on 0.0.0.0:8000..."
+python manage.py runserver 0.0.0.0:8000
 exec gunicorn trans.wsgi:application --bind 0.0.0.0:8000

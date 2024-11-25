@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg fill="#C0C0C0" width="800px" height="800px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Main complex figure -->
+  <circle cx="16" cy="16" r="10" stroke="#C0C0C0" stroke-width="2" fill="none"/> <!-- Outer silver circle -->
+  <circle cx="16" cy="16" r="5" fill="#C0C0C0"/> <!-- Inner filled silver circle -->
+
+  <!-- Adding an intricate pattern around the main circle -->
+  <path d="M16 15.503A5.041 5.041 0 1 0 16 5.42a5.041 5.041 0 0 0 0 10.083z"/>
+  <path d="M16 2a14 14 0 1 1 0 28 14 14 0 0 1 0-28zm0 2a12 12 0 1 0 0 24 12 12 0 0 0 0-24z" fill="none" stroke="#C0C0C0" stroke-width="1.5"/> <!-- Additional outer line -->
+  
+  <!-- Additional small circles to add complexity -->
+  <circle cx="10" cy="10" r="1" fill="#C0C0C0"/>
+  <circle cx="22" cy="10" r="1" fill="#C0C0C0"/>
+  <circle cx="10" cy="22" r="1" fill="#C0C0C0"/>
+  <circle cx="22" cy="22" r="1" fill="#C0C0C0"/>
+
+  <!-- Centerpiece decorative pattern -->
+  <path d="M16 17.718c-3.418 0-5.5 1.939-5.5 2.75v2h11v-2c0-.811-2.082-2.75-5.5-2.75z" fill="none" stroke="#C0C0C0" stroke-width="1.5"/>
+</svg>
