@@ -7,7 +7,7 @@ from django.templatetags.static import static
 
 
 class CustomUser(AbstractUser):
-    nickname = models.CharField(max_length=5, blank=True, null=True,unique=True)
+    nickname = models.CharField(max_length=5, blank=False, null=False,unique=True)
     wins = models.PositiveIntegerField(default=0)  # Counter for wins
     losses = models.PositiveIntegerField(default=0)  # Counter for losses
     tournament_wins = models.PositiveIntegerField(default=0)  # Counter for tournament wins
@@ -57,7 +57,11 @@ class CustomUser(AbstractUser):
         """Return the URL of the user's avatar or a default image."""
         if self.avatar_url:
             return self.avatar_url
-        return static('images/42-logo.png')    
+        return static('images/42-logo.png')   
+     
+    def get_nickname(self):
+        return self.nickname
+
 
 class Match(models.Model): 
     winner = models.ForeignKey(CustomUser, related_name='won_matches', on_delete=models.CASCADE)

@@ -19,9 +19,9 @@ export async function userList() {
         userListElement.innerHTML = users.map(user => `
             <li class="list-group-item bg-secondary text-light d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center justify-content-center col-md-2">
-                    <a href="/user_profile/${user.id}" class="btn btn-link">
+                    
                         <img src="${user.avatar_url || '/static/images/logo.png'}" alt="Avatar" class="img-fluid rounded-circle" style="width: 35px; height: 35px;">
-                    </a>
+              
                 </div>
                 <div class="d-flex align-items-center justify-content-center col-md-2 custom-text-color">
                     <strong>${user.nickname || 'No nickname'}</strong>

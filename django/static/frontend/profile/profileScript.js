@@ -41,7 +41,7 @@ function fetchFriends(friends) {
         // Create a remove button
         const removeButton = document.createElement('button');
         removeButton.textContent = 'Remove Friend';
-        removeButton.className = 'remove-friend-button';
+        removeButton.className = 'btn btn-danger btn-sm';
         removeButton.dataset.username = friend.username; // Store the user ID in a data attribute
         removeButton.addEventListener('click', removeFriend); // Attach the event listener        
 

@@ -109,7 +109,7 @@ main {
     position: fixed;
     top: 0;
     left: 0;
-    height: 80vh ;               /* Prend toute la hauteur de la fenêtre */
+    height: 100vh ;               /* Prend toute la hauteur de la fenêtre */
     width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
     background-color: rgba(51, 51, 51, 0.0); /* Couleur de fond semi-transparente */
     display: flex;

@@ -32,4 +32,8 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ['nickname','username', 'avatar_url']  # Add other fields as necessary
+class updateUserProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['nickname', 'avatar_url']  # Add other fields as necessary
    

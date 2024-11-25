@@ -1,0 +1,36 @@
+<div class="mt-5 custom-text-color">
+    <form id="profile-update-form" class="form-group">
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+                <!-- Error message section (will be displayed when there's an error) -->
+                <div class="alert alert-danger" id="error-messages" style="display: none;"></div>
+
+                <h4 class="mt-4 mb-4">Update Profile</h4>
+
+                <!-- Avatar Update Section -->
+                <div class="form-group">
+                    <label for="avatar_url">New Avatar</label>
+                    <input type="url" id="avatar_url" name="avatar_url" class="form-control" placeholder="Enter new avatar URL">
+                    <button type="button" class="btn btn-warning btn-block" id="update-avatar-button">Save Changes</button>
+                </div>
+
+                <!-- Nickname Input Field -->
+                <div class="form-group">
+                    <label for="nickname">Nickname</label>
+                    <input type="text" id="nickname" name="nickname" class="form-control" placeholder="Enter your nickname">
+                    <button type="button" class="btn btn-warning btn-block" id="update-nickname-button">Save Changes</button>
+                </div> 
+
+                <!-- Save Button -->
+
+                <!-- Cancel Button (Navigates to the profile page) -->
+                <button type="button" class="btn btn-outline-danger btn-block" onclick="window.location.href='/'">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Include necessary JavaScript libraries and your custom script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="module" src="/static/profile/updateProfileInfo/updateInfo.js"></script>

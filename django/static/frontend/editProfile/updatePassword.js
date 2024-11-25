@@ -17,7 +17,7 @@ export async function updatePassword() {
             },
             body: JSON.stringify(data),
         });
-
+        
         if (!response.ok) {
             const result = await response.json();
             errorMessages.innerHTML = Object.values(result.errors).join('<br>');

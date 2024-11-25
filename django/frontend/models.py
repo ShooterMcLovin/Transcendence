@@ -59,6 +59,9 @@ class CustomUser(AbstractUser):
         if self.avatar_url:
             return static('images/logo.png')
         return static('images/logo.png')
+    
+    def get_nickname(self):
+        return self.nickname
 
 class Match(models.Model): 
     winner = models.ForeignKey(CustomUser, related_name='won_matches', on_delete=models.CASCADE)

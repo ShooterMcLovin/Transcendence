@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.middleware.csrf import get_token
 from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Match, Tournament, Friendship
-from .forms import CustomUserCreationForm, ChangePasswordForm
+from .forms import CustomUserCreationForm, ChangePasswordForm, AvatarForm, updateUserProfileForm
 import json
 
 
@@ -91,6 +91,16 @@ def check_authentication(request):
 def check_online(request):
     return Response({'isonline': request.user.is_online})
 
+
+@api_view(['GET'])
+def get_avatar(request):
+    user = request.user
+    return Response(user.avatar_url)
+
+@api_view(['GET'])
+def getNick(request):
+    user = request.user
+    return Response(user.nickname)
 
 @api_view(['GET'])
 def getUser(request):
@@ -312,3 +322,41 @@ def update_password(request):
         return Response({'message': 'Password updated successfully.'}, status=200)
     else:
         return Response({'errors': form.errors}, status=400)
+    
+
+@login_required
+@api_view(['POST'])
+def update_avatar(request):
+    avatar_url = request.data.get('avatar_url', '').strip()
+    response_data = {}
+
+    if avatar_url:
+        request.user.avatar_url = avatar_url
+        request.user.save()  # Save the new avatar URL
+        response_data['status'] = 'success'
+        response_data['message'] = 'Avatar updated successfully.'
+        response_data['avatar_url'] = request.user.avatar_url
+    else:
+        response_data['status'] = 'error'
+        response_data['message'] = 'Invalid or empty avatar URL. Avatar not updated.'
+
+    return Response(response_data, status=200 if response_data['status'] == 'success' else 400)
+
+@login_required
+@api_view(['POST'])
+def update_nickname(request):
+    nickname = request.data.get('nickname', '').strip()
+    response_data = {}
+
+    if nickname:
+        # Save the nickname if it's valid
+        request.user.nickname = nickname
+        request.user.save()
+        response_data['status'] = 'success'
+        response_data['message'] = 'Nickname updated successfully.'
+        response_data['nickname'] = request.user.nickname
+    else:
+        response_data['status'] = 'error'
+        response_data['message'] = 'Invalid or empty nickname. Nickname not updated.'
+
+    return Response(response_data, status=200 if response_data['status'] == 'success' else 400)
