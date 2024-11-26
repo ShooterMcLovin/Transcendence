@@ -1,4 +1,4 @@
-import { getCookie } from '/static/js/auth/auth.js';
+import { getCookie } from '/static/frontend/auth/auth.js';
 
 async function fetchUserProfile() {
     try {
@@ -14,6 +14,8 @@ async function fetchUserProfile() {
         document.getElementById('userAvatar').src = data.current_user.avatar_url || '/static/images/logo.png';
         document.getElementById('username').textContent = data.current_user.username;
         document.getElementById('nickname').textContent = data.current_user.nickname;
+        document.getElementById('wins').textContent = data.current_user.wins;
+        document.getElementById('losses').textContent = data.current_user.losses;
         // Fetch friends data
         fetchFriends(data.friends);
     } catch (error) {

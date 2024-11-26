@@ -1,5 +1,5 @@
-import { checkLoginStatus } from "/static/frontend/login/login.js"
-import { loadSignUpPage } from "/static/frontend/sing-up/signup.js"
+// import { checkLoginStatus } from "/static/frontend/login/login.js"
+// import { loadSignUpPage } from "/static/frontend/sing-up/signup.js"
 import { displayLoginOrMenu, displayMenu } from "/static/frontend/components/loader.js"
 
 let debounceTimer;

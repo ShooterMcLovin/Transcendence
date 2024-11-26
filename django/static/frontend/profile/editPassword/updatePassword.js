@@ -1,4 +1,4 @@
-import { getCookie } from '/static/js/auth/auth.js';
+import { getCookie } from '/static/frontend/auth/auth.js';
 
 export async function updatePassword() {
     const form = document.getElementById('password-update-form');

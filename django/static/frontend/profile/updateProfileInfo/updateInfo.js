@@ -1,4 +1,4 @@
-import { getCookie } from '/static/js/auth/auth.js';
+import { getCookie } from '/static/frontend/auth/auth.js';
 
 // Function to update the avatar
 async function updateAvatar() {

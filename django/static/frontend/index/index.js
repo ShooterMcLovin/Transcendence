@@ -1,19 +1,22 @@
-import { loadLoginPage } from "/static/frontend/login/login.js";
-import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
+// import { loadLoginPage } from "/static/frontend/login/login.js";
+import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.js";
 
 let hashCleared = false;
+
+window.addEventListener('popstate', () => createWindow(history.state));
 
 export function loadMainPage() {
 
     let mainPage = document.getElementById("root");
     Promise.all([
         fetch('/static/frontend/index/index.html').then(response => response.text()),
-        fetch('/static/frontend/styles.css').then(response => response.text()),
-        fetch('/static/frontend/index/styleIndex.css').then(response => response.text())
+        fetch('/static/frontend/index/styleIndex.css').then(response => response.text()),
+        fetch('/static/frontend/index/styles.css').then(response => response.text())
     ]).then(([html, css, css2]) => {
         html += `<style>${css}</style>`;
         html += `<style>${css2}</style>`;
         mainPage.innerHTML = html;
+        
         if (!hashCleared) {
             hashCleared = true;
             history.pushState("", document.title, window.location.pathname + window.location.search);
@@ -154,9 +157,9 @@ function setWindowContent(uniqueId, customData = null) {
             scriptUrl = '/static/frontend/profile/updateprofileInfo/updateInfo.js';
             break;
         case 'myWindowEditProfile': // update password
-            htmlUrl = '/static/frontend/editProfile/updateProfile.html';
+            htmlUrl = '/static/frontend/profile/editPassword/updatePassword.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
-            scriptUrl = '/static/frontend/editProfile/updatePassword.js';
+            scriptUrl = '/static/frontend/profile/editPassword/updatePassword.js';
             break;
         case 'myWindowmatchHistory': // matches history
             htmlUrl = '/static/frontend/profile/matchHistory/matchHistory.html';
@@ -165,7 +168,7 @@ function setWindowContent(uniqueId, customData = null) {
             break;
         case 'myWindowUsers':
             htmlUrl = '/static/frontend/Users/Users.html';
-            cssUrl = '/static/css/auth/auth.css';
+            cssUrl = '/static/frontend/auth/auth.css';
             scriptUrl = '/static/frontend/Users/userList.js';
             break;
         case 'myWindowGame':
@@ -186,6 +189,7 @@ function setWindowContent(uniqueId, customData = null) {
         default:
             return;
     }
+    history.pushState({ uniqueId }, '', `#${uniqueId}`);
 
     console.log(`Loading content for: ${uniqueId}`);
    
@@ -241,6 +245,7 @@ export function createWindow(appName, customData = null) {
     }
 
     setWindowContent(uniqueId, customData);
+    console.log(history.state);
 }
 
 function closeWindowById(uniqueId) {

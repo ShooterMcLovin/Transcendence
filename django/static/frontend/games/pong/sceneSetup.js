@@ -33,7 +33,7 @@ const borderGeometry = new THREE.BoxGeometry(10.2, 0.2, 1);
 
 // Créez un chargeur de textures
 const textureLoader = new THREE.TextureLoader();
-const woodTexture = textureLoader.load('/static/wood.jpg');
+const woodTexture = textureLoader.load('/static/frontend/games/pong/wood.jpg');
 const borderMaterial = new THREE.MeshPhysicalMaterial({
     map: woodTexture,
     roughness: 0.6,

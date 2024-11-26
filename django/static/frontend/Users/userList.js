@@ -1,4 +1,4 @@
-import { getCookie, checkUserAuthentication  } from "/static/js/auth/auth.js";
+import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.js";
 
 export async function userList() {
     try {

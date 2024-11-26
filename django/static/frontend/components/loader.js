@@ -1,4 +1,4 @@
-import { checkLoginStatus, loadLoginPage } from "/static/frontend/login/login.js"
+// import { checkLoginStatus, loadLoginPage } from "/static/frontend/login/login.js"
 import { loadMainPage } from "/static/frontend/index/index.js"
 
 export function displayMessage(msg, type, id, color='red') {
