@@ -111,6 +111,8 @@ main {
     left: 0;
     height: 100vh ;               /* Prend toute la hauteur de la fenêtre */
     width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
+    max-width: 100px;                  /* Largeur fixe pour le panneau de gauche */
+    min-width: 45px;
     background-color: rgba(51, 51, 51, 0.0); /* Couleur de fond semi-transparente */
     display: flex;
     flex-direction: column;
@@ -148,8 +150,11 @@ main {
 }
 
 .profile-ico, .user-ico, .chat-ico, .terminal-ico, .game-ico, .pool-ico, .browser-ico {
-    height: 7vh;  /* La taille est maintenant relative à la largeur de la fenêtre */
+    height: flex;  /* La taille est maintenant relative à la largeur de la fenêtre */
+    min-height: 45px;
+    min-width: 45px;
     width: 7vw;   /* 7vw est 7% de la largeur de la fenêtre */
+    max-width: 90px;   /* 7vw est 7% de la largeur de la fenêtre */
     z-index: 1000;
 }
 

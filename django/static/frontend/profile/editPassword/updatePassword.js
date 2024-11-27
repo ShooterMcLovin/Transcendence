@@ -37,8 +37,8 @@ export async function updatePassword() {
     }
 }
 
-export function init() {
-    const button = document.getElementById('update-password-button');
+export async function init() {
+    button = document.getElementById('update-password-button');
     button.addEventListener('click', updatePassword);
 }
 

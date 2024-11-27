@@ -3,7 +3,9 @@ import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.
 
 let hashCleared = false;
 
-window.addEventListener('popstate', () => createWindow(history.state));
+window.addEventListener('popstate', openWindow =>{
+    createWindow(history.state.uniqueId);
+})
 
 export function loadMainPage() {
 
@@ -20,6 +22,7 @@ export function loadMainPage() {
         if (!hashCleared) {
             hashCleared = true;
             history.pushState("", document.title, window.location.pathname + window.location.search);
+            
         }
         setClickEvents();
     }).catch(error => {
@@ -72,14 +75,15 @@ export function setClickEvents() {
     
     document.getElementById('root').addEventListener('click', selectProgram);
     document.getElementById('root').addEventListener('dblclick', openWindow);
-    
+
     // document.getElementById('root').addEventListener('click', closeWindow);
     document.getElementById('root').addEventListener('click', logOut);
 }
 
 export function openWindow(e) {
-   
     var parentIcon = e.target.closest('.icon');
+    console.log("Opening Window: " + parentIcon.id);
+    console.log(e);
     if (!parentIcon) {
         removeClassFromClass('selected_program', 'selected_program');
         return;
@@ -224,6 +228,7 @@ function setWindowContent(uniqueId, customData = null) {
 }
 
 export function createWindow(appName, customData = null) {
+    console.log("Creating Window: " + appName);
     const uniqueId = "myWindow" + appName;
     closeAllWindows(uniqueId);
 
@@ -245,32 +250,9 @@ export function createWindow(appName, customData = null) {
     }
 
     setWindowContent(uniqueId, customData);
-    console.log(history.state);
-}
 
-function closeWindowById(uniqueId) {
-    const windowToClose = document.getElementById(uniqueId);
-    if (windowToClose) {
-        windowToClose.remove();
-    }
-}
-
-function closeWindow(e) {
-    const closeButton = e.target.closest('.round.red');
     
-    if (!closeButton) {
-        console.warn("Aucun bouton de fermeture trouvé !");
-        return;
-    }
-
-    const windowElement = closeButton.closest('.window');
-    if (windowElement) {
-        windowElement.remove();
-    } else {
-        console.warn("Aucune fenêtre associée trouvée !");
-    }
 }
-
 
 // Fonction pour fermer toutes les fenêtres ouvertes
 function closeAllWindows(exceptWindowId = null) {
@@ -283,6 +265,12 @@ function closeAllWindows(exceptWindowId = null) {
     });
 }
 
-
-
-  
+// window.addEventListener('popstate', () => {
+//     const hash = location.hash.slice(1); // Убираем символ `#`
+//     if (hash) {
+//         const uniqueId = hash.replace('myWindow', ''); // Преобразуем hash в appName
+//         createWindow(uniqueId);
+//     } else {
+//         closeAllWindows(); // Закрываем все окна, если hash пуст
+//     }
+// });
