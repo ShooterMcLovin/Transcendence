@@ -8,9 +8,22 @@ window.addEventListener('popstate', openWindow =>{
         createWindow(history.state.uniqueId.replace('myWindow', ''));
 })
 
+window.addEventListener('load', () => {
+    // Убираем hash из URL, если он есть
+    if (window.location.hash) {
+        history.replaceState(null, document.title, window.location.pathname + window.location.search);
+    }
+    // Сбрасываем состояние истории
+    if (history.state) {
+        history.replaceState(null, document.title, window.location.href);
+    }
+    console.log("Page reloaded. History state and hash cleared.");
+    loadMainPage();
+});
+
 export function loadMainPage() {
     console.log("state: " + history.state);
-    if (history.state.uniqueId === undefined || history.length === 0){
+    if (!history.state || !history.state.uniqueId || history.length === 0) {
 
         console.log("loading main page");
         let mainPage = document.getElementById("root");
