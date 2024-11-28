@@ -111,6 +111,7 @@ function lockPlayers() {
     document.querySelectorAll('.player-select').forEach(select => {
         select.disabled = true; // Disable player selection
     });
+    flag = Math.floor(Math.random() * 2); // Example: 0 or 1, you can adjust the logic
     updateTurnMessage(); // Reload the turn message after locking players
 }
 

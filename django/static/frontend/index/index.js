@@ -4,30 +4,38 @@ import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.
 let hashCleared = false;
 
 window.addEventListener('popstate', openWindow =>{
-    createWindow(history.state.uniqueId);
+    if (history.state.uniqueId)
+        createWindow(history.state.uniqueId.replace('myWindow', ''));
 })
 
 export function loadMainPage() {
+    console.log("state: " + history.state);
+    if (history.state.uniqueId === undefined){
 
-    let mainPage = document.getElementById("root");
-    Promise.all([
-        fetch('/static/frontend/index/index.html').then(response => response.text()),
-        fetch('/static/frontend/index/styleIndex.css').then(response => response.text()),
-        fetch('/static/frontend/index/styles.css').then(response => response.text())
-    ]).then(([html, css, css2]) => {
-        html += `<style>${css}</style>`;
-        html += `<style>${css2}</style>`;
-        mainPage.innerHTML = html;
-        
-        if (!hashCleared) {
-            hashCleared = true;
-            history.pushState("", document.title, window.location.pathname + window.location.search);
+        console.log("loading main page");
+        let mainPage = document.getElementById("root");
+        Promise.all([
+            fetch('/static/frontend/index/index.html').then(response => response.text()),
+            fetch('/static/frontend/index/styleIndex.css').then(response => response.text()),
+            fetch('/static/frontend/index/styles.css').then(response => response.text())
+        ]).then(([html, css, css2]) => {
+            html += `<style>${css}</style>`;
+            html += `<style>${css2}</style>`;
+            mainPage.innerHTML = html;
             
-        }
-        setClickEvents();
-    }).catch(error => {
-        console.error('Error loading form:', error);
-    });
+            if (!hashCleared) {
+                hashCleared = true;
+                history.pushState("", document.title, window.location.pathname + window.location.search);
+                
+            }
+            setClickEvents();
+        }).catch(error => {
+            console.error('Error loading form:', error);
+        });
+    }
+    else 
+        createWindow(history.state.uniqueId.replace('myWindow', ''));
+   
 }
 
 function removeClassFromClass(classNameToRemove, classNameToFind) {
@@ -82,7 +90,6 @@ export function setClickEvents() {
 
 export function openWindow(e) {
     var parentIcon = e.target.closest('.icon');
-    console.log("Opening Window: " + parentIcon.id);
     console.log(e);
     if (!parentIcon) {
         removeClassFromClass('selected_program', 'selected_program');
@@ -118,6 +125,8 @@ export function openWindow(e) {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Browser');
     }
+    var uniqueId = parentIcon.id;
+    history.pushState({ uniqueId }, '', `#${uniqueId}`);
 }
 
 function selectProgram(e) {
@@ -193,10 +202,10 @@ function setWindowContent(uniqueId, customData = null) {
         default:
             return;
     }
-    history.pushState({ uniqueId }, '', `#${uniqueId}`);
-
+    
     console.log(`Loading content for: ${uniqueId}`);
-   
+    
+
     Promise.all([
         fetch(htmlUrl).then(response => response.text()),
         fetch(cssUrl).then(response => response.text()),
@@ -209,12 +218,12 @@ function setWindowContent(uniqueId, customData = null) {
             const modifiedSelectors = selectors.split(',').map(selector => {
                 const isClassIDOrElement = /^[.#]?[a-zA-Z][\w-]*$/;
                 return isClassIDOrElement.test(selector.trim()) 
-                    ? `#${uniqueId}-content ${selector.trim()}` 
-                    : selector.trim();
+                ? `#${uniqueId}-content ${selector.trim()}` 
+                : selector.trim();
             }).join(',');
             return `${before} ${modifiedSelectors} {`;
         });
-
+        
         windowElement.innerHTML = `${html}<style>${css}</style>`;
         
         if (typeof javascript.init === 'function') {
@@ -225,6 +234,7 @@ function setWindowContent(uniqueId, customData = null) {
     }).catch(error => {
         console.error('Error loading content:', error);
     });
+    
 }
 
 export function createWindow(appName, customData = null) {
