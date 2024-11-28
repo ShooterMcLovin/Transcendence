@@ -10,7 +10,7 @@ window.addEventListener('popstate', openWindow =>{
 
 export function loadMainPage() {
     console.log("state: " + history.state);
-    if (history.state.uniqueId === undefined){
+    if (history.state.uniqueId === undefined || history.length === 0){
 
         console.log("loading main page");
         let mainPage = document.getElementById("root");
@@ -143,7 +143,8 @@ function selectProgram(e) {
 }
 
 
-function setWindowContent(uniqueId, customData = null) {
+async function setWindowContent(uniqueId, customData = null) {
+    console.log("setting window " + uniqueId);
     const windowElement = document.getElementById(`${uniqueId}-content`);
 
     if (!windowElement) {
@@ -160,6 +161,11 @@ function setWindowContent(uniqueId, customData = null) {
     
     switch (uniqueId) {
         case 'myWindowProfile':
+            htmlUrl = '/static/frontend/profile/profile.html';
+            cssUrl = '/static/frontend/profile/profileStyle.css';
+            scriptUrl = '/static/frontend/profile/profileScript.js';
+            break;
+        case 'myWindowprofile':
             htmlUrl = '/static/frontend/profile/profile.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/profileScript.js';
@@ -184,12 +190,27 @@ function setWindowContent(uniqueId, customData = null) {
             cssUrl = '/static/frontend/auth/auth.css';
             scriptUrl = '/static/frontend/Users/userList.js';
             break;
+        case 'myWindowusers':
+            htmlUrl = '/static/frontend/Users/Users.html';
+            cssUrl = '/static/frontend/auth/auth.css';
+            scriptUrl = '/static/frontend/Users/userList.js';
+            break;
         case 'myWindowGame':
             htmlUrl = '/static/frontend/games/pong/pong.html';
             cssUrl = '/static/frontend/games/pong/pong.css';
             scriptUrl = '/static/frontend/games/pong/pong.js';
             break;
+        case 'myWindowgame':
+            htmlUrl = '/static/frontend/games/pong/pong.html';
+            cssUrl = '/static/frontend/games/pong/pong.css';
+            scriptUrl = '/static/frontend/games/pong/pong.js';
+            break;
         case 'myWindowPool':
+            htmlUrl = '/static/frontend/games/pool/pool.html';
+            cssUrl = '/static/frontend/games/pool/pool.css';
+            scriptUrl = '/static/frontend/games/pool/pool.js';
+            break;
+        case 'myWindowpool':
             htmlUrl = '/static/frontend/games/pool/pool.html';
             cssUrl = '/static/frontend/games/pool/pool.css';
             scriptUrl = '/static/frontend/games/pool/pool.js';
@@ -200,6 +221,7 @@ function setWindowContent(uniqueId, customData = null) {
             scriptUrl = '/static/frontend/gadgets/browser/browser.js';
             break;
         default:
+            console.warn('unknown Error.' + uniqueId + '.');
             return;
     }
     
@@ -239,6 +261,7 @@ function setWindowContent(uniqueId, customData = null) {
 
 export function createWindow(appName, customData = null) {
     console.log("Creating Window: " + appName);
+    
     const uniqueId = "myWindow" + appName;
     closeAllWindows(uniqueId);
 
