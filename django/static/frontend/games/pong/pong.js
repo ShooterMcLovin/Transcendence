@@ -87,7 +87,7 @@ function showWinMessage(winner, loser) {
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
     scoreContext.textAlign = 'center';
-    if (!isTournament || (currentMatch === 1 || currentMatch === 2))
+    if (!isModeFreeForAll && !isTournament || (currentMatch === 1 || currentMatch === 2))
     {
          scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
         //  setTimeout(() => {
@@ -123,7 +123,7 @@ function showWinMessage(winner, loser) {
             // Proceed to final match
             winners2 = winner;
             currentMatch = 3;
-            startMatch(winners1, winners2, 'Finale');
+            startMatch(winners1, winners2, 'Final');
         }
         else {
             sendWinnerMessage(winner, loser, 'tournement'); //// DO NOT REMOVE! tournement est sposer updater les tournement win/losses
