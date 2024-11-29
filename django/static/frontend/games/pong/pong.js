@@ -587,7 +587,7 @@ export function init() {
        async function setMenuVisibility(visible) {
            const menu = document.getElementById('menuP');
            menu.style.display = visible ? 'block' : 'none';
-           if(visible === false)
+           if(visible === false && !isMenuFormOpen() && ! isMenuTournamentFormOpen())
                isPaused = false;
        }
        document.getElementById('freeforall').addEventListener('click', () => {

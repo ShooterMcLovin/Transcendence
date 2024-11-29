@@ -32,7 +32,7 @@ body {
     z-index: 15;
     display: flex; /* Utilisation de Flexbox */
     flex-direction: column; /* Disposition des boutons en colonne */
-    align-items: center; /* Centrer les éléments horizontalement */
+   align-items: center; /*  Centrer les éléments horizontalement */
 }
 
 #menuP h1 {
@@ -41,14 +41,14 @@ body {
     z-index: 15;
 }
 
-#menuP button, #menuP buttonquit {
+#menuP button {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s ease;
-    margin: 10px 0; /* Ajouter un espacement vertical entre les boutons */
+    margin: 2px 0; /* Ajouter un espacement vertical entre les boutons */
     z-index: 15;
 }
 
