@@ -36,6 +36,7 @@ main {
     outline: none !important; 
     border-bottom: 1px solid #a36a00;
     color: #ffa500 !important;
+    max-width: none;
 }
 
 .form-control:focus {

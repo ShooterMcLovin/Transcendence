@@ -530,8 +530,7 @@ function closeGameWindow() {
 function isGameOpen() {
     var windowExist = document.getElementById('myWindowGame');
     var windowExist1 = document.getElementById('myWindowgame');
-    console.log("using the function - isGameOpen");
-
+    
     if (windowExist || windowExist1)
         return(0);
     else
