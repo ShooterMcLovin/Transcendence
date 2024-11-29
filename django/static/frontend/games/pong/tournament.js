@@ -1,4 +1,4 @@
-import { isfreeforall,startGame, player1, player2,startMatch,setMenuVisibility,asingPlayer} from './pong.js';
+import { asingNextPlayer,isfreeforall,startGame, player1, player2,startMatch,setMenuVisibility,asingPlayer} from './pong.js';
 
 //variable globale tournois
 let isFirstMatchComplete = false;
@@ -11,7 +11,7 @@ let tournamentScores = { player1: 0, player2: 0, player3: 0, player4: 0 };
 function startTournamentMatches() {
     // Assurez-vous que les joueurs sont bien sélectionnés
     if (tournamentPlayers.length !== 4) {
-        console.error('Quatre joueurs doivent être sélectionnés pour commencer le tournoi.');
+        console.error('Four players must be selected to start the tournament.');
         return;
     }
 
@@ -21,16 +21,16 @@ function startTournamentMatches() {
 
     // Définir les matchs
     const match1Players = [shuffledPlayers[0], shuffledPlayers[1]];
-    match2Players = [shuffledPlayers[2], shuffledPlayers[3]];
+    const match2Players = [shuffledPlayers[2], shuffledPlayers[3]];
 
     console.log(`Match 1: ${match1Players[0]} vs ${match1Players[1]}`);
     console.log(`Match 2: ${match2Players[0]} vs ${match2Players[1]}`);
     // Commencer les matchs
-
+    asingNextPlayer(match2Players[0],match2Players[1]); 
     startMatch(match1Players[0], match1Players[1], 'Match 1');
     }
     else{
-   asingPlayer();
+    asingPlayer();
     }
   
 }
@@ -93,7 +93,7 @@ function startTournamentHandler() {
     // Vérifier la sélection unique des joueurs
     const selectedPlayers = [player1, player2, player3, player4];
     if (new Set(selectedPlayers).size !== selectedPlayers.length) {
-        alert('Chaque joueur doit avoir un nom unique.');
+        alert('Each player must have a unique name.');
         showTournamentForm();
         return;
     }

@@ -1,6 +1,6 @@
 import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.min.js';
 
-import {initialCameraRotation, stopcamerarotation ,player1,player2,player3,player4,score1,score2,score3,score4,isModeFreeForAll,gameStarted,setgameStarted,ia1Active,ia2Active} from './pong.js';
+import {currentMatch,isTournament,initialCameraRotation, stopcamerarotation ,player1,player2,player3,player4,score1,score2,score3,score4,isModeFreeForAll,gameStarted,setgameStarted,ia1Active,ia2Active} from './pong.js';
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //                                                     creation d'image                                                                      ///
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,6 +216,12 @@ function drawScores() {
             scoreContext.textAlign = 'center';
             scoreContext.fillText(`Joueur 4 (${player4}): ${score4} `, rightScoreX, textY2);
         }
+        if (isTournament && currentMatch === 1) {
+            scoreContext.fillStyle = 'yellow';
+            scoreContext.textAlign = 'center';
+            scoreContext.fillText(`next game  (${player3}) vs (${player4})`, scoreCanvas.width / 2, textY2);
+
+         }
     }
 }
 

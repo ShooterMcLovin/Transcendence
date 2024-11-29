@@ -115,7 +115,7 @@ function showWinMessage(winner, loser) {
         if (currentMatch === 1) {
             isFirstMatchComplete = true
             currentMatch = 2;
-            startMatch(match2Players[0], match2Players[1], 'Match 2');
+            startMatch(player3, player4, 'Match 2');
             isFirstMatchComplete = false;
             winners1 = winner;
         }
@@ -514,6 +514,12 @@ function closeGame() {
     console.log("Game has been stopped and window closed");
 }
 
+function asingNextPlayer(match21,match22){
+ 
+    player3 = match21;
+    player4 = match22;
+}
+
 function closeGameWindow() {
     var gameWindow = document.getElementById('myWindowGame');
     if (gameWindow) {
@@ -609,4 +615,4 @@ export function init() {
    
    }
 
-   export {isMenuOpen,setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,modeSelected,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};
+   export {currentMatch,asingNextPlayer,isTournament,isMenuOpen,setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,modeSelected,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};
