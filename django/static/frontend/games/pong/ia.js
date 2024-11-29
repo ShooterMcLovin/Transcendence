@@ -1,6 +1,6 @@
 
 import { ballDirection,ballSpeed,score1,score2,ball,paddle1,paddle2} from './pong.js';
-// import { ball,paddle1,paddle2} from './sceneSetup.js';
+
 
 let aiTargetZ = 0;  // Position cible de l'IA (où elle pense que la balle arrivera)
 let lastAiUpdateTime = 0;  // Temps du dernier calcul d'anticipation

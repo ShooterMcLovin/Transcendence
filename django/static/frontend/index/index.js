@@ -47,7 +47,7 @@ export function loadMainPage() {
         });
     }
     else 
-        createWindow(history.state.uniqueId.replace('myWindow', ''));
+        createWindow(history.state.uniqueId.replace('myWindow',''));
    
 }
 
@@ -158,6 +158,7 @@ function selectProgram(e) {
 
 async function setWindowContent(uniqueId, customData = null) {
     console.log("setting window " + uniqueId);
+    
     const windowElement = document.getElementById(`${uniqueId}-content`);
 
     if (!windowElement) {
@@ -273,14 +274,16 @@ async function setWindowContent(uniqueId, customData = null) {
 }
 
 export function createWindow(appName, customData = null) {
-    console.log("Creating Window: " + appName);
-    
-    const uniqueId = "myWindow" + appName;
+ 
+    const normalizedAppName = appName.toLowerCase();
+
+    const uniqueId = "myWindow" + normalizedAppName;  
+     console.log("Creating Window: " + normalizedAppName);
     closeAllWindows(uniqueId);
 
     const windowExists = document.getElementById(uniqueId);
-    if (windowExists) return;
-
+    if (windowExists ) return;
+ 
     const windowContainer = document.createElement('div');
     windowContainer.id = uniqueId;
     windowContainer.classList.add('window');
