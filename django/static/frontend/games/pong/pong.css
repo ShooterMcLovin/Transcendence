@@ -27,6 +27,8 @@ body {
 
 /* Style pour le menu principal */
 #menuP {
+     width: 300px;
+    height: 400px;
     text-align: center;
     margin-top: 50px;
     z-index: 15;
@@ -73,6 +75,7 @@ body {
 
 /* Formulaire de sélection des noms de joueurs */
 #nameForm, #tournamentForm, #freeforallForm {
+  
     text-align: center;
     margin-top: 50px;
 }
@@ -110,8 +113,8 @@ body {
     position: fixed;
     top: 50%;
     left: 50%;
-    width: 300px;
-    height: 200px;
+    /* width: 300px;
+    height: 200px; */
     background: rgba(0, 0, 0, 0.8);
     color: white;
     text-align: center;
