@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login as django_login, logout as  
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
+import requests
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from django.middleware.csrf import get_token
@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from .models import CustomUser, Match, Tournament, Friendship
 from .forms import CustomUserCreationForm, ChangePasswordForm, AvatarForm, updateUserProfileForm
 import json
+from requests.exceptions import Timeout, ConnectionError, RequestException
 
 
 # Serve the main SPA HTML file
@@ -324,23 +325,58 @@ def update_password(request):
         return Response({'errors': form.errors}, status=400)
     
 
-@login_required
 @api_view(['POST'])
+@login_required
 def update_avatar(request):
-    avatar_url = request.data.get('avatar_url', '').strip()
+    avatar_url = request.data.get('avatar_url', '').strip()  # Get the avatar URL from request
     response_data = {}
 
-    if avatar_url:
-        request.user.avatar_url = avatar_url
-        request.user.save()  # Save the new avatar URL
-        response_data['status'] = 'success'
-        response_data['message'] = 'Avatar updated successfully.'
-        response_data['avatar_url'] = request.user.avatar_url
-    else:
+    if not avatar_url:
         response_data['status'] = 'error'
-        response_data['message'] = 'Invalid or empty avatar URL. Avatar not updated.'
+        response_data['message'] = 'Avatar URL cannot be empty.'
+        return Response(response_data, status=400)
 
-    return Response(response_data, status=200 if response_data['status'] == 'success' else 400)
+    if not (avatar_url.startswith('http://') or avatar_url.startswith('https://')):
+        response_data['status'] = 'error'
+        response_data['message'] = 'The avatar URL must start with http:// or https://.'
+        return Response(response_data, status=400)
+
+    try:
+        response = requests.get(avatar_url, stream=True, timeout=5, allow_redirects=True)
+        final_url = response.url  # The final URL after all redirects
+        content_type = response.headers.get('Content-Type', '').lower()
+
+        # Debugging: Print the final URL and content-type for inspection
+        if 'image' not in content_type:
+            response_data['status'] = 'error'
+            response_data['message'] = 'The provided URL does not point to a valid image.'
+            return Response(response_data, status=400)
+
+    except Timeout:
+        # Timeout error handling
+        response_data['status'] = 'error'
+        response_data['message'] = 'The request to the image URL timed out. Please try again later.'
+        return Response(response_data, status=408)  # 408 Request Timeout
+
+    except ConnectionError:
+        # Connection error handling (e.g., server unreachable)
+        response_data['status'] = 'error'
+        response_data['message'] = f'Could not connect to the image URL: {avatar_url}. The server might be unreachable.'
+        return Response(response_data, status=400)  # 503 Service Unavailable
+
+    except RequestException as e:
+        # Catch all other requests exceptions (network-related issues)
+        response_data['status'] = 'error'
+        response_data['message'] = f'An error occurred while trying to access the image URL: {str(e)}'
+        return Response(response_data, status=500)  # 500 Internal Server Error
+
+    request.user.avatar_url = final_url  # Update to the final URL after redirects
+    request.user.save()  # Save the new avatar URL to the database
+
+    response_data['status'] = 'success'
+    response_data['message'] = 'Avatar updated successfully.'
+    response_data['avatar_url'] = request.user.avatar_url
+    return Response(response_data, status=200)  # 200 OK
 
 @login_required
 @api_view(['POST'])

@@ -12,9 +12,9 @@ class CustomUser(AbstractUser):
     losses = models.PositiveIntegerField(default=0)  # Counter for losses
     tournament_wins = models.PositiveIntegerField(default=0)  # Counter for tournament wins
     tournament_losses = models.PositiveIntegerField(default=0)  # Counter for tournament losses
-    avatar_url = models.URLField(blank=True, null=True)
+    avatar_url = models.URLField(max_length=25, blank=True, null=True)
     is_online = models.BooleanField(default=False)
-    
+     
     def get_friends(self):
         return CustomUser.objects.filter(
             id__in=Friendship.objects.filter(

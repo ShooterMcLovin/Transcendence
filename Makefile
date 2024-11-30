@@ -42,5 +42,5 @@ remake: reset_db up
 re: down clean up
 
 handle_error:
-	@make down
+	@make remake
 	@exit 42
