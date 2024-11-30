@@ -15,14 +15,10 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100vw;
     height: 100vh;
     overflow: hidden;
     z-index: 15;
-}
-
-* {
-    box-sizing: border-box;
-    outline: none;
 }
 
 #menuP {
@@ -143,12 +139,14 @@ body {
     z-index: 15;
 }
 
-canvas { 
+#canvas { 
     display: block;
     position: absolute;
     z-index: 1;
     overflow: hidden;
     pointer-events: none;
+    height: 100vh;
+    width: 100vw;
 }
 
 #menuP, #nameForm, #tournamentForm, #freeforallForm, #pauseMenu, #pauseMenufreeforall {

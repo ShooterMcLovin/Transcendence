@@ -109,7 +109,7 @@ main {
     position: fixed;
     top: 0;
     left: 0;
-    height: 100vh ;               /* Prend toute la hauteur de la fenêtre */
+    height: 90vh ;               /* Prend toute la hauteur de la fenêtre */
     width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
     max-width: 100px;                  /* Largeur fixe pour le panneau de gauche */
     min-width: 45px;
@@ -119,13 +119,14 @@ main {
     align-items: center;
     /* padding-top: 7vh; */
     overflow-y: auto;             /* Barre de défilement si nécessaire */
-    z-index: 1000;                /* S'assure que la colonne reste au-dessus des autres éléments */
+    z-index: 1000;    
+         /* S'assure que la colonne reste au-dessus des autres éléments */
 }
 
 
 /* Alignement des icônes dans la colonne */
 .icon {
-    /* margin-bottom: 20px; */
+    margin-bottom: 1px;
     text-align: center;
     display: flex;
     flex-direction: column;

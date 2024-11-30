@@ -197,7 +197,7 @@ function drawScores() {
         const leftScoreX = scoreCanvas.width / 4;
         const rightScoreX = scoreCanvas.width / 4 * 3;
         const textY = scoreCanvas.height / 2;
-        const textY2 = 100;
+        const textY2 = 93;
 
         scoreContext.fillStyle = 'blue';
         scoreContext.textAlign = 'center';
@@ -219,7 +219,7 @@ function drawScores() {
         if (isTournament && currentMatch === 1) {
             scoreContext.fillStyle = 'yellow';
             scoreContext.textAlign = 'center';
-            scoreContext.fillText(`next game  (${player3}) vs (${player4})`, scoreCanvas.width / 2, textY2);
+            scoreContext.fillText(`next game  (${player3}) vs (${player4})`, scoreCanvas.width / 2, textY2 );
 
          }
     }
