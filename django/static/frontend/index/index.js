@@ -133,7 +133,7 @@ export function openWindow(e) {
         createWindow('matchhistory');
     } else if (parentIcon.id === 'pool') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('Pool');
+        createWindow('pool');
     } else if (parentIcon.id === 'browser') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Browser');
