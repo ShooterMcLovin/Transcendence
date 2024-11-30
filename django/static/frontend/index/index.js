@@ -252,15 +252,19 @@ async function setWindowContent(uniqueId, customData = null) {
     
 }
 
+function normalizeAppName(appName) {
+    const appNameMap = {
+        'game': 'Game',
+        'pool': 'Pool',
+        'profile': 'Profile',
+        'users': 'Users'
+    };
+    const normalized = appNameMap[appName.toLowerCase()] || appName;
+    return normalized;
+}
+
 export function createWindow(appName, customData = null) {
-    if (appName === 'game')
-        appName = 'Game';
-    if (appName === 'pool')
-        appName = 'Pool';
-    if (appName === 'profile')
-        appName = 'Profile';
-    if (appName === 'users')
-        appName = 'Users';
+    appName = normalizeAppName(appName);
     console.log("Creating Window: " + appName);
     
     const uniqueId = "myWindow" + appName;
