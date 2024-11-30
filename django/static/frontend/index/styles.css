@@ -6,6 +6,14 @@ body {
 
 }
 
+.top-center-container {
+    display: flex;              /* Enable Flexbox layout */
+    justify-content: center;    /* Center horizontally */
+    align-items: flex-start;    /* Align to the top of the window */
+    height: 100vh;              /* Full viewport height */
+    margin: 0;                  /* Remove default margin */
+}
+
 header {
     background-color: #333;
     color: white;
@@ -26,9 +34,9 @@ nav a {
 }
 
 main {
-    padding: 20px;
+    /* padding: 20px; */
     /* min-width: 800px; */
-    min-height: 700px;
+    /* min-height: 700px; */
 }
 
 .form-control {

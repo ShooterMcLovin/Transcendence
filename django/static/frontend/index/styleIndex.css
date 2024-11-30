@@ -1,7 +1,7 @@
 /* Styles de base pour le corps de la page */
 body {
     font-family: 'Courier New', Courier, monospace;
-    background-color: #28292d;
+    background-color: #28292d00;
     margin: 0;
     padding: 0;
     height: 100%;
@@ -16,12 +16,12 @@ body {
 
 }
 
-/* Conteneur principal */
+/* Conteneur principal
 main {
     margin: 0;
     padding: 0;
     height: 100vh;
-}
+} */
 
 .div-table-container {
     display: flex;
@@ -202,7 +202,7 @@ main {
     /* box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.0), -1px 1px 4px rgba(0, 0, 0, 0.0); */
     /* background: transparent; */
     background: rgba(51, 51, 51, 0.0);
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0,0,0,0.5);
     left: 50%; 
     /* bottom: 7vw; */
     top:50%;

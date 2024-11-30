@@ -4,8 +4,13 @@ import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.
 let hashCleared = false;
 
 window.addEventListener('popstate', openWindow =>{
-    if (history.state && history.state.uniqueId)
+    if (history.state && history.state.uniqueId){
+
+        document.getElementById("welcomeText").style.display = "none";
         createWindow(history.state.uniqueId.replace('myWindow', ''));
+    }
+    else
+        history.replaceState(null,'');
 })
 
 window.addEventListener('load', () => {

@@ -18,9 +18,8 @@
             max-width: 6000px; /* Max width for larger screens */
             max-height: 6000px; /* Max width for larger screens */
             padding: 0px; /* Add padding for spacing */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: shadow for depth */
+            {% comment %} box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Optional: shadow for depth */ {% endcomment %}
         }
-        
     </style>
 </head>
 <body>
@@ -70,7 +69,7 @@
 
         <link rel="stylesheet" href="/static/frontend/auth/auth.css">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+        {% comment %} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script> {% endcomment %}
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script type="module" src="/static/frontend/auth/auth.js"></script>
         <main id="root" display="none"></main>

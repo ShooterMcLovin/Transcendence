@@ -6,6 +6,10 @@ import {showTournamentForm,populateTournamentDropdowns,tournamentScores,startTou
 import {ball,paddle1,paddle2 ,paddle3,paddle4,renderer,scene,handleCameraTransition,handleInitialCameraRotation,pointLight,camera,drawScores,closeScoreVisible,woodTexture,scoreContext,scoreCanvas} from './sceneSetup.js';
 import {updateBallPosition,updatePaddlesPosition,detectCollision} from './ballMouvementCollision.js';
 
+
+
+
+
 let isTournament = false;
 let isFirstMatchComplete = false;
 
@@ -67,6 +71,7 @@ function onWindowResize() {
 
 // Ajouter un écouteur d'événements pour le redimensionnement de la fenêtre
 window.addEventListener('resize', onWindowResize);
+
 
 let winners1;
 let winners2;
@@ -527,7 +532,7 @@ export function init() {
     scoreCanvas.style.display = 'block'; 
    renderer.setSize(window.innerWidth, window.innerHeight);
    document.body.appendChild(renderer.domElement);
-   scene.background = null; 
+//    scene.background.color = rgba(0, 0, 0, 0.5);
         
        document.getElementById('resumeButton').addEventListener('click', () => {
            setPauseMenuVisibility(false);
@@ -576,6 +581,7 @@ export function init() {
        document.getElementById('resume').addEventListener('click', () => setMenuVisibility(false));
        document.getElementById('freeforall').addEventListener('click', showTournamentForm);
        document.getElementById('tournament').addEventListener('click', showTournamentForm);
+       document.getElementById('myWindowGame').style.backgroundColor ='rgba(51, 51, 51, 0.0)';
        initializeGame();
    
    }
