@@ -112,7 +112,9 @@ export function openWindow(e) {
     removeClassFromClass('selected_program', 'selected_program');
     parentIcon.classList.add('selected_program');
     e.preventDefault();
-
+    const uniqueIds = "myWindow" + parentIcon.id;  
+    const windowExists = document.getElementById(uniqueIds);
+    if (windowExists) return;
     if (parentIcon.id === 'profile') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('profile');
@@ -281,8 +283,9 @@ export function createWindow(appName, customData = null) {
     closeAllWindows(uniqueId);
 
     const windowExists = document.getElementById(uniqueId);
-    if (windowExists ) return;
- 
+    if (windowExists) return;
+    console.log("Creating Window: test " + appName);
+
     const windowContainer = document.createElement('div');
     windowContainer.id = uniqueId;
     windowContainer.classList.add('window');
