@@ -12,7 +12,7 @@ class CustomUser(AbstractUser):
     losses = models.PositiveIntegerField(default=0)  # Counter for losses
     tournament_wins = models.PositiveIntegerField(default=0)  # Counter for tournament wins
     tournament_losses = models.PositiveIntegerField(default=0)  # Counter for tournament losses
-    avatar_url = models.URLField(max_length=25, blank=True, null=True)
+    avatar_url = models.URLField(blank=True, null=True)
     is_online = models.BooleanField(default=False)
      
     def get_friends(self):
@@ -29,7 +29,7 @@ class CustomUser(AbstractUser):
                 challenged=self
             ).values_list('challenge', flat=True)
         )
-
+ 
     def is_challenged_by(self, user):
         """Check if this user is friends with another user."""
         return Challenge.objects.filter(challenged=self, challenger=user, is_accepted=False).exists()

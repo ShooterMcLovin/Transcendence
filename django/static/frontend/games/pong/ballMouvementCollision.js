@@ -141,12 +141,12 @@ function onDocumentKeyDown(event) {
     switch (event.key) {
         case 'Escape':
             if (isMenuOpen() === true && !isMenuFormOpen() && !isMenuTournamentFormOpen()) {
-                setMenuVisibility(false);// Cacher le menu si déjà visible
+                setMenuVisibility(false);
                 setIsPaused(false);
             } else if(isMenuOpen() ===false && !isMenuFormOpen() && !isMenuTournamentFormOpen()){
-                setMenuVisibility(true) ; // Afficher le menu sinon
+                setMenuVisibility(true) ;
                 if(modeSelected)
-                setIsPaused(true);// Mettre le jeu en pause
+                setIsPaused(true);
             }
             if(isMenuTournamentFormOpen())
             {    document.getElementById('tournamentForm').style.display = 'none';
@@ -158,7 +158,7 @@ function onDocumentKeyDown(event) {
                  setMenuVisibility(true);
             }
              
-            return; // Sortir après avoir géré l'échappement
+            return; 
 
         case 'ArrowUp':
             if (!ia2Active) {

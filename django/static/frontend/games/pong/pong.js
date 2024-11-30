@@ -14,6 +14,7 @@ function setIsPaused(trueordfalse){
      isPaused = trueordfalse;
 }
 let currentMatch = 1;
+
 // Fonction pour afficher/masquer le menu de pause
 function setPauseMenuVisibility(visible) {
     const pauseMenu = document.getElementById('pauseMenu');
@@ -31,28 +32,18 @@ function asingPlayer(){
 function startMatch(playerA, playerB, matchName) {
     console.log(`Démarrage du ${matchName}: ${playerA} vs ${playerB}`);
 
-    // Réinitialiser les scores pour ce match
     tournamentScores[playerA] = 0;
     tournamentScores[playerB] = 0;
-
-    // Configurer les joueurs pour ce match
     player1 = playerA;
     player2 = playerB;
-
-    // Réinitialiser les scores
- 
     score1 = 0;
     score2 = 0;
- 
-    // Mettre à jour le mode du jeu
     isSinglePlayer = false;
     isMultiplayer = false;
     isTournament = true;
     isfreeforall = false;
-
-    // Démarrer le jeu pour le match en cours
     drawScores();
-    setPauseMenuVisibility(true); // Afficher le menu de pause
+    setPauseMenuVisibility(true); 
     isPaused = true;
 
 }
@@ -87,45 +78,31 @@ function showWinMessage(winner, loser) {
     scoreContext.font = '50px Arial';
     scoreContext.fillStyle = 'green';
     scoreContext.textAlign = 'center';
-    if (!isTournament || (currentMatch === 1 || currentMatch === 2))
-    {
-         scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
-        //  setTimeout(() => {
-        //     scoreCanvas.style.display = 'none';
-        // }, 3000);
-    }  
+    if (!isModeFreeForAll && !isTournament || (currentMatch === 1 || currentMatch === 2))
+         scoreContext.fillText(`${winner} wins!`, scoreCanvas.width / 2, scoreCanvas.height / 2); 
     else
-    {
          scoreContext.fillText(`${winner} wins tournament!`, scoreCanvas.width / 2, scoreCanvas.height / 2);
-        //  setTimeout(() => {
-        //     scoreCanvas.style.display = 'none';
-        // }, 3000);
-    }
+
        
     scoreContext.font = '20px Arial';
-    // Masquer le canvas après un délai, par exemple 3 secondes
 
- // Délai en millisecondes
-    // if(!isModeFreeForAll && !isTournament)
     sendWinnerMessage(winner, loser, 'Pong'); //// DO NOT REMOVE!
-    // else if (isTournament)
-    // sendWinnerMessage(winner, loser, 'tournement'); //// DO NOT REMOVE! tournement est sposer updater les tournement win/losses
-
+    
     if (isTournament) {
         if (currentMatch === 1) {
             isFirstMatchComplete = true
             currentMatch = 2;
-            startMatch(match2Players[0], match2Players[1], 'Match 2');
+            startMatch(player3, player4, 'Match 2');
             isFirstMatchComplete = false;
             winners1 = winner;
         }
         else if (currentMatch === 2) {
-            // Proceed to final match
             winners2 = winner;
             currentMatch = 3;
-            startMatch(winners1, winners2, 'Finale');
+            startMatch(winners1, winners2, 'Final');
         }
         else {
+            ///////ici y c'est passer quelque choose c'est pas la ca devrait etre////
             sendWinnerMessage(winner, loser, 'tournement'); //// DO NOT REMOVE! tournement est sposer updater les tournement win/losses
             // Tournament is complete
             console.log(`${winner} remporte le tournoi !`);
@@ -159,7 +136,7 @@ function getRandomDirection() {
 }
 
 // Variables pour le score
-let player1 = 'IA'; // added variable for name
+let player1 = 'IA'; 
 let player2; 
 let player3;
 let player4;
@@ -177,7 +154,6 @@ function setgameStarted(falseortrue){
 // Variables pour le mouvement de la balle
 let ballSpeed = 0.05;
 let ballDirection = getRandomDirection();
-// const speedIncrease = 0.005;
 function upgradeBallSpeed(speed){
     ballSpeed += speed;
 }
@@ -203,7 +179,7 @@ function stopcamerarotation(){
     initialCameraRotation = false;
 }
 
-///variables mode
+
 let modeSelected = false;
 // Afficher le menu principal
 function checkGameOver() {
@@ -278,12 +254,7 @@ function checkGameOver() {
 
 
         if (!isTournament)
-        {
-            gameOver = true;
-            // modeSelected = false;
-        }
-       
-       
+            gameOver = true;       
     }
 }
 
@@ -306,7 +277,7 @@ function animate() {
     handleCameraTransition();
 
     if (isSinglePlayer) {
-        moveAI(); // Lancer l'IA si le mode solo est activé
+        moveAI(); 
     }
 
     updatePaddlesPosition();
@@ -379,7 +350,7 @@ function startGame(mode) {
         ia2Active = false;
         isPaused = false; 
         player1 = "IA";
-        player2 = username; // Assign the fetched username to player2
+        player2 = username; 
 
     } else if (mode === 'multiPlayer') {
         initializeGameData();
@@ -398,7 +369,6 @@ function startGame(mode) {
         isModeFreeForAll = false;
         ia1Active = false;
         ia2Active = false;
-        // tournamentScores = { player1: 0, player2: 0 };
         if (!isTournament)
             startTournamentMatches();
         isPaused = true;
@@ -426,14 +396,13 @@ function startGame(mode) {
         scene.add(paddle4);
         scene.add(paddle1);
         scene.add(paddle2);
-            // startTournamentMatches();
         isPaused = true;
         
     }
 
     scene.add(paddle1);
     scene.add(paddle2);
-    modeSelected = true; // Marquer le mode comme sélectionné
+    modeSelected = true; 
     setMenuVisibility(false);
     if(!isModeFreeForAll)
     {
@@ -485,33 +454,36 @@ async function initializeGame() {
 ///fonction pour fermer le menu de multijoueur
 function closeNameForm() {
     const nameForm = document.getElementById('nameForm');
-    nameForm.style.display = 'none'; // Masquer le formulaire
+    nameForm.style.display = 'none'; 
 }
 
 function isMenuOpen() {
-    const menu = document.getElementById('menuP'); // Sélectionner le menu
+    const menu = document.getElementById('menuP');
     if(menu)
-    return menu.style.display === 'block'; // Retourne true si le menu est visible
+    return menu.style.display === 'block';
 }
-let animationId; // Stocker l'ID de l'animation
+let animationId;
 
 function stopGame() {
-    // Vérifier si l'animation est en cours et l'annuler   
-    // document.getElementById('welcomeText').style.display = 'block'; // ou 'inline', 'flex', selon le besoin
-
  if (animationId) {
         cancelAnimationFrame(animationId); 
         console.log("Animation cancelled");
     }
 }
 
-// Exemple : fonction qui s'exécute quand on ferme le jeu
+
 function closeGame() {
   closeScoreVisible(false);
   scoreCanvas.style.display = 'none';
-    stopGame(); // Arrêter l'animation et nettoyer la scène
+    stopGame(); 
       closeGameWindow();
     console.log("Game has been stopped and window closed");
+}
+
+function asingNextPlayer(match21,match22){
+ 
+    player3 = match21;
+    player4 = match22;
 }
 
 function closeGameWindow() {
@@ -520,7 +492,6 @@ function closeGameWindow() {
         gameWindow.remove(); // Supprime la fenêtre du jeu
     }
 
-    // Supprimer également le canvas si nécessaire
     if (renderer && renderer.domElement) {
         renderer.dispose(); // Dispose les ressources WebGL
         document.body.removeChild(renderer.domElement); // Retire le canvas du DOM
@@ -581,7 +552,7 @@ export function init() {
        async function setMenuVisibility(visible) {
            const menu = document.getElementById('menuP');
            menu.style.display = visible ? 'block' : 'none';
-           if(visible === false)
+           if(visible === false && !isMenuFormOpen() && ! isMenuTournamentFormOpen())
                isPaused = false;
        }
        document.getElementById('freeforall').addEventListener('click', () => {
@@ -609,4 +580,4 @@ export function init() {
    
    }
 
-   export {isMenuOpen,setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,modeSelected,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};
+   export {currentMatch,asingNextPlayer,isTournament,isMenuOpen,setIsPaused,isMenuFormOpen,isMenuTournamentFormOpen,modeSelected,isPaused,score1,score2,score3,score4,ballDirection,isfreeforall,startGame,player1,player2,player3,player4,startMatch,setMenuVisibility,asingPlayer,startMultiplayerHandler,paddle1,paddle2,paddle3,paddle4,ball,initialCameraRotation,stopcamerarotation,isModeFreeForAll,pointLight,ballSpeed,upgradeBallSpeed,agScore,decscore,resetBall,gameStarted,ia1Active,ia2Active,setgameStarted};

@@ -1,13 +1,13 @@
 
 import { ballDirection,ballSpeed,score1,score2,ball,paddle1,paddle2} from './pong.js';
-// import { ball,paddle1,paddle2} from './sceneSetup.js';
+
 
 let aiTargetZ = 0;  // Position cible de l'IA (où elle pense que la balle arrivera)
 let lastAiUpdateTime = 0;  // Temps du dernier calcul d'anticipation
 const aiUpdateInterval = 1000;  // Intervalle de mise à jour (1 seconde)
 
 let lastAi2UpdateTime = 0;  // Temps du dernier calcul d'anticipation pour IA2
-const ai2UpdateInterval = 1000;  // Intervalle de mise à jour pour IA2 (1 seconde)
+const ai2UpdateInterval = 1000 ;  // Intervalle de mise à jour pour IA2 (1 seconde)
 let ai2TargetZ = 0;  // Position cible de l'IA 2
 
 function predictBallPositionForAI2() {
@@ -15,7 +15,7 @@ function predictBallPositionForAI2() {
     let predictedBallPosition = ball.position.clone();
     let predictedBallDirection = ballDirection.clone();
     let predictedBallSpeed = ballSpeed;
-    const simulationDuration = 500; // 1 seconde en millisecondes
+    const simulationDuration = 1000; // 1 seconde en millisecondes
     let timeElapsed = 0;
     const deltaTime = 16; // Approximation de 60 FPS
 
@@ -42,7 +42,7 @@ function predictBallPositionForAI2() {
 
 function moveAI2() {
     const currentTime = Date.now();
-    const aiSpeed = 0.1 + (0.005 * score1); // Vitesse de déplacement de l'IA 2
+    const aiSpeed = 0.1 ; // Vitesse de déplacement de l'IA 2
 
     // Anticipation une fois par seconde
     if (currentTime - lastAi2UpdateTime > ai2UpdateInterval) {
@@ -69,7 +69,7 @@ function predictBallPosition() {
     let predictedBallPosition = ball.position.clone();
     let predictedBallDirection = ballDirection.clone();
     let predictedBallSpeed = ballSpeed;
-    const simulationDuration = 250; // 1 seconde en millisecondes
+    const simulationDuration = 250; // 1 seconde en millisecondes/4 parceque je fait allez ma balle 4 x plus vite en simulation
     let timeElapsed = 0;
     const deltaTime = 16; // Approximation de 60 FPS
 
@@ -96,10 +96,10 @@ function predictBallPosition() {
 
 function moveAI(deltaTime) {
     const currentTime = Date.now();
-    const aiSpeed = 0.1 + (0.005 * score2); // Vitesse de déplacement de l'IA, augmentée selon le score
+    const aiSpeed = 0.1 ; 
 
     // Anticipation une fois par seconde
-    if (currentTime - lastAiUpdateTime > aiUpdateInterval) {
+    if (currentTime - lastAiUpdateTime > aiUpdateInterval ) {
         lastAiUpdateTime = currentTime;
 
         // Prédire la position en Z où la balle frappera le bord de l'IA ou sera dans 1 seconde
