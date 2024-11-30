@@ -174,56 +174,56 @@ async function setWindowContent(uniqueId, customData = null) {
     let htmlUrl, cssUrl, scriptUrl;
     
     switch (uniqueId) {
-        case 'myWindowProfile':
-            htmlUrl = '/static/frontend/profile/profile.html';
-            cssUrl = '/static/frontend/profile/profileStyle.css';
-            scriptUrl = '/static/frontend/profile/profileScript.js';
-            break;
+        // case 'myWindowProfile':
+        //     htmlUrl = '/static/frontend/profile/profile.html';
+        //     cssUrl = '/static/frontend/profile/profileStyle.css';
+        //     scriptUrl = '/static/frontend/profile/profileScript.js';
+        //     break;
         case 'myWindowprofile':
             htmlUrl = '/static/frontend/profile/profile.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/profileScript.js';
             break;
-        case 'myWindowEditInfo': // update info
+        case 'myWindoweditinfo': // update info
             htmlUrl = '/static/frontend/profile/updateProfileInfo/updateInfo.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/updateprofileInfo/updateInfo.js';
             break;
-        case 'myWindowEditProfile': // update password
+        case 'myWindoweditprofile': // update password
             htmlUrl = '/static/frontend/profile/editPassword/updatePassword.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/editPassword/updatePassword.js';
             break;
-        case 'myWindowmatchHistory': // matches history
+        case 'myWindowmatchhistory': // matches history
             htmlUrl = '/static/frontend/profile/matchHistory/matchHistory.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/matchHistory/matchHistory.js';
             break;
-        case 'myWindowUsers':
-            htmlUrl = '/static/frontend/Users/Users.html';
-            cssUrl = '/static/frontend/auth/auth.css';
-            scriptUrl = '/static/frontend/Users/userList.js';
-            break;
+        // case 'myWindowUsers':
+        //     htmlUrl = '/static/frontend/Users/Users.html';
+        //     cssUrl = '/static/frontend/auth/auth.css';
+        //     scriptUrl = '/static/frontend/Users/userList.js';
+        //     break;
         case 'myWindowusers':
             htmlUrl = '/static/frontend/Users/Users.html';
             cssUrl = '/static/frontend/auth/auth.css';
             scriptUrl = '/static/frontend/Users/userList.js';
             break;
-        case 'myWindowGame':
-            htmlUrl = '/static/frontend/games/pong/pong.html';
-            cssUrl = '/static/frontend/games/pong/pong.css';
-            scriptUrl = '/static/frontend/games/pong/pong.js';
-            break;
+        // case 'myWindowGame':
+        //     htmlUrl = '/static/frontend/games/pong/pong.html';
+        //     cssUrl = '/static/frontend/games/pong/pong.css';
+        //     scriptUrl = '/static/frontend/games/pong/pong.js';
+        //     break;
         case 'myWindowgame':
             htmlUrl = '/static/frontend/games/pong/pong.html';
             cssUrl = '/static/frontend/games/pong/pong.css';
             scriptUrl = '/static/frontend/games/pong/pong.js';
             break;
-        case 'myWindowPool':
-            htmlUrl = '/static/frontend/games/pool/pool.html';
-            cssUrl = '/static/frontend/games/pool/pool.css';
-            scriptUrl = '/static/frontend/games/pool/pool.js';
-            break;
+        // case 'myWindowPool':
+        //     htmlUrl = '/static/frontend/games/pool/pool.html';
+        //     cssUrl = '/static/frontend/games/pool/pool.css';
+        //     scriptUrl = '/static/frontend/games/pool/pool.js';
+        //     break;
         case 'myWindowpool':
             htmlUrl = '/static/frontend/games/pool/pool.html';
             cssUrl = '/static/frontend/games/pool/pool.css';
