@@ -110,18 +110,23 @@ export function openWindow(e) {
         removeClassFromClass('selected_program', 'selected_program');
         return;
     }
-   
+        
     removeClassFromClass('selected_program', 'selected_program');
     parentIcon.classList.add('selected_program');
     e.preventDefault();
-
-    if (parentIcon.id === 'profile') {
+    const uniqueIds = "myWindow" + parentIcon.id;
+        
+    const windowExists = document.getElementById(uniqueIds);
+    if (windowExists) return;
+    
+    parentIcon.id = normalizeAppName(parentIcon.id);
+    if (parentIcon.id === 'Profile') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Profile');
-    } else if (parentIcon.id === 'game') {
+    } else if (parentIcon.id === 'Game') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Game');
-    } else if (parentIcon.id === 'users') {
+    } else if (parentIcon.id === 'Users') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Users');
     } else if (parentIcon.id === 'EditInfo') {
@@ -133,7 +138,7 @@ export function openWindow(e) {
     } else if (parentIcon.id === 'matchHistory') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('matchHistory');
-    } else if (parentIcon.id === 'pool') {
+    } else if (parentIcon.id === 'Pool') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Pool');
     } else if (parentIcon.id === 'browser') {

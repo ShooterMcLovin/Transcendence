@@ -122,7 +122,7 @@ main {
     overflow-y: auto;             /* Barre de défilement si nécessaire */
     z-index: 1000;                /* S'assure que la colonne reste au-dessus des autres éléments */
     margin-bottom: 20px;
-    min-width: 1000px;
+    /* min-width: 1000px; */
     min-height: 900px;
 }
 
