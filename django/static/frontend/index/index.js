@@ -115,22 +115,22 @@ export function openWindow(e) {
 
     if (parentIcon.id === 'profile') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('Profile');
+        createWindow('profile');
     } else if (parentIcon.id === 'game') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('Game');
+        createWindow('game');
     } else if (parentIcon.id === 'users') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('Users');
+        createWindow('users');
     } else if (parentIcon.id === 'EditInfo') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('EditInfo');
+        createWindow('editinfo');
     } else if (parentIcon.id === 'EditProfile') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('EditProfile');
+        createWindow('editprofile');
     } else if (parentIcon.id === 'matchHistory') {
         document.getElementById('welcomeText').style.display = 'none';
-        createWindow('matchHistory');
+        createWindow('matchhistory');
     } else if (parentIcon.id === 'pool') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('Pool');
@@ -275,10 +275,9 @@ async function setWindowContent(uniqueId, customData = null) {
 
 export function createWindow(appName, customData = null) {
  
-    const normalizedAppName = appName.toLowerCase();
-
-    const uniqueId = "myWindow" + normalizedAppName;  
-     console.log("Creating Window: " + normalizedAppName);
+    // const normalizedAppName = appName.toLowerCase();
+    const uniqueId = "myWindow" + appName;  
+     console.log("Creating Window: " + appName);
     closeAllWindows(uniqueId);
 
     const windowExists = document.getElementById(uniqueId);
