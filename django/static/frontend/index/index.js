@@ -18,7 +18,7 @@ window.addEventListener('load', () => {
     if (history.state) {
         console.log("Page reloaded. History cleared");
     }
-    history.replaceState(null, document.title, window.location.href);
+    history.replaceState(null,'');
     console.log("Page reloaded. History cleared");
     loadMainPage();
 });

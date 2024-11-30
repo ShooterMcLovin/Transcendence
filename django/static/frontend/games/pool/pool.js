@@ -1,5 +1,5 @@
 let flag = 1; // 1 for X, 0 for O
-
+var playerLocked = 0;
 async function sendWinnerMessage(win, lose, pgame) {
     console.log(`Winner: ${win}, Loser: ${lose}, Game: ${pgame}`);
     try {
@@ -47,7 +47,7 @@ function updateTurnMessage() {
     const playerSelects = document.querySelectorAll('.player-select');
     const player1 = playerSelects[0].value;
     const player2 = playerSelects[1].value;
-    const message = player1 !== player2 ? 
+    const message = player1 !== player2 && playerLocked ?  
         `${flag === 1 ? player1 : player2}'s Turn` : 
         `${flag === 1 ? "X's" : "O's"} Turn`;
 
@@ -112,6 +112,11 @@ function lockPlayers() {
         select.disabled = true; // Disable player selection
     });
     flag = Math.floor(Math.random() * 2); // Example: 0 or 1, you can adjust the logic
+    playerLocked = 1;
+    Array.from({ length: 9 }, (_, i) => document.getElementById(`b${i + 1}`)).forEach(cell => {
+        cell.value = '';  // Clear cell value
+        cell.disabled = false;   // Enable the button
+    });
     updateTurnMessage(); // Reload the turn message after locking players
 }
 
