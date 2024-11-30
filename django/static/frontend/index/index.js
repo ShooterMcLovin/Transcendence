@@ -159,9 +159,9 @@ function selectProgram(e) {
 async function setWindowContent(uniqueId, customData = null) {
     console.log("setting window " + uniqueId);
     const windowElement = document.getElementById(`${uniqueId}-content`);
-
+    
     if (!windowElement) {
-        console.error(`Window element #${uniqueId}-content not found.`);
+        // console.log(`Window element #${uniqueId}-content not found.`);
         return;
     }
 
@@ -174,11 +174,6 @@ async function setWindowContent(uniqueId, customData = null) {
     
     switch (uniqueId) {
         case 'myWindowProfile':
-            htmlUrl = '/static/frontend/profile/profile.html';
-            cssUrl = '/static/frontend/profile/profileStyle.css';
-            scriptUrl = '/static/frontend/profile/profileScript.js';
-            break;
-        case 'myWindowprofile':
             htmlUrl = '/static/frontend/profile/profile.html';
             cssUrl = '/static/frontend/profile/profileStyle.css';
             scriptUrl = '/static/frontend/profile/profileScript.js';
@@ -203,27 +198,12 @@ async function setWindowContent(uniqueId, customData = null) {
             cssUrl = '/static/frontend/auth/auth.css';
             scriptUrl = '/static/frontend/Users/userList.js';
             break;
-        case 'myWindowusers':
-            htmlUrl = '/static/frontend/Users/Users.html';
-            cssUrl = '/static/frontend/auth/auth.css';
-            scriptUrl = '/static/frontend/Users/userList.js';
-            break;
         case 'myWindowGame':
             htmlUrl = '/static/frontend/games/pong/pong.html';
             cssUrl = '/static/frontend/games/pong/pong.css';
             scriptUrl = '/static/frontend/games/pong/pong.js';
             break;
-        case 'myWindowgame':
-            htmlUrl = '/static/frontend/games/pong/pong.html';
-            cssUrl = '/static/frontend/games/pong/pong.css';
-            scriptUrl = '/static/frontend/games/pong/pong.js';
-            break;
         case 'myWindowPool':
-            htmlUrl = '/static/frontend/games/pool/pool.html';
-            cssUrl = '/static/frontend/games/pool/pool.css';
-            scriptUrl = '/static/frontend/games/pool/pool.js';
-            break;
-        case 'myWindowpool':
             htmlUrl = '/static/frontend/games/pool/pool.html';
             cssUrl = '/static/frontend/games/pool/pool.css';
             scriptUrl = '/static/frontend/games/pool/pool.js';
@@ -273,6 +253,14 @@ async function setWindowContent(uniqueId, customData = null) {
 }
 
 export function createWindow(appName, customData = null) {
+    if (appName === 'game')
+        appName = 'Game';
+    if (appName === 'pool')
+        appName = 'Pool';
+    if (appName === 'profile')
+        appName = 'Profile';
+    if (appName === 'users')
+        appName = 'Users';
     console.log("Creating Window: " + appName);
     
     const uniqueId = "myWindow" + appName;
