@@ -122,13 +122,13 @@ export function openWindow(e) {
     } else if (parentIcon.id === 'users') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('users');
-    } else if (parentIcon.id === 'EditInfo') {
+    } else if (parentIcon.id === 'editinfo') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('editinfo');
-    } else if (parentIcon.id === 'EditProfile') {
+    } else if (parentIcon.id === 'editprofile') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('editprofile');
-    } else if (parentIcon.id === 'matchHistory') {
+    } else if (parentIcon.id === 'matchhistory') {
         document.getElementById('welcomeText').style.display = 'none';
         createWindow('matchhistory');
     } else if (parentIcon.id === 'pool') {
