@@ -13,6 +13,8 @@ body {
     background-repeat: no-repeat; /* Pas de répétition */
     background-size: cover; /* Mise à l'échelle */
     user-select: none;
+    min-width: 500px;
+    min-height: 400px;
 }
 
 /* Conteneur principal */
@@ -110,9 +112,9 @@ main {
     top: 0;
     left: 0;
     height: 100vh ;               /* Prend toute la hauteur de la fenêtre */
-    width: 7vw;                  /* Largeur fixe pour le panneau de gauche */
+    width: 17vw;                  /* Largeur fixe pour le panneau de gauche */
     max-width: 100px;                  /* Largeur fixe pour le panneau de gauche */
-    min-width: 45px;
+    min-width: 65px;
     background-color: rgba(51, 51, 51, 0.0); /* Couleur de fond semi-transparente */
     display: flex;
     flex-direction: column;
@@ -120,6 +122,7 @@ main {
     /* padding-top: 7vh; */
     overflow-y: auto;             /* Barre de défilement si nécessaire */
     z-index: 1000;                /* S'assure que la colonne reste au-dessus des autres éléments */
+    margin-bottom: 20px;
 }
 
 

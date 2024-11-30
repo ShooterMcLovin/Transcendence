@@ -3,6 +3,8 @@ body {
     margin: 0;
     padding: 0;
     background-color: #28292d;
+    min-width: 800px;
+    min-height: 700px;
 }
 
 header {
@@ -26,6 +28,8 @@ nav a {
 
 main {
     padding: 20px;
+    min-width: 800px;
+    min-height: 700px;
 }
 
 .form-control {

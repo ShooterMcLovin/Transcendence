@@ -4,7 +4,7 @@ import { getCookie, checkUserAuthentication  } from "/static/frontend/auth/auth.
 let hashCleared = false;
 
 window.addEventListener('popstate', openWindow =>{
-    if (history.state.uniqueId)
+    if (history.state && history.state.uniqueId)
         createWindow(history.state.uniqueId.replace('myWindow', ''));
 })
 
@@ -12,12 +12,14 @@ window.addEventListener('load', () => {
     // Убираем hash из URL, если он есть
     if (window.location.hash) {
         history.replaceState(null, document.title, window.location.pathname + window.location.search);
+        console.log("Page reloaded. Hash cleared.");
     }
     // Сбрасываем состояние истории
     if (history.state) {
-        history.replaceState(null, document.title, window.location.href);
+        console.log("Page reloaded. History cleared");
     }
-    console.log("Page reloaded. History state and hash cleared.");
+    history.replaceState(null, document.title, window.location.href);
+    console.log("Page reloaded. History cleared");
     loadMainPage();
 });
 

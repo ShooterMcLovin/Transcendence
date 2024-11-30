@@ -34,6 +34,8 @@ fclean: clean
 
 reset_db: fclean
 	rm -rf postgresql/data
+	rm -rf grafana/data/grafana.db
+	rm -rf django/frontend/migrations/0001_initial.py
 
 remake: reset_db up
 
