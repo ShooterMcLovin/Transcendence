@@ -192,7 +192,7 @@ main {
 
 /* Styles pour la fenêtre */
 .window {
-    position: absolute;
+    position: fixed;
     width: 100vw;
     height: 100vh;
       text-align: center;
@@ -202,6 +202,7 @@ main {
     /* box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.0), -1px 1px 4px rgba(0, 0, 0, 0.0); */
     /* background: transparent; */
     background: rgba(51, 51, 51, 0.0);
+    background-color: rgba(0, 0, 0, 0.5);
     left: 50%; 
     /* bottom: 7vw; */
     top:50%;
